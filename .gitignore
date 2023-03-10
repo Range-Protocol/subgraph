@@ -1,0 +1,14 @@
+/node_modules
+
+# local env variables
+.env
+
+# VS Code
+.vscode
+
+# idea
+.idea
+.husky
+.DS_Store
+
+

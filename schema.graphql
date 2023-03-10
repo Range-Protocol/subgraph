@@ -1,0 +1,73 @@
+#Vault entity contains properties vault properties being tracked.
+type Vault @entity {
+  id: Bytes!
+  pool: Bytes!
+  token0: Bytes!
+  token1: Bytes!
+  ticksLastUpdated: BigInt!
+  liquidity: BigInt!
+  totalSupply: BigInt!
+  manager: Bytes!
+  managerFee: BigInt!
+  managerBalance0: BigInt!
+  managerBalance1: BigInt!
+  treasury: Bytes!
+  treasuryFee: BigInt!
+  treasuryBalance0: BigInt!
+  treasuryBalance1: BigInt!
+  balance0: BigInt!
+  balance1: BigInt!
+  totalFeesEarned0: BigInt!
+  totalFeesEarned1: BigInt!
+  inThePosition: Boolean!
+  currentPosition: Position!
+  positions: [Position!]! @derivedFrom(field: "vault")
+}
+
+type Position @entity {
+  id: Bytes!
+  lowerTick: BigInt!
+  upperTick: BigInt!
+  feesEarned0: BigInt!
+  feesEarned1: BigInt!
+  vault: Vault!
+}
+
+# User entity represents users balance across all vaults.
+type User @entity {
+  id: Bytes!
+  vaultBalances: [UserVaultBalance!]! @derivedFrom(field: "user")
+}
+
+# UserVaultBalance entity contains user's balance in a given vault.
+type UserVaultBalance @entity {
+  id: Bytes!
+  address: Bytes!
+  balance: BigInt!
+  vault: Bytes!
+  user: User!
+}
+
+# Swap entity to track swap records
+type Swap @entity {
+  id: Bytes!
+  zeroForOne: Boolean!
+  amount0: BigInt!
+  amount1: BigInt!
+}
+
+type Mint @entity {
+  id: Bytes!
+  receiver: Bytes!
+  mintAmount: BigInt!
+  amount0In: BigInt!
+  amount1In: BigInt!
+}
+
+type Burn @entity {
+  id: Bytes!
+  receiver: Bytes!
+  burnAmount: BigInt!
+  amount0Out: BigInt!
+  amount1Out: BigInt!
+}

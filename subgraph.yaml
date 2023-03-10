@@ -1,0 +1,88 @@
+specVersion: 0.0.5
+description: Range Protocol's subgraph
+repository: https://github.com/Range-Protocol/range-protocol-vault
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: RangeProtocolFactory
+    network: mumbai
+    source:
+      address: "0xd004E6617E9d17858B5bfCc3cd2704493Be681F1"
+      abi: RangeProtocolFactory
+      startBlock: 32647649
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+      abis:
+        - name: RangeProtocolFactory
+          file: ./abis/RangeProtocolFactory.json
+        - name: RangeProtocolVault
+          file: ./abis/RangeProtocolVault.json
+        - name: UniswapV3Pool
+          file: ./abis/UniswapV3Pool.json
+      eventHandlers:
+        - event: VaultCreated(indexed address,indexed address,indexed address)
+          handler: handleVaultCreated
+      file: ./src/factory.ts
+templates:
+  - name: RangeProtocolVault
+    kind: ethereum/contract
+    network: mumbai
+    source:
+      abi: RangeProtocolVault
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/vault.ts
+      entities:
+        - Vault
+        - User
+        - UserVaultBalance
+      abis:
+        - name: RangeProtocolVault
+          file: ./abis/RangeProtocolVault.json
+        - name: UniswapV3Pool
+          file: ./abis/UniswapV3Pool.json
+      eventHandlers:
+        - event: Minted(indexed address,uint256,uint256,uint256)
+          handler: handleMinted
+        - event: Burned(indexed address,uint256,uint256,uint256)
+          handler: handleBurned
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: TicksSet(int24,int24)
+          handler: handleTicksSet
+        - event: LiquidityAdded(uint256,int24,int24,uint256,uint256)
+          handler: liquidityAddedHandler
+        - event: LiquidityRemoved(uint256,int24,int24,uint256,uint256)
+          handler: liquidityRemovedHandler
+        - event: UpdateManagerParams(uint16,address)
+          handler: updateManagerParamsHandler
+        - event: Swapped(bool,int256,int256)
+          handler: handleSwap
+        - event: FeesEarned(uint256,uint256)
+          handler: handleFeesEarned
+        - event: InThePositionStatusSet(bool)
+          handler: handleInThePositionStatusSet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

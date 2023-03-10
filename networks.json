@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "RangeProtocolVault": {
+      "address": "0x5Df4F55Bb19426c602cfa795741044ADF9483547",
+      "startBlock": 8535231
+    }
+  }
+}
