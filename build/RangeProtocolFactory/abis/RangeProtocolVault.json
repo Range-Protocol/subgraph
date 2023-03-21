@@ -1,49 +1,92 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_pool",
-        "type": "address"
-      },
-      {
-        "internalType": "int24",
-        "name": "_lowerTick",
-        "type": "int24"
-      },
-      {
-        "internalType": "int24",
-        "name": "_upperTick",
-        "type": "int24"
-      },
-      {
-        "internalType": "address",
-        "name": "_treasury",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_manager_",
-        "type": "address"
-      },
-      {
-        "internalType": "uint16",
-        "name": "_managerFee",
-        "type": "uint16"
-      },
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_symbol",
-        "type": "string"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidBurnAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidManagerFee",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidMintAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidTicksSpacing",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MintNotAllowed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MintNotStarted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAllowedToUpdateTicks",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "OnlyFactoryAllowed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "OnlyPoolAllowed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TicksOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroMintAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroTreasuryAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroUnderlyingBalance",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -68,6 +111,19 @@
       }
     ],
     "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
     "type": "event"
   },
   {
@@ -131,6 +187,19 @@
       }
     ],
     "name": "InThePositionStatusSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -205,6 +274,25 @@
       }
     ],
     "name": "LiquidityRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "managerFee",
+        "type": "uint16"
+      }
+    ],
+    "name": "ManagerFeeUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "MintStarted",
     "type": "event"
   },
   {
@@ -330,24 +418,31 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "managerFee",
-        "type": "uint16"
-      },
-      {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
-        "name": "managerTreasury",
+        "name": "implementation",
         "type": "address"
       }
     ],
-    "name": "UpdateManagerParams",
+    "name": "Upgraded",
     "type": "event"
   },
   {
     "inputs": [],
-    "name": "MAX_MANAGER_FEE",
+    "name": "MAX_MANAGER_FEE_BPS",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "TREASURY_FEE_BPS",
     "outputs": [
       {
         "internalType": "uint16",
@@ -470,11 +565,6 @@
         "internalType": "uint256",
         "name": "burnAmount",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
       }
     ],
     "name": "burn",
@@ -542,6 +632,19 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "factory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -689,6 +792,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pool",
+        "type": "address"
+      },
+      {
+        "internalType": "int24",
+        "name": "_tickSpacing",
+        "type": "int24"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "lowerTick",
     "outputs": [
@@ -754,29 +880,11 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "managerTreasury",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
         "name": "mintAmount",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
       }
     ],
     "name": "mint",
@@ -793,6 +901,19 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mintStarted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -823,6 +944,26 @@
   },
   {
     "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pullFeeFromPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "removeLiquidity",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -831,13 +972,6 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "setinThePositionStatus",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -891,10 +1025,23 @@
   },
   {
     "inputs": [],
+    "name": "tickSpacing",
+    "outputs": [
+      {
+        "internalType": "int24",
+        "name": "",
+        "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "token0",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
         "type": "address"
       }
@@ -907,7 +1054,7 @@
     "name": "token1",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
         "type": "address"
       }
@@ -932,7 +1079,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -956,12 +1103,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sender",
+        "name": "from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -1009,7 +1156,7 @@
   },
   {
     "inputs": [],
-    "name": "treasury0",
+    "name": "treasuryBalance0",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1022,25 +1169,12 @@
   },
   {
     "inputs": [],
-    "name": "treasury1",
+    "name": "treasuryBalance1",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "treasuryFee",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -1095,19 +1229,63 @@
   {
     "inputs": [
       {
-        "internalType": "int16",
+        "internalType": "uint16",
         "name": "newManagerFee",
-        "type": "int16"
+        "type": "uint16"
+      }
+    ],
+    "name": "updateManagerFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int24",
+        "name": "_lowerTick",
+        "type": "int24"
       },
       {
+        "internalType": "int24",
+        "name": "_upperTick",
+        "type": "int24"
+      }
+    ],
+    "name": "updateTicks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
-        "name": "newManagerTreasury",
+        "name": "newImplementation",
         "type": "address"
       }
     ],
-    "name": "updateManagerParams",
+    "name": "upgradeTo",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {

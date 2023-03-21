@@ -1,6 +1,6 @@
 # range-protocol-subgraph
 
-Demo @ https://api.studio.thegraph.com/query/43249/range-graph/v0.0.73
+Demo @ https://api.studio.thegraph.com/query/43249/range-protocol-graph/v0.0.2
 
 Example Schema:
 ```

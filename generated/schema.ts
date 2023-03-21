@@ -69,6 +69,24 @@ export class Vault extends Entity {
     this.set("token1", Value.fromBytes(value));
   }
 
+  get token0Name(): string {
+    let value = this.get("token0Name");
+    return value!.toString();
+  }
+
+  set token0Name(value: string) {
+    this.set("token0Name", Value.fromString(value));
+  }
+
+  get token1Name(): string {
+    let value = this.get("token1Name");
+    return value!.toString();
+  }
+
+  set token1Name(value: string) {
+    this.set("token1Name", Value.fromString(value));
+  }
+
   get ticksLastUpdated(): BigInt {
     let value = this.get("ticksLastUpdated");
     return value!.toBigInt();

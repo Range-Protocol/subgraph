@@ -3,6 +3,7 @@ import {RangeProtocolVault as RangeProtocolVaultTemplate} from "../generated/tem
 import {Position, Vault} from "../generated/schema";
 import {RangeProtocolVault} from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
+import {IERC20Metadata} from "../generated/RangeProtocolFactory/IERC20Metadata";
 
 /**
  * @dev Called when a new vault is created through Factory. The handler spins a new template
@@ -19,17 +20,19 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     const vaultInstance = RangeProtocolVault.bind(vaultAddress);
     vault.token0 = vaultInstance.token0();
     vault.token1 = vaultInstance.token1();
+    vault.token0Name = IERC20Metadata.bind(vaultInstance.token0()).name();
+    vault.token1Name = IERC20Metadata.bind(vaultInstance.token1()).name();
     vault.ticksLastUpdated = event.block.timestamp;
     vault.liquidity = ZERO;
     vault.totalSupply = ZERO;
 
     vault.manager = vaultInstance.manager();
-    vault.managerFee = bn(vaultInstance.treasuryFee());
+    vault.managerFee = bn(vaultInstance.managerFee());
     vault.managerBalance0 = ZERO;
     vault.managerBalance1 = ZERO;
 
     vault.treasury = vaultInstance.treasury();
-    vault.treasuryFee = bn(vaultInstance.treasuryFee());
+    vault.treasuryFee = bn(vaultInstance.TREASURY_FEE_BPS());
     vault.treasuryBalance0 = ZERO;
     vault.treasuryBalance1 = ZERO;
 

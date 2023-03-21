@@ -7,7 +7,7 @@ import {
     TicksSet as TicksSetEvent,
     LiquidityAdded as LiquidityAddedEvent,
     LiquidityRemoved as LiquidityRemovedEvent,
-    UpdateManagerParams as UpdateManagerParamsEvent,
+    ManagerFeeUpdated as ManagerFeeUpdatedEvent,
     Swapped as SwappedEvent,
     FeesEarned as FeesEarnedEvent,
     InThePositionStatusSet as InThePositionStatusSetEvent,
@@ -165,11 +165,10 @@ export function handleTicksSet(event: TicksSetEvent): void {
  *
  * Updates the underlying balances and liquidity amount.
  *
- * @param event Instance of UpdateManagerParamsEvent.
+ * @param event Instance of ManagerFeeUpdatedEvent.
  */
-export function updateManagerParamsHandler(event: UpdateManagerParamsEvent): void {
+export function updateManagerFeeHandler(event: ManagerFeeUpdatedEvent): void {
     const vault = Vault.load(event.address)!;
-    vault.manager = event.params.managerTreasury;
     vault.managerFee = bn(event.params.managerFee);
     updateUnderlyingBalancesAndLiquidty(vault);
 }
@@ -245,8 +244,8 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
-    vault.treasuryBalance0 = vaultInstance.treasury0();
-    vault.treasuryBalance1 = vaultInstance.treasury1();
+    vault.treasuryBalance0 = vaultInstance.treasuryBalance0();
+    vault.treasuryBalance1 = vaultInstance.treasuryBalance1();
 
     const currentPosition = Position.load(vault.currentPosition)!;
     const position = UniswapV3Pool.bind(Address.fromBytes(vault.pool))

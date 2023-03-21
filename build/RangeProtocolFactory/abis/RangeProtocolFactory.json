@@ -11,6 +11,31 @@
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "MismatchedVaultsAndImplsLength",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoVaultInitDataProvided",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "VaultAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "VaultUpgradeFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroPoolAddress",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -41,7 +66,20 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "manager",
+        "name": "vault",
+        "type": "address"
+      }
+    ],
+    "name": "VaultCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "uniPool",
         "type": "address"
       },
       {
@@ -51,8 +89,34 @@
         "type": "address"
       }
     ],
-    "name": "VaultCreated",
+    "name": "VaultImplUpgraded",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "INIT_SELECTOR",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "UPGRADE_SELECTOR",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
@@ -92,38 +156,13 @@
       },
       {
         "internalType": "address",
-        "name": "treasury",
+        "name": "implementation",
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "manager",
-        "type": "address"
-      },
-      {
-        "internalType": "uint16",
-        "name": "managerFee",
-        "type": "uint16"
-      },
-      {
-        "internalType": "int24",
-        "name": "lowerTick",
-        "type": "int24"
-      },
-      {
-        "internalType": "int24",
-        "name": "upperTick",
-        "type": "int24"
-      },
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol",
-        "type": "string"
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
     "name": "createVault",
@@ -173,6 +212,42 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_vault",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_impl",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeVault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_vaults",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_impls",
+        "type": "address[]"
+      }
+    ],
+    "name": "upgradeVaults",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

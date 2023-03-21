@@ -4,6 +4,8 @@ type Vault @entity {
   pool: Bytes!
   token0: Bytes!
   token1: Bytes!
+  token0Name: String!
+  token1Name: String!
   ticksLastUpdated: BigInt!
   liquidity: BigInt!
   totalSupply: BigInt!

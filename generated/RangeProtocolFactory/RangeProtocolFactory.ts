@@ -49,18 +49,74 @@ export class VaultCreated__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get manager(): Address {
+  get vault(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class VaultImplUpgraded extends ethereum.Event {
+  get params(): VaultImplUpgraded__Params {
+    return new VaultImplUpgraded__Params(this);
+  }
+}
+
+export class VaultImplUpgraded__Params {
+  _event: VaultImplUpgraded;
+
+  constructor(event: VaultImplUpgraded) {
+    this._event = event;
+  }
+
+  get uniPool(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 
   get vault(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
 export class RangeProtocolFactory extends ethereum.SmartContract {
   static bind(address: Address): RangeProtocolFactory {
     return new RangeProtocolFactory("RangeProtocolFactory", address);
+  }
+
+  INIT_SELECTOR(): Bytes {
+    let result = super.call("INIT_SELECTOR", "INIT_SELECTOR():(bytes4)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_INIT_SELECTOR(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("INIT_SELECTOR", "INIT_SELECTOR():(bytes4)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  UPGRADE_SELECTOR(): Bytes {
+    let result = super.call(
+      "UPGRADE_SELECTOR",
+      "UPGRADE_SELECTOR():(bytes4)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_UPGRADE_SELECTOR(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "UPGRADE_SELECTOR",
+      "UPGRADE_SELECTOR():(bytes4)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   allVaults(param0: BigInt): Address {
@@ -207,32 +263,12 @@ export class CreateVaultCall__Inputs {
     return this._call.inputValues[2].value.toI32();
   }
 
-  get treasury(): Address {
+  get implementation(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 
-  get manager(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get managerFee(): i32 {
-    return this._call.inputValues[5].value.toI32();
-  }
-
-  get lowerTick(): i32 {
-    return this._call.inputValues[6].value.toI32();
-  }
-
-  get upperTick(): i32 {
-    return this._call.inputValues[7].value.toI32();
-  }
-
-  get name(): string {
-    return this._call.inputValues[8].value.toString();
-  }
-
-  get symbol(): string {
-    return this._call.inputValues[9].value.toString();
+  get data(): Bytes {
+    return this._call.inputValues[4].value.toBytes();
   }
 }
 
@@ -296,6 +332,74 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeVaultCall extends ethereum.Call {
+  get inputs(): UpgradeVaultCall__Inputs {
+    return new UpgradeVaultCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeVaultCall__Outputs {
+    return new UpgradeVaultCall__Outputs(this);
+  }
+}
+
+export class UpgradeVaultCall__Inputs {
+  _call: UpgradeVaultCall;
+
+  constructor(call: UpgradeVaultCall) {
+    this._call = call;
+  }
+
+  get _vault(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _impl(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class UpgradeVaultCall__Outputs {
+  _call: UpgradeVaultCall;
+
+  constructor(call: UpgradeVaultCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeVaultsCall extends ethereum.Call {
+  get inputs(): UpgradeVaultsCall__Inputs {
+    return new UpgradeVaultsCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeVaultsCall__Outputs {
+    return new UpgradeVaultsCall__Outputs(this);
+  }
+}
+
+export class UpgradeVaultsCall__Inputs {
+  _call: UpgradeVaultsCall;
+
+  constructor(call: UpgradeVaultsCall) {
+    this._call = call;
+  }
+
+  get _vaults(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get _impls(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+}
+
+export class UpgradeVaultsCall__Outputs {
+  _call: UpgradeVaultsCall;
+
+  constructor(call: UpgradeVaultsCall) {
     this._call = call;
   }
 }

@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: RangeProtocolFactory
-    network: mumbai
+    network: mainnet
     source:
-      address: "0xd004E6617E9d17858B5bfCc3cd2704493Be681F1"
+      address: "0x4bF9CDcCE12924B559928623a5d23598ca19367B"
       abi: RangeProtocolFactory
-      startBlock: 32647649
+      startBlock: 16868251
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -22,16 +22,18 @@ dataSources:
           file: RangeProtocolFactory/abis/RangeProtocolFactory.json
         - name: RangeProtocolVault
           file: RangeProtocolFactory/abis/RangeProtocolVault.json
+        - name: IERC20Metadata
+          file: RangeProtocolFactory/abis/IERC20Metadata.json
         - name: UniswapV3Pool
           file: RangeProtocolFactory/abis/UniswapV3Pool.json
       eventHandlers:
-        - event: VaultCreated(indexed address,indexed address,indexed address)
+        - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
       file: RangeProtocolFactory/RangeProtocolFactory.wasm
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: mumbai
+    network: mainnet
     source:
       abi: RangeProtocolVault
     mapping:
@@ -61,8 +63,8 @@ templates:
           handler: liquidityAddedHandler
         - event: LiquidityRemoved(uint256,int24,int24,uint256,uint256)
           handler: liquidityRemovedHandler
-        - event: UpdateManagerParams(uint16,address)
-          handler: updateManagerParamsHandler
+        - event: ManagerFeeUpdated(uint16)
+          handler: updateManagerFeeHandler
         - event: Swapped(bool,int256,int256)
           handler: handleSwap
         - event: FeesEarned(uint256,uint256)
