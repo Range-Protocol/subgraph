@@ -21,6 +21,7 @@ type Vault @entity {
   balance1: BigInt!
   totalFeesEarned0: BigInt!
   totalFeesEarned1: BigInt!
+  firstMintAtBlock: BigInt!
   inThePosition: Boolean!
   currentPosition: Position!
   positions: [Position!]! @derivedFrom(field: "vault")

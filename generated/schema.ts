@@ -222,6 +222,15 @@ export class Vault extends Entity {
     this.set("totalFeesEarned1", Value.fromBigInt(value));
   }
 
+  get firstMintAtBlock(): BigInt {
+    let value = this.get("firstMintAtBlock");
+    return value!.toBigInt();
+  }
+
+  set firstMintAtBlock(value: BigInt) {
+    this.set("firstMintAtBlock", Value.fromBigInt(value));
+  }
+
   get inThePosition(): boolean {
     let value = this.get("inThePosition");
     return value!.toBoolean();

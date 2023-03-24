@@ -37,6 +37,12 @@ export function handleMinted(event: MintedEvent): void {
     mint.amount1In = event.params.amount1In;
     mint.save();
 
+    const vault = Vault.load(event.address)!;
+    if (vault.firstMintAtBlock.equals(ZERO)) {
+        vault.firstMintAtBlock = event.block.number;
+        vault.save();
+    }
+
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
 
@@ -103,7 +109,7 @@ export function handleTransfer(event: TransferEvent): void {
         const fromVaultBalance = UserVaultBalance.load(fromVaultBalanceId)!;
         fromVaultBalance.balance = fromVaultBalance.balance.minus(event.params.value);
         fromVaultBalance.save();
-        if (fromVaultBalance.balance == ZERO) {
+        if (fromVaultBalance.balance.equals(ZERO)) {
             store.remove("UserVaultBalance", fromVaultBalanceId.toHexString());
         }
     }

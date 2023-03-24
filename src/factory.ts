@@ -41,6 +41,7 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
 
     vault.totalFeesEarned0 = ZERO;
     vault.totalFeesEarned1 = ZERO;
+    vault.firstMintAtBlock = ZERO;
     vault.inThePosition = true;
 
     const lowerTick = bn(vaultInstance.lowerTick());
