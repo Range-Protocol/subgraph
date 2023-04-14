@@ -11,12 +11,17 @@
   },
   {
     "inputs": [],
-    "name": "InvalidManagerFee",
+    "name": "InvalidManagingFee",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "InvalidMintAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPerformanceFee",
     "type": "error"
   },
   {
@@ -57,11 +62,6 @@
   {
     "inputs": [],
     "name": "ZeroMintAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ZeroTreasuryAddress",
     "type": "error"
   },
   {
@@ -162,18 +162,18 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "feesEarned0",
-        "type": "uint256"
+        "internalType": "uint16",
+        "name": "managingFee",
+        "type": "uint16"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "feesEarned1",
-        "type": "uint256"
+        "internalType": "uint16",
+        "name": "performanceFee",
+        "type": "uint16"
       }
     ],
-    "name": "FeesEarned",
+    "name": "FeesUpdated",
     "type": "event"
   },
   {
@@ -281,12 +281,18 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint16",
-        "name": "managerFee",
-        "type": "uint16"
+        "internalType": "uint256",
+        "name": "feesEarned0",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feesEarned1",
+        "type": "uint256"
       }
     ],
-    "name": "ManagerFeeUpdated",
+    "name": "ManagingFeeEarned",
     "type": "event"
   },
   {
@@ -343,6 +349,38 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feesEarned0",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feesEarned1",
+        "type": "uint256"
+      }
+    ],
+    "name": "PerformanceFeeEarned",
     "type": "event"
   },
   {
@@ -418,6 +456,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "implementation",
@@ -429,7 +480,7 @@
   },
   {
     "inputs": [],
-    "name": "MAX_MANAGER_FEE_BPS",
+    "name": "MAX_MANAGING_FEE_BPS",
     "outputs": [
       {
         "internalType": "uint16",
@@ -442,7 +493,7 @@
   },
   {
     "inputs": [],
-    "name": "TREASURY_FEE_BPS",
+    "name": "MAX_PERFORMANCE_FEE_BPS",
     "outputs": [
       {
         "internalType": "uint16",
@@ -586,13 +637,6 @@
   {
     "inputs": [],
     "name": "collectManager",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "collectTreasury",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -755,6 +799,47 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "fromIdx",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "toIdx",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserVaults",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "token0",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "token1",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IRangeProtocolVault.UserVaultInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "inThePosition",
     "outputs": [
@@ -868,7 +953,7 @@
   },
   {
     "inputs": [],
-    "name": "managerFee",
+    "name": "managingFee",
     "outputs": [
       {
         "internalType": "uint16",
@@ -924,6 +1009,39 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "performanceFee",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -1142,45 +1260,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "treasury",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "treasuryBalance0",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "treasuryBalance1",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1227,14 +1306,65 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unusedSlot0",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unusedSlot1",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unusedSlot2",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint16",
-        "name": "newManagerFee",
+        "name": "newManagingFee",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "newPerformanceFee",
         "type": "uint16"
       }
     ],
-    "name": "updateManagerFee",
+    "name": "updateFees",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1296,6 +1426,54 @@
         "internalType": "int24",
         "name": "",
         "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "userVaults",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "exists",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token0",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "token1",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "users",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

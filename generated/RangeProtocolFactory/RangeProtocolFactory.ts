@@ -119,25 +119,6 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  allVaults(param0: BigInt): Address {
-    let result = super.call("allVaults", "allVaults(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_allVaults(param0: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall("allVaults", "allVaults(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   factory(): Address {
     let result = super.call("factory", "factory():(address)", []);
 
@@ -151,6 +132,38 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getVaultAddresses(startIdx: BigInt, endIdx: BigInt): Array<Address> {
+    let result = super.call(
+      "getVaultAddresses",
+      "getVaultAddresses(uint256,uint256):(address[])",
+      [
+        ethereum.Value.fromUnsignedBigInt(startIdx),
+        ethereum.Value.fromUnsignedBigInt(endIdx)
+      ]
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getVaultAddresses(
+    startIdx: BigInt,
+    endIdx: BigInt
+  ): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getVaultAddresses",
+      "getVaultAddresses(uint256,uint256):(address[])",
+      [
+        ethereum.Value.fromUnsignedBigInt(startIdx),
+        ethereum.Value.fromUnsignedBigInt(endIdx)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
   manager(): Address {
@@ -168,39 +181,19 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  vaults(param0: Address, param1: Address, param2: i32): Address {
-    let result = super.call(
-      "vaults",
-      "vaults(address,address,uint24):(address)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param2))
-      ]
-    );
+  vaultCount(): BigInt {
+    let result = super.call("vaultCount", "vaultCount():(uint256)", []);
 
-    return result[0].toAddress();
+    return result[0].toBigInt();
   }
 
-  try_vaults(
-    param0: Address,
-    param1: Address,
-    param2: i32
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "vaults",
-      "vaults(address,address,uint24):(address)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(param2))
-      ]
-    );
+  try_vaultCount(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("vaultCount", "vaultCount():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 }
 

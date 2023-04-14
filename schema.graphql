@@ -10,13 +10,10 @@ type Vault @entity {
   liquidity: BigInt!
   totalSupply: BigInt!
   manager: Bytes!
-  managerFee: BigInt!
+  managingFee: BigInt!
+  performanceFee: BigInt!
   managerBalance0: BigInt!
   managerBalance1: BigInt!
-  treasury: Bytes!
-  treasuryFee: BigInt!
-  treasuryBalance0: BigInt!
-  treasuryBalance1: BigInt!
   balance0: BigInt!
   balance1: BigInt!
   totalFeesEarned0: BigInt!

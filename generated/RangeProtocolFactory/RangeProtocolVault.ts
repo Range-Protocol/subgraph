@@ -106,25 +106,25 @@ export class Burned__Params {
   }
 }
 
-export class FeesEarned extends ethereum.Event {
-  get params(): FeesEarned__Params {
-    return new FeesEarned__Params(this);
+export class FeesUpdated extends ethereum.Event {
+  get params(): FeesUpdated__Params {
+    return new FeesUpdated__Params(this);
   }
 }
 
-export class FeesEarned__Params {
-  _event: FeesEarned;
+export class FeesUpdated__Params {
+  _event: FeesUpdated;
 
-  constructor(event: FeesEarned) {
+  constructor(event: FeesUpdated) {
     this._event = event;
   }
 
-  get feesEarned0(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get managingFee(): i32 {
+    return this._event.parameters[0].value.toI32();
   }
 
-  get feesEarned1(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get performanceFee(): i32 {
+    return this._event.parameters[1].value.toI32();
   }
 }
 
@@ -232,21 +232,25 @@ export class LiquidityRemoved__Params {
   }
 }
 
-export class ManagerFeeUpdated extends ethereum.Event {
-  get params(): ManagerFeeUpdated__Params {
-    return new ManagerFeeUpdated__Params(this);
+export class ManagingFeeEarned extends ethereum.Event {
+  get params(): ManagingFeeEarned__Params {
+    return new ManagingFeeEarned__Params(this);
   }
 }
 
-export class ManagerFeeUpdated__Params {
-  _event: ManagerFeeUpdated;
+export class ManagingFeeEarned__Params {
+  _event: ManagingFeeEarned;
 
-  constructor(event: ManagerFeeUpdated) {
+  constructor(event: ManagingFeeEarned) {
     this._event = event;
   }
 
-  get managerFee(): i32 {
-    return this._event.parameters[0].value.toI32();
+  get feesEarned0(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get feesEarned1(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -313,6 +317,46 @@ export class OwnershipTransferred__Params {
 
   get newManager(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class Paused extends ethereum.Event {
+  get params(): Paused__Params {
+    return new Paused__Params(this);
+  }
+}
+
+export class Paused__Params {
+  _event: Paused;
+
+  constructor(event: Paused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class PerformanceFeeEarned extends ethereum.Event {
+  get params(): PerformanceFeeEarned__Params {
+    return new PerformanceFeeEarned__Params(this);
+  }
+}
+
+export class PerformanceFeeEarned__Params {
+  _event: PerformanceFeeEarned;
+
+  constructor(event: PerformanceFeeEarned) {
+    this._event = event;
+  }
+
+  get feesEarned0(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get feesEarned1(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -387,6 +431,24 @@ export class Transfer__Params {
 
   get value(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class Unpaused extends ethereum.Event {
+  get params(): Unpaused__Params {
+    return new Unpaused__Params(this);
+  }
+}
+
+export class Unpaused__Params {
+  _event: Unpaused;
+
+  constructor(event: Unpaused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 }
 
@@ -565,6 +627,20 @@ export class RangeProtocolVault__getUnderlyingBalancesAtPriceResult {
   }
 }
 
+export class RangeProtocolVault__getUserVaultsResultValue0Struct extends ethereum.Tuple {
+  get user(): Address {
+    return this[0].toAddress();
+  }
+
+  get token0(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get token1(): BigInt {
+    return this[2].toBigInt();
+  }
+}
+
 export class RangeProtocolVault__mintResult {
   value0: BigInt;
   value1: BigInt;
@@ -615,25 +691,57 @@ export class RangeProtocolVault__swapResult {
   }
 }
 
+export class RangeProtocolVault__userVaultsResult {
+  value0: boolean;
+  value1: BigInt;
+  value2: BigInt;
+
+  constructor(value0: boolean, value1: BigInt, value2: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromBoolean(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    return map;
+  }
+
+  getExists(): boolean {
+    return this.value0;
+  }
+
+  getToken0(): BigInt {
+    return this.value1;
+  }
+
+  getToken1(): BigInt {
+    return this.value2;
+  }
+}
+
 export class RangeProtocolVault extends ethereum.SmartContract {
   static bind(address: Address): RangeProtocolVault {
     return new RangeProtocolVault("RangeProtocolVault", address);
   }
 
-  MAX_MANAGER_FEE_BPS(): i32 {
+  MAX_MANAGING_FEE_BPS(): i32 {
     let result = super.call(
-      "MAX_MANAGER_FEE_BPS",
-      "MAX_MANAGER_FEE_BPS():(uint16)",
+      "MAX_MANAGING_FEE_BPS",
+      "MAX_MANAGING_FEE_BPS():(uint16)",
       []
     );
 
     return result[0].toI32();
   }
 
-  try_MAX_MANAGER_FEE_BPS(): ethereum.CallResult<i32> {
+  try_MAX_MANAGING_FEE_BPS(): ethereum.CallResult<i32> {
     let result = super.tryCall(
-      "MAX_MANAGER_FEE_BPS",
-      "MAX_MANAGER_FEE_BPS():(uint16)",
+      "MAX_MANAGING_FEE_BPS",
+      "MAX_MANAGING_FEE_BPS():(uint16)",
       []
     );
     if (result.reverted) {
@@ -643,20 +751,20 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  TREASURY_FEE_BPS(): i32 {
+  MAX_PERFORMANCE_FEE_BPS(): i32 {
     let result = super.call(
-      "TREASURY_FEE_BPS",
-      "TREASURY_FEE_BPS():(uint16)",
+      "MAX_PERFORMANCE_FEE_BPS",
+      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
       []
     );
 
     return result[0].toI32();
   }
 
-  try_TREASURY_FEE_BPS(): ethereum.CallResult<i32> {
+  try_MAX_PERFORMANCE_FEE_BPS(): ethereum.CallResult<i32> {
     let result = super.tryCall(
-      "TREASURY_FEE_BPS",
-      "TREASURY_FEE_BPS():(uint16)",
+      "MAX_PERFORMANCE_FEE_BPS",
+      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
       []
     );
     if (result.reverted) {
@@ -1038,6 +1146,49 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     );
   }
 
+  getUserVaults(
+    fromIdx: BigInt,
+    toIdx: BigInt
+  ): Array<RangeProtocolVault__getUserVaultsResultValue0Struct> {
+    let result = super.call(
+      "getUserVaults",
+      "getUserVaults(uint256,uint256):((address,uint256,uint256)[])",
+      [
+        ethereum.Value.fromUnsignedBigInt(fromIdx),
+        ethereum.Value.fromUnsignedBigInt(toIdx)
+      ]
+    );
+
+    return result[0].toTupleArray<
+      RangeProtocolVault__getUserVaultsResultValue0Struct
+    >();
+  }
+
+  try_getUserVaults(
+    fromIdx: BigInt,
+    toIdx: BigInt
+  ): ethereum.CallResult<
+    Array<RangeProtocolVault__getUserVaultsResultValue0Struct>
+  > {
+    let result = super.tryCall(
+      "getUserVaults",
+      "getUserVaults(uint256,uint256):((address,uint256,uint256)[])",
+      [
+        ethereum.Value.fromUnsignedBigInt(fromIdx),
+        ethereum.Value.fromUnsignedBigInt(toIdx)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        RangeProtocolVault__getUserVaultsResultValue0Struct
+      >()
+    );
+  }
+
   inThePosition(): boolean {
     let result = super.call("inThePosition", "inThePosition():(bool)", []);
 
@@ -1161,14 +1312,14 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  managerFee(): i32 {
-    let result = super.call("managerFee", "managerFee():(uint16)", []);
+  managingFee(): i32 {
+    let result = super.call("managingFee", "managingFee():(uint16)", []);
 
     return result[0].toI32();
   }
 
-  try_managerFee(): ethereum.CallResult<i32> {
-    let result = super.tryCall("managerFee", "managerFee():(uint16)", []);
+  try_managingFee(): ethereum.CallResult<i32> {
+    let result = super.tryCall("managingFee", "managingFee():(uint16)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1233,6 +1384,40 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  paused(): boolean {
+    let result = super.call("paused", "paused():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_paused(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("paused", "paused():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  performanceFee(): i32 {
+    let result = super.call("performanceFee", "performanceFee():(uint16)", []);
+
+    return result[0].toI32();
+  }
+
+  try_performanceFee(): ethereum.CallResult<i32> {
+    let result = super.tryCall(
+      "performanceFee",
+      "performanceFee():(uint16)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   pool(): Address {
@@ -1447,14 +1632,14 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  treasury(): Address {
-    let result = super.call("treasury", "treasury():(address)", []);
+  unusedSlot0(): Address {
+    let result = super.call("unusedSlot0", "unusedSlot0():(address)", []);
 
     return result[0].toAddress();
   }
 
-  try_treasury(): ethereum.CallResult<Address> {
-    let result = super.tryCall("treasury", "treasury():(address)", []);
+  try_unusedSlot0(): ethereum.CallResult<Address> {
+    let result = super.tryCall("unusedSlot0", "unusedSlot0():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1462,22 +1647,14 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  treasuryBalance0(): BigInt {
-    let result = super.call(
-      "treasuryBalance0",
-      "treasuryBalance0():(uint256)",
-      []
-    );
+  unusedSlot1(): BigInt {
+    let result = super.call("unusedSlot1", "unusedSlot1():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_treasuryBalance0(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "treasuryBalance0",
-      "treasuryBalance0():(uint256)",
-      []
-    );
+  try_unusedSlot1(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("unusedSlot1", "unusedSlot1():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1485,22 +1662,14 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  treasuryBalance1(): BigInt {
-    let result = super.call(
-      "treasuryBalance1",
-      "treasuryBalance1():(uint256)",
-      []
-    );
+  unusedSlot2(): BigInt {
+    let result = super.call("unusedSlot2", "unusedSlot2():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_treasuryBalance1(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "treasuryBalance1",
-      "treasuryBalance1():(uint256)",
-      []
-    );
+  try_unusedSlot2(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("unusedSlot2", "unusedSlot2():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1521,6 +1690,60 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
+  userVaults(param0: Address): RangeProtocolVault__userVaultsResult {
+    let result = super.call(
+      "userVaults",
+      "userVaults(address):(bool,uint256,uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return new RangeProtocolVault__userVaultsResult(
+      result[0].toBoolean(),
+      result[1].toBigInt(),
+      result[2].toBigInt()
+    );
+  }
+
+  try_userVaults(
+    param0: Address
+  ): ethereum.CallResult<RangeProtocolVault__userVaultsResult> {
+    let result = super.tryCall(
+      "userVaults",
+      "userVaults(address):(bool,uint256,uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new RangeProtocolVault__userVaultsResult(
+        value[0].toBoolean(),
+        value[1].toBigInt(),
+        value[2].toBigInt()
+      )
+    );
+  }
+
+  users(param0: BigInt): Address {
+    let result = super.call("users", "users(uint256):(address)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toAddress();
+  }
+
+  try_users(param0: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall("users", "users(uint256):(address)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 }
 
@@ -1702,32 +1925,6 @@ export class CollectManagerCall__Outputs {
   }
 }
 
-export class CollectTreasuryCall extends ethereum.Call {
-  get inputs(): CollectTreasuryCall__Inputs {
-    return new CollectTreasuryCall__Inputs(this);
-  }
-
-  get outputs(): CollectTreasuryCall__Outputs {
-    return new CollectTreasuryCall__Outputs(this);
-  }
-}
-
-export class CollectTreasuryCall__Inputs {
-  _call: CollectTreasuryCall;
-
-  constructor(call: CollectTreasuryCall) {
-    this._call = call;
-  }
-}
-
-export class CollectTreasuryCall__Outputs {
-  _call: CollectTreasuryCall;
-
-  constructor(call: CollectTreasuryCall) {
-    this._call = call;
-  }
-}
-
 export class DecreaseAllowanceCall extends ethereum.Call {
   get inputs(): DecreaseAllowanceCall__Inputs {
     return new DecreaseAllowanceCall__Inputs(this);
@@ -1877,6 +2074,32 @@ export class MintCall__Outputs {
 
   get amount1(): BigInt {
     return this._call.outputValues[1].value.toBigInt();
+  }
+}
+
+export class PauseCall extends ethereum.Call {
+  get inputs(): PauseCall__Inputs {
+    return new PauseCall__Inputs(this);
+  }
+
+  get outputs(): PauseCall__Outputs {
+    return new PauseCall__Outputs(this);
+  }
+}
+
+export class PauseCall__Inputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
+  }
+}
+
+export class PauseCall__Outputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
   }
 }
 
@@ -2190,32 +2413,62 @@ export class UniswapV3SwapCallbackCall__Outputs {
   }
 }
 
-export class UpdateManagerFeeCall extends ethereum.Call {
-  get inputs(): UpdateManagerFeeCall__Inputs {
-    return new UpdateManagerFeeCall__Inputs(this);
+export class UnpauseCall extends ethereum.Call {
+  get inputs(): UnpauseCall__Inputs {
+    return new UnpauseCall__Inputs(this);
   }
 
-  get outputs(): UpdateManagerFeeCall__Outputs {
-    return new UpdateManagerFeeCall__Outputs(this);
+  get outputs(): UnpauseCall__Outputs {
+    return new UnpauseCall__Outputs(this);
   }
 }
 
-export class UpdateManagerFeeCall__Inputs {
-  _call: UpdateManagerFeeCall;
+export class UnpauseCall__Inputs {
+  _call: UnpauseCall;
 
-  constructor(call: UpdateManagerFeeCall) {
+  constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UnpauseCall__Outputs {
+  _call: UnpauseCall;
+
+  constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateFeesCall extends ethereum.Call {
+  get inputs(): UpdateFeesCall__Inputs {
+    return new UpdateFeesCall__Inputs(this);
+  }
+
+  get outputs(): UpdateFeesCall__Outputs {
+    return new UpdateFeesCall__Outputs(this);
+  }
+}
+
+export class UpdateFeesCall__Inputs {
+  _call: UpdateFeesCall;
+
+  constructor(call: UpdateFeesCall) {
     this._call = call;
   }
 
-  get newManagerFee(): i32 {
+  get newManagingFee(): i32 {
     return this._call.inputValues[0].value.toI32();
+  }
+
+  get newPerformanceFee(): i32 {
+    return this._call.inputValues[1].value.toI32();
   }
 }
 
-export class UpdateManagerFeeCall__Outputs {
-  _call: UpdateManagerFeeCall;
+export class UpdateFeesCall__Outputs {
+  _call: UpdateFeesCall;
 
-  constructor(call: UpdateManagerFeeCall) {
+  constructor(call: UpdateFeesCall) {
     this._call = call;
   }
 }

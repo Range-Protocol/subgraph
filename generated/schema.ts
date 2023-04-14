@@ -123,13 +123,22 @@ export class Vault extends Entity {
     this.set("manager", Value.fromBytes(value));
   }
 
-  get managerFee(): BigInt {
-    let value = this.get("managerFee");
+  get managingFee(): BigInt {
+    let value = this.get("managingFee");
     return value!.toBigInt();
   }
 
-  set managerFee(value: BigInt) {
-    this.set("managerFee", Value.fromBigInt(value));
+  set managingFee(value: BigInt) {
+    this.set("managingFee", Value.fromBigInt(value));
+  }
+
+  get performanceFee(): BigInt {
+    let value = this.get("performanceFee");
+    return value!.toBigInt();
+  }
+
+  set performanceFee(value: BigInt) {
+    this.set("performanceFee", Value.fromBigInt(value));
   }
 
   get managerBalance0(): BigInt {
@@ -148,42 +157,6 @@ export class Vault extends Entity {
 
   set managerBalance1(value: BigInt) {
     this.set("managerBalance1", Value.fromBigInt(value));
-  }
-
-  get treasury(): Bytes {
-    let value = this.get("treasury");
-    return value!.toBytes();
-  }
-
-  set treasury(value: Bytes) {
-    this.set("treasury", Value.fromBytes(value));
-  }
-
-  get treasuryFee(): BigInt {
-    let value = this.get("treasuryFee");
-    return value!.toBigInt();
-  }
-
-  set treasuryFee(value: BigInt) {
-    this.set("treasuryFee", Value.fromBigInt(value));
-  }
-
-  get treasuryBalance0(): BigInt {
-    let value = this.get("treasuryBalance0");
-    return value!.toBigInt();
-  }
-
-  set treasuryBalance0(value: BigInt) {
-    this.set("treasuryBalance0", Value.fromBigInt(value));
-  }
-
-  get treasuryBalance1(): BigInt {
-    let value = this.get("treasuryBalance1");
-    return value!.toBigInt();
-  }
-
-  set treasuryBalance1(value: BigInt) {
-    this.set("treasuryBalance1", Value.fromBigInt(value));
   }
 
   get balance0(): BigInt {
