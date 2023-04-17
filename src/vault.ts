@@ -9,8 +9,7 @@ import {
     LiquidityRemoved as LiquidityRemovedEvent,
     FeesUpdated as FeeUpdatedEvent,
     Swapped as SwappedEvent,
-    PerformanceFeeEarned as PerformanceFeeEarnedEvent,
-    ManagingFeeEarned as ManagingFeeEarnedEvent,
+    FeesEarned as FeesEarnedEvent,
     InThePositionStatusSet as InThePositionStatusSetEvent,
     RangeProtocolVault
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
@@ -205,29 +204,7 @@ export function handleSwap(event: SwappedEvent): void {
  *
  * @param event Instance of FeesEarnedEvent.
  */
-export function handlePerformanceFeeEarned(event: PerformanceFeeEarnedEvent): void {
-    const vault = Vault.load(event.address)!;
-
-    const position = Position.load(vault.currentPosition!)!;
-    position.feesEarned0 = position.feesEarned0.plus(event.params.feesEarned0);
-    position.feesEarned1 = position.feesEarned1.plus(event.params.feesEarned1);
-    position.save();
-
-    vault.totalFeesEarned0 = vault.totalFeesEarned0.plus(event.params.feesEarned0);
-    vault.totalFeesEarned1 = vault.totalFeesEarned1.plus(event.params.feesEarned1);
-    vault.save();
-    updateUnderlyingBalancesAndLiquidty(vault);
-}
-
-/**
- * @dev Handles recording of fees accrued both in the current position and also the cumulative fees accrued across
- * all positions since vault creation.
- *
- * Updates the underlying balances and liquidity amount.
- *
- * @param event Instance of FeesEarnedEvent.
- */
-export function handleManagingFeeEarned(event: ManagingFeeEarnedEvent): void {
+export function handleFeesEarned(event: FeesEarnedEvent): void {
     const vault = Vault.load(event.address)!;
 
     const position = Position.load(vault.currentPosition!)!;

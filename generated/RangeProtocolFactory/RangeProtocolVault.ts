@@ -106,6 +106,28 @@ export class Burned__Params {
   }
 }
 
+export class FeesEarned extends ethereum.Event {
+  get params(): FeesEarned__Params {
+    return new FeesEarned__Params(this);
+  }
+}
+
+export class FeesEarned__Params {
+  _event: FeesEarned;
+
+  constructor(event: FeesEarned) {
+    this._event = event;
+  }
+
+  get feesEarned0(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get feesEarned1(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class FeesUpdated extends ethereum.Event {
   get params(): FeesUpdated__Params {
     return new FeesUpdated__Params(this);
@@ -232,28 +254,6 @@ export class LiquidityRemoved__Params {
   }
 }
 
-export class ManagingFeeEarned extends ethereum.Event {
-  get params(): ManagingFeeEarned__Params {
-    return new ManagingFeeEarned__Params(this);
-  }
-}
-
-export class ManagingFeeEarned__Params {
-  _event: ManagingFeeEarned;
-
-  constructor(event: ManagingFeeEarned) {
-    this._event = event;
-  }
-
-  get feesEarned0(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get feesEarned1(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
 export class MintStarted extends ethereum.Event {
   get params(): MintStarted__Params {
     return new MintStarted__Params(this);
@@ -335,28 +335,6 @@ export class Paused__Params {
 
   get account(): Address {
     return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class PerformanceFeeEarned extends ethereum.Event {
-  get params(): PerformanceFeeEarned__Params {
-    return new PerformanceFeeEarned__Params(this);
-  }
-}
-
-export class PerformanceFeeEarned__Params {
-  _event: PerformanceFeeEarned;
-
-  constructor(event: PerformanceFeeEarned) {
-    this._event = event;
-  }
-
-  get feesEarned0(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get feesEarned1(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -1630,51 +1608,6 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  unusedSlot0(): Address {
-    let result = super.call("unusedSlot0", "unusedSlot0():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_unusedSlot0(): ethereum.CallResult<Address> {
-    let result = super.tryCall("unusedSlot0", "unusedSlot0():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  unusedSlot1(): BigInt {
-    let result = super.call("unusedSlot1", "unusedSlot1():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_unusedSlot1(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("unusedSlot1", "unusedSlot1():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  unusedSlot2(): BigInt {
-    let result = super.call("unusedSlot2", "unusedSlot2():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_unusedSlot2(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("unusedSlot2", "unusedSlot2():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   upperTick(): i32 {

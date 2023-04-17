@@ -67,10 +67,8 @@ templates:
           handler: feesUpdatedFeeHandler
         - event: Swapped(bool,int256,int256)
           handler: handleSwap
-        - event: PerformanceFeeEarned(uint256,uint256)
-          handler: handlePerformanceFeeEarned
-        - event: ManagingFeeEarned(uint256,uint256)
-          handler: handleManagingFeeEarned
+        - event: FeesEarned(uint256,uint256)
+          handler: handleFeesEarned
         - event: InThePositionStatusSet(bool)
           handler: handleInThePositionStatusSet
 
