@@ -4,7 +4,6 @@ import {Position, Vault} from "../generated/schema";
 import {RangeProtocolVault} from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
 import {IERC20Metadata} from "../generated/RangeProtocolFactory/IERC20Metadata";
-import {Address} from "@graphprotocol/graph-ts";
 
 /**
  * @dev Called when a new vault is created through Factory. The handler spins a new template
@@ -19,6 +18,7 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.pool = event.params.uniPool;
 
     const vaultInstance = RangeProtocolVault.bind(vaultAddress);
+    vault.name = vaultInstance.name();
     vault.token0 = vaultInstance.token0();
     vault.token1 = vaultInstance.token1();
     vault.token0Name = IERC20Metadata.bind(vaultInstance.token0()).name();
@@ -39,20 +39,8 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.totalFeesEarned0 = ZERO;
     vault.totalFeesEarned1 = ZERO;
     vault.firstMintAtBlock = ZERO;
-    vault.inThePosition = true;
+    vault.inThePosition = false;
 
-    const lowerTick = bn(vaultInstance.lowerTick());
-    const upperTick = bn(vaultInstance.upperTick());
-
-    const position = new Position(vaultInstance.getPositionID());
-    position.lowerTick = lowerTick;
-    position.upperTick = upperTick;
-    position.feesEarned0 = ZERO;
-    position.feesEarned1 = ZERO;
-    position.vault = vault.id;
-    position.save();
-
-    vault.currentPosition = position.id;
     vault.save();
 
     // Start indexing newly deployed vault.

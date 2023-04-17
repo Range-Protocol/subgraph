@@ -63,13 +63,13 @@ templates:
           handler: liquidityAddedHandler
         - event: LiquidityRemoved(uint256,int24,int24,uint256,uint256)
           handler: liquidityRemovedHandler
-#        - event: ManagerFeeUpdated(uint16)
-#          handler: updateManagerFeeHandler
+        - event: FeesUpdated(uint16,uint16)
+          handler: feesUpdatedFeeHandler
         - event: Swapped(bool,int256,int256)
           handler: handleSwap
         - event: PerformanceFeeEarned(uint256,uint256)
           handler: handlePerformanceFeeEarned
-        - event: PerformanceFeeEarned(uint256,uint256)
+        - event: ManagingFeeEarned(uint256,uint256)
           handler: handleManagingFeeEarned
         - event: InThePositionStatusSet(bool)
           handler: handleInThePositionStatusSet

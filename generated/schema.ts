@@ -42,6 +42,15 @@ export class Vault extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
+  get name(): string {
+    let value = this.get("name");
+    return value!.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
   get pool(): Bytes {
     let value = this.get("pool");
     return value!.toBytes();
@@ -213,13 +222,21 @@ export class Vault extends Entity {
     this.set("inThePosition", Value.fromBoolean(value));
   }
 
-  get currentPosition(): Bytes {
+  get currentPosition(): Bytes | null {
     let value = this.get("currentPosition");
-    return value!.toBytes();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set currentPosition(value: Bytes) {
-    this.set("currentPosition", Value.fromBytes(value));
+  set currentPosition(value: Bytes | null) {
+    if (!value) {
+      this.unset("currentPosition");
+    } else {
+      this.set("currentPosition", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get positions(): Array<Bytes> {

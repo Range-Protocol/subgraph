@@ -1,6 +1,7 @@
 #Vault entity contains properties vault properties being tracked.
 type Vault @entity {
   id: Bytes!
+  name: String!
   pool: Bytes!
   token0: Bytes!
   token1: Bytes!
@@ -20,7 +21,7 @@ type Vault @entity {
   totalFeesEarned1: BigInt!
   firstMintAtBlock: BigInt!
   inThePosition: Boolean!
-  currentPosition: Position!
+  currentPosition: Position
   positions: [Position!]! @derivedFrom(field: "vault")
 }
 

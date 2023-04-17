@@ -7,7 +7,7 @@ import {
     TicksSet as TicksSetEvent,
     LiquidityAdded as LiquidityAddedEvent,
     LiquidityRemoved as LiquidityRemovedEvent,
-    // ManagerFeeUpdated as ManagerFeeUpdatedEvent,
+    FeesUpdated as FeeUpdatedEvent,
     Swapped as SwappedEvent,
     PerformanceFeeEarned as PerformanceFeeEarnedEvent,
     ManagingFeeEarned as ManagingFeeEarnedEvent,
@@ -44,7 +44,7 @@ export function handleMinted(event: MintedEvent): void {
         vault.save();
     }
 
-    updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
+    updateUnderlyingBalancesAndLiquidty(vault);
 }
 
 /**
@@ -163,7 +163,6 @@ export function handleTicksSet(event: TicksSetEvent): void {
 
     vault.currentPosition = position.id;
     vault.save();
-    updateUnderlyingBalancesAndLiquidty(vault);
 }
 
 /**
@@ -174,11 +173,12 @@ export function handleTicksSet(event: TicksSetEvent): void {
  *
  * @param event Instance of ManagerFeeUpdatedEvent.
  */
-// export function updateManagerFeeHandler(event: ManagerFeeUpdatedEvent): void {
-//     const vault = Vault.load(event.address)!;
-//     vault.managerFee = bn(event.params.managerFee);
-//     updateUnderlyingBalancesAndLiquidty(vault);
-// }
+export function feesUpdatedFeeHandler(event: FeeUpdatedEvent): void {
+    const vault = Vault.load(event.address)!;
+    vault.managingFee = bn(event.params.managingFee);
+    vault.performanceFee = bn(event.params.performanceFee);
+    vault.save();
+}
 
 /**
  * @dev Called when swap is performed on the vault by manager. It records the amount in
@@ -208,13 +208,14 @@ export function handleSwap(event: SwappedEvent): void {
 export function handlePerformanceFeeEarned(event: PerformanceFeeEarnedEvent): void {
     const vault = Vault.load(event.address)!;
 
-    const position = Position.load(vault.currentPosition)!;
+    const position = Position.load(vault.currentPosition!)!;
     position.feesEarned0 = position.feesEarned0.plus(event.params.feesEarned0);
     position.feesEarned1 = position.feesEarned1.plus(event.params.feesEarned1);
     position.save();
 
     vault.totalFeesEarned0 = vault.totalFeesEarned0.plus(event.params.feesEarned0);
     vault.totalFeesEarned1 = vault.totalFeesEarned1.plus(event.params.feesEarned1);
+    vault.save();
     updateUnderlyingBalancesAndLiquidty(vault);
 }
 
@@ -229,13 +230,14 @@ export function handlePerformanceFeeEarned(event: PerformanceFeeEarnedEvent): vo
 export function handleManagingFeeEarned(event: ManagingFeeEarnedEvent): void {
     const vault = Vault.load(event.address)!;
 
-    const position = Position.load(vault.currentPosition)!;
+    const position = Position.load(vault.currentPosition!)!;
     position.feesEarned0 = position.feesEarned0.plus(event.params.feesEarned0);
     position.feesEarned1 = position.feesEarned1.plus(event.params.feesEarned1);
     position.save();
 
     vault.totalFeesEarned0 = vault.totalFeesEarned0.plus(event.params.feesEarned0);
     vault.totalFeesEarned1 = vault.totalFeesEarned1.plus(event.params.feesEarned1);
+    vault.save();
     updateUnderlyingBalancesAndLiquidty(vault);
 }
 
@@ -250,7 +252,7 @@ export function handleManagingFeeEarned(event: ManagingFeeEarnedEvent): void {
 export function handleInThePositionStatusSet(event: InThePositionStatusSetEvent): void {
     const vault = Vault.load(event.address)!;
     vault.inThePosition = event.params.inThePosition;
-    updateUnderlyingBalancesAndLiquidty(vault);
+    vault.save();
 }
 
 /**
@@ -272,7 +274,7 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
-    const currentPosition = Position.load(vault.currentPosition)!;
+    const currentPosition = Position.load(vault.currentPosition!)!;
     const position = UniswapV3Pool.bind(Address.fromBytes(vault.pool))
         .positions(currentPosition.id);
 
