@@ -23,11 +23,11 @@ export class OwnershipTransferred__Params {
     this._event = event;
   }
 
-  get previousManager(): Address {
+  get previousOwner(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get newManager(): Address {
+  get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 }
@@ -166,14 +166,14 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
-  manager(): Address {
-    let result = super.call("manager", "manager():(address)", []);
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
 
     return result[0].toAddress();
   }
 
-  try_manager(): ethereum.CallResult<Address> {
-    let result = super.tryCall("manager", "manager():(address)", []);
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }

@@ -36,13 +36,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "previousManager",
+        "name": "previousOwner",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newManager",
+        "name": "newOwner",
         "type": "address"
       }
     ],
@@ -185,7 +185,7 @@
   },
   {
     "inputs": [],
-    "name": "manager",
+    "name": "owner",
     "outputs": [
       {
         "internalType": "address",

@@ -96,15 +96,6 @@ export class Vault extends Entity {
     this.set("token1Name", Value.fromString(value));
   }
 
-  get ticksLastUpdated(): BigInt {
-    let value = this.get("ticksLastUpdated");
-    return value!.toBigInt();
-  }
-
-  set ticksLastUpdated(value: BigInt) {
-    this.set("ticksLastUpdated", Value.fromBigInt(value));
-  }
-
   get liquidity(): BigInt {
     let value = this.get("liquidity");
     return value!.toBigInt();
@@ -222,8 +213,25 @@ export class Vault extends Entity {
     this.set("inThePosition", Value.fromBoolean(value));
   }
 
-  get currentPosition(): Bytes | null {
+  get currentPosition(): string | null {
     let value = this.get("currentPosition");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set currentPosition(value: string | null) {
+    if (!value) {
+      this.unset("currentPosition");
+    } else {
+      this.set("currentPosition", Value.fromString(<string>value));
+    }
+  }
+
+  get currentPositionIdInVault(): Bytes | null {
+    let value = this.get("currentPositionIdInVault");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -231,28 +239,37 @@ export class Vault extends Entity {
     }
   }
 
-  set currentPosition(value: Bytes | null) {
+  set currentPositionIdInVault(value: Bytes | null) {
     if (!value) {
-      this.unset("currentPosition");
+      this.unset("currentPositionIdInVault");
     } else {
-      this.set("currentPosition", Value.fromBytes(<Bytes>value));
+      this.set("currentPositionIdInVault", Value.fromBytes(<Bytes>value));
     }
   }
 
-  get positions(): Array<Bytes> {
-    let value = this.get("positions");
-    return value!.toBytesArray();
+  get positionCount(): BigInt {
+    let value = this.get("positionCount");
+    return value!.toBigInt();
   }
 
-  set positions(value: Array<Bytes>) {
-    this.set("positions", Value.fromBytesArray(value));
+  set positionCount(value: BigInt) {
+    this.set("positionCount", Value.fromBigInt(value));
+  }
+
+  get positions(): Array<string> {
+    let value = this.get("positions");
+    return value!.toStringArray();
+  }
+
+  set positions(value: Array<string>) {
+    this.set("positions", Value.fromStringArray(value));
   }
 }
 
 export class Position extends Entity {
-  constructor(id: Bytes) {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
@@ -260,24 +277,24 @@ export class Position extends Entity {
     assert(id != null, "Cannot save Position entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type Position must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type Position must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Position", id.toBytes().toHexString(), this);
+      store.set("Position", id.toString(), this);
     }
   }
 
-  static load(id: Bytes): Position | null {
-    return changetype<Position | null>(store.get("Position", id.toHexString()));
+  static load(id: string): Position | null {
+    return changetype<Position | null>(store.get("Position", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
-    return value!.toBytes();
+    return value!.toString();
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
   get lowerTick(): BigInt {
@@ -323,6 +340,51 @@ export class Position extends Entity {
 
   set vault(value: Bytes) {
     this.set("vault", Value.fromBytes(value));
+  }
+
+  get positionIdInVault(): Bytes {
+    let value = this.get("positionIdInVault");
+    return value!.toBytes();
+  }
+
+  set positionIdInVault(value: Bytes) {
+    this.set("positionIdInVault", Value.fromBytes(value));
+  }
+
+  get openedAtTimestamp(): BigInt {
+    let value = this.get("openedAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set openedAtTimestamp(value: BigInt) {
+    this.set("openedAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get closedAtTimestamp(): BigInt {
+    let value = this.get("closedAtTimestamp");
+    return value!.toBigInt();
+  }
+
+  set closedAtTimestamp(value: BigInt) {
+    this.set("closedAtTimestamp", Value.fromBigInt(value));
+  }
+
+  get openedATBlock(): BigInt {
+    let value = this.get("openedATBlock");
+    return value!.toBigInt();
+  }
+
+  set openedATBlock(value: BigInt) {
+    this.set("openedATBlock", Value.fromBigInt(value));
+  }
+
+  get closedAtBlock(): BigInt {
+    let value = this.get("closedAtBlock");
+    return value!.toBigInt();
+  }
+
+  set closedAtBlock(value: BigInt) {
+    this.set("closedAtBlock", Value.fromBigInt(value));
   }
 }
 

@@ -2257,7 +2257,7 @@ export class TransferOwnershipCall__Inputs {
     this._call = call;
   }
 
-  get newOwner(): Address {
+  get newManager(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }

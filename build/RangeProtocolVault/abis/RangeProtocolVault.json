@@ -1231,7 +1231,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "newOwner",
+        "name": "newManager",
         "type": "address"
       }
     ],

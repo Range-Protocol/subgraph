@@ -7,7 +7,6 @@ type Vault @entity {
   token1: Bytes!
   token0Name: String!
   token1Name: String!
-  ticksLastUpdated: BigInt!
   liquidity: BigInt!
   totalSupply: BigInt!
   manager: Bytes!
@@ -22,16 +21,22 @@ type Vault @entity {
   firstMintAtBlock: BigInt!
   inThePosition: Boolean!
   currentPosition: Position
+  currentPositionIdInVault: Bytes
+  positionCount: BigInt!
   positions: [Position!]! @derivedFrom(field: "vault")
 }
 
 type Position @entity {
-  id: Bytes!
+  id: String!
   lowerTick: BigInt!
   upperTick: BigInt!
   feesEarned0: BigInt!
   feesEarned1: BigInt!
   vault: Vault!
+  openedAtTimestamp: BigInt!
+  closedAtTimestamp: BigInt!
+  openedATBlock: BigInt!
+  closedAtBlock: BigInt!
 }
 
 # User entity represents users balance across all vaults.

@@ -89,6 +89,13 @@ export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
  * @param event Instance of LiquidityRemovedEvent.
  */
 export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
+    const vault = Vault.load(event.address)!;
+    const position = Position.load(vault.currentPosition!)!;
+    if (position.closedAtBlock == ZERO) {
+        position.closedAtTimestamp = event.block.timestamp;
+        position.closedAtBlock = event.block.number;
+        position.save();
+    }
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
 
@@ -147,20 +154,31 @@ export function handleTransfer(event: TransferEvent): void {
  */
 export function handleTicksSet(event: TicksSetEvent): void {
     const vault = Vault.load(event.address)!;
-    vault.ticksLastUpdated = event.block.timestamp;
 
-    const lowerTick = bn(event.params.lowerTick);
-    const upperTick = bn(event.params.upperTick);
+    if (vault.currentPosition) {
+        const lastPosition = Position.load(vault.currentPosition!)!;
+        if (lastPosition.closedAtTimestamp == ZERO) {
+            lastPosition.closedAtTimestamp = event.block.timestamp;
+            lastPosition.closedAtBlock = event.block.number;
+            lastPosition.save();
+        }
+    }
 
-    const position = new Position(RangeProtocolVault.bind(event.address).getPositionID());
-    position.lowerTick = lowerTick;
-    position.upperTick = upperTick;
+    vault.positionCount = vault.positionCount.plus(bn(1));
+    const position = new Position(vault.id.toString() + vault.positionCount.toString());
+    position.lowerTick = bn(event.params.lowerTick);
+    position.upperTick = bn(event.params.upperTick);
     position.feesEarned0 = ZERO;
     position.feesEarned1 = ZERO;
     position.vault = vault.id;
+    position.openedAtTimestamp = event.block.timestamp;
+    position.openedATBlock = event.block.number;
+    position.closedAtTimestamp = ZERO;
+    position.closedAtBlock = ZERO;
     position.save();
 
     vault.currentPosition = position.id;
+    vault.currentPositionIdInVault = RangeProtocolVault.bind(event.address).getPositionID();
     vault.save();
 }
 
@@ -251,9 +269,8 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
-    const currentPosition = Position.load(vault.currentPosition!)!;
     const position = UniswapV3Pool.bind(Address.fromBytes(vault.pool))
-        .positions(currentPosition.id);
+        .positions(vault.currentPositionIdInVault!);
 
     vault.liquidity = position.value0;
     vault.save();
