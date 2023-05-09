@@ -23,7 +23,9 @@ type Vault @entity {
   currentPosition: Position
   currentPositionIdInVault: Bytes
   positionCount: BigInt!
+  feeEarnedEventCount: BigInt!
   positions: [Position!]! @derivedFrom(field: "vault")
+  feeEarnedEvents: [FeeEarned!]! @derivedFrom(field: "vault")
 }
 
 type Position @entity {
@@ -37,6 +39,14 @@ type Position @entity {
   closedAtTimestamp: BigInt!
   openedATBlock: BigInt!
   closedAtBlock: BigInt!
+}
+
+type FeeEarned @entity {
+  id: String!
+  amount0: BigInt
+  amount1: BigInt
+  timestamp: BigInt!
+  vault: Vault!
 }
 
 # User entity represents users balance across all vaults.

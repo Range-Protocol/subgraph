@@ -1,4 +1,4 @@
-import {Burn, Mint, Position, Swap, User, UserVaultBalance, Vault} from "../generated/schema";
+import {Burn, Mint, Position, Swap, User, UserVaultBalance, Vault, FeeEarned} from "../generated/schema";
 import {Address, BigInt, Bytes, store} from "@graphprotocol/graph-ts";
 import {
     Minted as MintedEvent,
@@ -165,7 +165,7 @@ export function handleTicksSet(event: TicksSetEvent): void {
     }
 
     vault.positionCount = vault.positionCount.plus(bn(1));
-    const position = new Position(vault.id.toString() + vault.positionCount.toString());
+    const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
     position.lowerTick = bn(event.params.lowerTick);
     position.upperTick = bn(event.params.upperTick);
     position.feesEarned0 = ZERO;
@@ -224,6 +224,14 @@ export function handleSwap(event: SwappedEvent): void {
  */
 export function handleFeesEarned(event: FeesEarnedEvent): void {
     const vault = Vault.load(event.address)!;
+
+    vault.feeEarnedEventCount = vault.feeEarnedEventCount.plus(bn(1));
+    const feeEarned = new FeeEarned(vault.id.toHexString() + "#" + vault.feeEarnedEventCount.toHexString().substr(2));
+    feeEarned.amount0 = event.params.feesEarned0;
+    feeEarned.amount1 = event.params.feesEarned1;
+    feeEarned.timestamp = event.block.timestamp;
+    feeEarned.vault = vault.id;
+    feeEarned.save();
 
     const position = Position.load(vault.currentPosition!)!;
     position.feesEarned0 = position.feesEarned0.plus(event.params.feesEarned0);

@@ -256,6 +256,15 @@ export class Vault extends Entity {
     this.set("positionCount", Value.fromBigInt(value));
   }
 
+  get feeEarnedEventCount(): BigInt {
+    let value = this.get("feeEarnedEventCount");
+    return value!.toBigInt();
+  }
+
+  set feeEarnedEventCount(value: BigInt) {
+    this.set("feeEarnedEventCount", Value.fromBigInt(value));
+  }
+
   get positions(): Array<string> {
     let value = this.get("positions");
     return value!.toStringArray();
@@ -263,6 +272,15 @@ export class Vault extends Entity {
 
   set positions(value: Array<string>) {
     this.set("positions", Value.fromStringArray(value));
+  }
+
+  get feeEarnedEvents(): Array<string> {
+    let value = this.get("feeEarnedEvents");
+    return value!.toStringArray();
+  }
+
+  set feeEarnedEvents(value: Array<string>) {
+    this.set("feeEarnedEvents", Value.fromStringArray(value));
   }
 }
 
@@ -342,15 +360,6 @@ export class Position extends Entity {
     this.set("vault", Value.fromBytes(value));
   }
 
-  get positionIdInVault(): Bytes {
-    let value = this.get("positionIdInVault");
-    return value!.toBytes();
-  }
-
-  set positionIdInVault(value: Bytes) {
-    this.set("positionIdInVault", Value.fromBytes(value));
-  }
-
   get openedAtTimestamp(): BigInt {
     let value = this.get("openedAtTimestamp");
     return value!.toBigInt();
@@ -385,6 +394,90 @@ export class Position extends Entity {
 
   set closedAtBlock(value: BigInt) {
     this.set("closedAtBlock", Value.fromBigInt(value));
+  }
+}
+
+export class FeeEarned extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save FeeEarned entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type FeeEarned must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("FeeEarned", id.toString(), this);
+    }
+  }
+
+  static load(id: string): FeeEarned | null {
+    return changetype<FeeEarned | null>(store.get("FeeEarned", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get amount0(): BigInt | null {
+    let value = this.get("amount0");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amount0(value: BigInt | null) {
+    if (!value) {
+      this.unset("amount0");
+    } else {
+      this.set("amount0", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get amount1(): BigInt | null {
+    let value = this.get("amount1");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amount1(value: BigInt | null) {
+    if (!value) {
+      this.unset("amount1");
+    } else {
+      this.set("amount1", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get vault(): Bytes {
+    let value = this.get("vault");
+    return value!.toBytes();
+  }
+
+  set vault(value: Bytes) {
+    this.set("vault", Value.fromBytes(value));
   }
 }
 
