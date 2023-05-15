@@ -996,52 +996,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3MintCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "int256",
-        "name": "amount0Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "amount1Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3SwapCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "pause",
     "outputs": [],
@@ -1079,7 +1033,7 @@
     "name": "pool",
     "outputs": [
       {
-        "internalType": "contract IPancakeV3Pool",
+        "internalType": "contract IUniswapV3Pool",
         "name": "",
         "type": "address"
       }
@@ -1282,6 +1236,52 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount0Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount1Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "uniswapV3MintCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "amount0Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "amount1Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "uniswapV3SwapCallback",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

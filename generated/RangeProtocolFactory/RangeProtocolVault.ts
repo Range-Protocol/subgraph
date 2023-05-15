@@ -2025,82 +2025,6 @@ export class MintCall__Outputs {
   }
 }
 
-export class PancakeV3MintCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3MintCallbackCall__Inputs {
-    return new PancakeV3MintCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3MintCallbackCall__Outputs {
-    return new PancakeV3MintCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3MintCallbackCall__Inputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Owed(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Owed(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3MintCallbackCall__Outputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-}
-
-export class PancakeV3SwapCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3SwapCallbackCall__Inputs {
-    return new PancakeV3SwapCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3SwapCallbackCall__Outputs {
-    return new PancakeV3SwapCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Inputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Delta(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Delta(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Outputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
-  }
-}
-
 export class PauseCall extends ethereum.Call {
   get inputs(): PauseCall__Inputs {
     return new PauseCall__Inputs(this);
@@ -2357,6 +2281,82 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class UniswapV3MintCallbackCall extends ethereum.Call {
+  get inputs(): UniswapV3MintCallbackCall__Inputs {
+    return new UniswapV3MintCallbackCall__Inputs(this);
+  }
+
+  get outputs(): UniswapV3MintCallbackCall__Outputs {
+    return new UniswapV3MintCallbackCall__Outputs(this);
+  }
+}
+
+export class UniswapV3MintCallbackCall__Inputs {
+  _call: UniswapV3MintCallbackCall;
+
+  constructor(call: UniswapV3MintCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Owed(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Owed(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class UniswapV3MintCallbackCall__Outputs {
+  _call: UniswapV3MintCallbackCall;
+
+  constructor(call: UniswapV3MintCallbackCall) {
+    this._call = call;
+  }
+}
+
+export class UniswapV3SwapCallbackCall extends ethereum.Call {
+  get inputs(): UniswapV3SwapCallbackCall__Inputs {
+    return new UniswapV3SwapCallbackCall__Inputs(this);
+  }
+
+  get outputs(): UniswapV3SwapCallbackCall__Outputs {
+    return new UniswapV3SwapCallbackCall__Outputs(this);
+  }
+}
+
+export class UniswapV3SwapCallbackCall__Inputs {
+  _call: UniswapV3SwapCallbackCall;
+
+  constructor(call: UniswapV3SwapCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Delta(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Delta(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class UniswapV3SwapCallbackCall__Outputs {
+  _call: UniswapV3SwapCallbackCall;
+
+  constructor(call: UniswapV3SwapCallbackCall) {
     this._call = call;
   }
 }

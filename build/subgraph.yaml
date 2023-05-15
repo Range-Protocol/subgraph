@@ -4,13 +4,13 @@ repository: https://github.com/Range-Protocol/range-protocol-vault
 schema:
   file: schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: RangeProtocolFactory
-    network: bsc
+    network: matic
     source:
-      address: "0xad2b34a2245b5a7378964BC820e8F34D14adF312"
+      address: "0xB9084c75D361D1d4cfC7663ef31591DeAB1086d6"
       abi: RangeProtocolFactory
-      startBlock: 28026880
+      startBlock: 42444608
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -25,7 +25,7 @@ dataSources:
         - name: IERC20Metadata
           file: RangeProtocolFactory/abis/IERC20Metadata.json
         - name: IPancakeV3Pool
-          file: RangeProtocolFactory/abis/IPancakeV3Pool.json
+          file: RangeProtocolFactory/abis/IUniswapV3Pool.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: bsc
+    network: matic
     source:
       abi: RangeProtocolVault
     mapping:
@@ -49,7 +49,7 @@ templates:
         - name: RangeProtocolVault
           file: RangeProtocolVault/abis/RangeProtocolVault.json
         - name: IPancakeV3Pool
-          file: RangeProtocolVault/abis/IPancakeV3Pool.json
+          file: RangeProtocolVault/abis/IUniswapV3Pool.json
       eventHandlers:
         - event: Minted(indexed address,uint256,uint256,uint256)
           handler: handleMinted
