@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: RangeProtocolFactory
-    network: mumbai
+    network: bsc
     source:
-      address: "0xd02a386e06b53AC7AeB68F6d30D3619F575d041E"
+      address: "0xad2b34a2245b5a7378964BC820e8F34D14adF312"
       abi: RangeProtocolFactory
-      startBlock: 35365490
+      startBlock: 28026880
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -24,8 +24,8 @@ dataSources:
           file: RangeProtocolFactory/abis/RangeProtocolVault.json
         - name: IERC20Metadata
           file: RangeProtocolFactory/abis/IERC20Metadata.json
-        - name: UniswapV3Pool
-          file: RangeProtocolFactory/abis/UniswapV3Pool.json
+        - name: IPancakeV3Pool
+          file: RangeProtocolFactory/abis/IPancakeV3Pool.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: mumbai
+    network: bsc
     source:
       abi: RangeProtocolVault
     mapping:
@@ -48,8 +48,8 @@ templates:
       abis:
         - name: RangeProtocolVault
           file: RangeProtocolVault/abis/RangeProtocolVault.json
-        - name: UniswapV3Pool
-          file: RangeProtocolVault/abis/UniswapV3Pool.json
+        - name: IPancakeV3Pool
+          file: RangeProtocolVault/abis/IPancakeV3Pool.json
       eventHandlers:
         - event: Minted(indexed address,uint256,uint256,uint256)
           handler: handleMinted

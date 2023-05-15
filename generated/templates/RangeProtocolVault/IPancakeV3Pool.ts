@@ -10,309 +10,7 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class Burn extends ethereum.Event {
-  get params(): Burn__Params {
-    return new Burn__Params(this);
-  }
-}
-
-export class Burn__Params {
-  _event: Burn;
-
-  constructor(event: Burn) {
-    this._event = event;
-  }
-
-  get owner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get tickLower(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tickUpper(): i32 {
-    return this._event.parameters[2].value.toI32();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class Collect extends ethereum.Event {
-  get params(): Collect__Params {
-    return new Collect__Params(this);
-  }
-}
-
-export class Collect__Params {
-  _event: Collect;
-
-  constructor(event: Collect) {
-    this._event = event;
-  }
-
-  get owner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tickLower(): i32 {
-    return this._event.parameters[2].value.toI32();
-  }
-
-  get tickUpper(): i32 {
-    return this._event.parameters[3].value.toI32();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class CollectProtocol extends ethereum.Event {
-  get params(): CollectProtocol__Params {
-    return new CollectProtocol__Params(this);
-  }
-}
-
-export class CollectProtocol__Params {
-  _event: CollectProtocol;
-
-  constructor(event: CollectProtocol) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class Flash extends ethereum.Event {
-  get params(): Flash__Params {
-    return new Flash__Params(this);
-  }
-}
-
-export class Flash__Params {
-  _event: Flash;
-
-  constructor(event: Flash) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get paid0(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get paid1(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class IncreaseObservationCardinalityNext extends ethereum.Event {
-  get params(): IncreaseObservationCardinalityNext__Params {
-    return new IncreaseObservationCardinalityNext__Params(this);
-  }
-}
-
-export class IncreaseObservationCardinalityNext__Params {
-  _event: IncreaseObservationCardinalityNext;
-
-  constructor(event: IncreaseObservationCardinalityNext) {
-    this._event = event;
-  }
-
-  get observationCardinalityNextOld(): i32 {
-    return this._event.parameters[0].value.toI32();
-  }
-
-  get observationCardinalityNextNew(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-}
-
-export class Initialize extends ethereum.Event {
-  get params(): Initialize__Params {
-    return new Initialize__Params(this);
-  }
-}
-
-export class Initialize__Params {
-  _event: Initialize;
-
-  constructor(event: Initialize) {
-    this._event = event;
-  }
-
-  get sqrtPriceX96(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get tick(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-}
-
-export class Mint extends ethereum.Event {
-  get params(): Mint__Params {
-    return new Mint__Params(this);
-  }
-}
-
-export class Mint__Params {
-  _event: Mint;
-
-  constructor(event: Mint) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get owner(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tickLower(): i32 {
-    return this._event.parameters[2].value.toI32();
-  }
-
-  get tickUpper(): i32 {
-    return this._event.parameters[3].value.toI32();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-}
-
-export class SetFeeProtocol extends ethereum.Event {
-  get params(): SetFeeProtocol__Params {
-    return new SetFeeProtocol__Params(this);
-  }
-}
-
-export class SetFeeProtocol__Params {
-  _event: SetFeeProtocol;
-
-  constructor(event: SetFeeProtocol) {
-    this._event = event;
-  }
-
-  get feeProtocol0Old(): i32 {
-    return this._event.parameters[0].value.toI32();
-  }
-
-  get feeProtocol1Old(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get feeProtocol0New(): i32 {
-    return this._event.parameters[2].value.toI32();
-  }
-
-  get feeProtocol1New(): i32 {
-    return this._event.parameters[3].value.toI32();
-  }
-}
-
-export class Swap extends ethereum.Event {
-  get params(): Swap__Params {
-    return new Swap__Params(this);
-  }
-}
-
-export class Swap__Params {
-  _event: Swap;
-
-  constructor(event: Swap) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount0(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get sqrtPriceX96(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get liquidity(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get tick(): i32 {
-    return this._event.parameters[6].value.toI32();
-  }
-}
-
-export class UniswapV3Pool__burnResult {
+export class IPancakeV3Pool__burnResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -337,7 +35,7 @@ export class UniswapV3Pool__burnResult {
   }
 }
 
-export class UniswapV3Pool__collectResult {
+export class IPancakeV3Pool__collectResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -362,7 +60,7 @@ export class UniswapV3Pool__collectResult {
   }
 }
 
-export class UniswapV3Pool__collectProtocolResult {
+export class IPancakeV3Pool__mintResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -387,32 +85,7 @@ export class UniswapV3Pool__collectProtocolResult {
   }
 }
 
-export class UniswapV3Pool__mintResult {
-  value0: BigInt;
-  value1: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-
-  getAmount0(): BigInt {
-    return this.value0;
-  }
-
-  getAmount1(): BigInt {
-    return this.value1;
-  }
-}
-
-export class UniswapV3Pool__observationsResult {
+export class IPancakeV3Pool__observationsResult {
   value0: BigInt;
   value1: BigInt;
   value2: BigInt;
@@ -451,32 +124,7 @@ export class UniswapV3Pool__observationsResult {
   }
 }
 
-export class UniswapV3Pool__observeResult {
-  value0: Array<BigInt>;
-  value1: Array<BigInt>;
-
-  constructor(value0: Array<BigInt>, value1: Array<BigInt>) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromSignedBigIntArray(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigIntArray(this.value1));
-    return map;
-  }
-
-  getTickCumulatives(): Array<BigInt> {
-    return this.value0;
-  }
-
-  getSecondsPerLiquidityCumulativeX128s(): Array<BigInt> {
-    return this.value1;
-  }
-}
-
-export class UniswapV3Pool__positionsResult {
+export class IPancakeV3Pool__positionsResult {
   value0: BigInt;
   value1: BigInt;
   value2: BigInt;
@@ -507,7 +155,7 @@ export class UniswapV3Pool__positionsResult {
     return map;
   }
 
-  getLiquidity(): BigInt {
+  get_liquidity(): BigInt {
     return this.value0;
   }
 
@@ -528,38 +176,13 @@ export class UniswapV3Pool__positionsResult {
   }
 }
 
-export class UniswapV3Pool__protocolFeesResult {
-  value0: BigInt;
-  value1: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-
-  getToken0(): BigInt {
-    return this.value0;
-  }
-
-  getToken1(): BigInt {
-    return this.value1;
-  }
-}
-
-export class UniswapV3Pool__slot0Result {
+export class IPancakeV3Pool__slot0Result {
   value0: BigInt;
   value1: i32;
   value2: i32;
   value3: i32;
   value4: i32;
-  value5: i32;
+  value5: BigInt;
   value6: boolean;
 
   constructor(
@@ -568,7 +191,7 @@ export class UniswapV3Pool__slot0Result {
     value2: i32,
     value3: i32,
     value4: i32,
-    value5: i32,
+    value5: BigInt,
     value6: boolean
   ) {
     this.value0 = value0;
@@ -596,10 +219,7 @@ export class UniswapV3Pool__slot0Result {
       "value4",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
     );
-    map.set(
-      "value5",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5))
-    );
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
     map.set("value6", ethereum.Value.fromBoolean(this.value6));
     return map;
   }
@@ -624,7 +244,7 @@ export class UniswapV3Pool__slot0Result {
     return this.value4;
   }
 
-  getFeeProtocol(): i32 {
+  getFeeProtocol(): BigInt {
     return this.value5;
   }
 
@@ -633,39 +253,7 @@ export class UniswapV3Pool__slot0Result {
   }
 }
 
-export class UniswapV3Pool__snapshotCumulativesInsideResult {
-  value0: BigInt;
-  value1: BigInt;
-  value2: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt, value2: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromSignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    return map;
-  }
-
-  getTickCumulativeInside(): BigInt {
-    return this.value0;
-  }
-
-  getSecondsPerLiquidityInsideX128(): BigInt {
-    return this.value1;
-  }
-
-  getSecondsInside(): BigInt {
-    return this.value2;
-  }
-}
-
-export class UniswapV3Pool__swapResult {
+export class IPancakeV3Pool__swapResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -690,7 +278,7 @@ export class UniswapV3Pool__swapResult {
   }
 }
 
-export class UniswapV3Pool__ticksResult {
+export class IPancakeV3Pool__ticksResult {
   value0: BigInt;
   value1: BigInt;
   value2: BigInt;
@@ -766,16 +354,16 @@ export class UniswapV3Pool__ticksResult {
   }
 }
 
-export class UniswapV3Pool extends ethereum.SmartContract {
-  static bind(address: Address): UniswapV3Pool {
-    return new UniswapV3Pool("UniswapV3Pool", address);
+export class IPancakeV3Pool extends ethereum.SmartContract {
+  static bind(address: Address): IPancakeV3Pool {
+    return new IPancakeV3Pool("IPancakeV3Pool", address);
   }
 
   burn(
     tickLower: i32,
     tickUpper: i32,
     amount: BigInt
-  ): UniswapV3Pool__burnResult {
+  ): IPancakeV3Pool__burnResult {
     let result = super.call(
       "burn",
       "burn(int24,int24,uint128):(uint256,uint256)",
@@ -786,7 +374,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
       ]
     );
 
-    return new UniswapV3Pool__burnResult(
+    return new IPancakeV3Pool__burnResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
@@ -796,7 +384,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     tickLower: i32,
     tickUpper: i32,
     amount: BigInt
-  ): ethereum.CallResult<UniswapV3Pool__burnResult> {
+  ): ethereum.CallResult<IPancakeV3Pool__burnResult> {
     let result = super.tryCall(
       "burn",
       "burn(int24,int24,uint128):(uint256,uint256)",
@@ -811,7 +399,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__burnResult(value[0].toBigInt(), value[1].toBigInt())
+      new IPancakeV3Pool__burnResult(value[0].toBigInt(), value[1].toBigInt())
     );
   }
 
@@ -821,7 +409,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     tickUpper: i32,
     amount0Requested: BigInt,
     amount1Requested: BigInt
-  ): UniswapV3Pool__collectResult {
+  ): IPancakeV3Pool__collectResult {
     let result = super.call(
       "collect",
       "collect(address,int24,int24,uint128,uint128):(uint128,uint128)",
@@ -834,7 +422,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
       ]
     );
 
-    return new UniswapV3Pool__collectResult(
+    return new IPancakeV3Pool__collectResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
@@ -846,7 +434,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     tickUpper: i32,
     amount0Requested: BigInt,
     amount1Requested: BigInt
-  ): ethereum.CallResult<UniswapV3Pool__collectResult> {
+  ): ethereum.CallResult<IPancakeV3Pool__collectResult> {
     let result = super.tryCall(
       "collect",
       "collect(address,int24,int24,uint128,uint128):(uint128,uint128)",
@@ -863,51 +451,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__collectResult(value[0].toBigInt(), value[1].toBigInt())
-    );
-  }
-
-  collectProtocol(
-    recipient: Address,
-    amount0Requested: BigInt,
-    amount1Requested: BigInt
-  ): UniswapV3Pool__collectProtocolResult {
-    let result = super.call(
-      "collectProtocol",
-      "collectProtocol(address,uint128,uint128):(uint128,uint128)",
-      [
-        ethereum.Value.fromAddress(recipient),
-        ethereum.Value.fromUnsignedBigInt(amount0Requested),
-        ethereum.Value.fromUnsignedBigInt(amount1Requested)
-      ]
-    );
-
-    return new UniswapV3Pool__collectProtocolResult(
-      result[0].toBigInt(),
-      result[1].toBigInt()
-    );
-  }
-
-  try_collectProtocol(
-    recipient: Address,
-    amount0Requested: BigInt,
-    amount1Requested: BigInt
-  ): ethereum.CallResult<UniswapV3Pool__collectProtocolResult> {
-    let result = super.tryCall(
-      "collectProtocol",
-      "collectProtocol(address,uint128,uint128):(uint128,uint128)",
-      [
-        ethereum.Value.fromAddress(recipient),
-        ethereum.Value.fromUnsignedBigInt(amount0Requested),
-        ethereum.Value.fromUnsignedBigInt(amount1Requested)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__collectProtocolResult(
+      new IPancakeV3Pool__collectResult(
         value[0].toBigInt(),
         value[1].toBigInt()
       )
@@ -1034,7 +578,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     tickUpper: i32,
     amount: BigInt,
     data: Bytes
-  ): UniswapV3Pool__mintResult {
+  ): IPancakeV3Pool__mintResult {
     let result = super.call(
       "mint",
       "mint(address,int24,int24,uint128,bytes):(uint256,uint256)",
@@ -1047,7 +591,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
       ]
     );
 
-    return new UniswapV3Pool__mintResult(
+    return new IPancakeV3Pool__mintResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
@@ -1059,7 +603,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     tickUpper: i32,
     amount: BigInt,
     data: Bytes
-  ): ethereum.CallResult<UniswapV3Pool__mintResult> {
+  ): ethereum.CallResult<IPancakeV3Pool__mintResult> {
     let result = super.tryCall(
       "mint",
       "mint(address,int24,int24,uint128,bytes):(uint256,uint256)",
@@ -1076,18 +620,18 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__mintResult(value[0].toBigInt(), value[1].toBigInt())
+      new IPancakeV3Pool__mintResult(value[0].toBigInt(), value[1].toBigInt())
     );
   }
 
-  observations(param0: BigInt): UniswapV3Pool__observationsResult {
+  observations(index: BigInt): IPancakeV3Pool__observationsResult {
     let result = super.call(
       "observations",
       "observations(uint256):(uint32,int56,uint160,bool)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      [ethereum.Value.fromUnsignedBigInt(index)]
     );
 
-    return new UniswapV3Pool__observationsResult(
+    return new IPancakeV3Pool__observationsResult(
       result[0].toBigInt(),
       result[1].toBigInt(),
       result[2].toBigInt(),
@@ -1096,19 +640,19 @@ export class UniswapV3Pool extends ethereum.SmartContract {
   }
 
   try_observations(
-    param0: BigInt
-  ): ethereum.CallResult<UniswapV3Pool__observationsResult> {
+    index: BigInt
+  ): ethereum.CallResult<IPancakeV3Pool__observationsResult> {
     let result = super.tryCall(
       "observations",
       "observations(uint256):(uint32,int56,uint160,bool)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
+      [ethereum.Value.fromUnsignedBigInt(index)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__observationsResult(
+      new IPancakeV3Pool__observationsResult(
         value[0].toBigInt(),
         value[1].toBigInt(),
         value[2].toBigInt(),
@@ -1117,47 +661,14 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     );
   }
 
-  observe(secondsAgos: Array<BigInt>): UniswapV3Pool__observeResult {
-    let result = super.call(
-      "observe",
-      "observe(uint32[]):(int56[],uint160[])",
-      [ethereum.Value.fromUnsignedBigIntArray(secondsAgos)]
-    );
-
-    return new UniswapV3Pool__observeResult(
-      result[0].toBigIntArray(),
-      result[1].toBigIntArray()
-    );
-  }
-
-  try_observe(
-    secondsAgos: Array<BigInt>
-  ): ethereum.CallResult<UniswapV3Pool__observeResult> {
-    let result = super.tryCall(
-      "observe",
-      "observe(uint32[]):(int56[],uint160[])",
-      [ethereum.Value.fromUnsignedBigIntArray(secondsAgos)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__observeResult(
-        value[0].toBigIntArray(),
-        value[1].toBigIntArray()
-      )
-    );
-  }
-
-  positions(param0: Bytes): UniswapV3Pool__positionsResult {
+  positions(key: Bytes): IPancakeV3Pool__positionsResult {
     let result = super.call(
       "positions",
       "positions(bytes32):(uint128,uint256,uint256,uint128,uint128)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      [ethereum.Value.fromFixedBytes(key)]
     );
 
-    return new UniswapV3Pool__positionsResult(
+    return new IPancakeV3Pool__positionsResult(
       result[0].toBigInt(),
       result[1].toBigInt(),
       result[2].toBigInt(),
@@ -1167,19 +678,19 @@ export class UniswapV3Pool extends ethereum.SmartContract {
   }
 
   try_positions(
-    param0: Bytes
-  ): ethereum.CallResult<UniswapV3Pool__positionsResult> {
+    key: Bytes
+  ): ethereum.CallResult<IPancakeV3Pool__positionsResult> {
     let result = super.tryCall(
       "positions",
       "positions(bytes32):(uint128,uint256,uint256,uint128,uint128)",
-      [ethereum.Value.fromFixedBytes(param0)]
+      [ethereum.Value.fromFixedBytes(key)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__positionsResult(
+      new IPancakeV3Pool__positionsResult(
         value[0].toBigInt(),
         value[1].toBigInt(),
         value[2].toBigInt(),
@@ -1189,59 +700,28 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     );
   }
 
-  protocolFees(): UniswapV3Pool__protocolFeesResult {
-    let result = super.call(
-      "protocolFees",
-      "protocolFees():(uint128,uint128)",
-      []
-    );
-
-    return new UniswapV3Pool__protocolFeesResult(
-      result[0].toBigInt(),
-      result[1].toBigInt()
-    );
-  }
-
-  try_protocolFees(): ethereum.CallResult<UniswapV3Pool__protocolFeesResult> {
-    let result = super.tryCall(
-      "protocolFees",
-      "protocolFees():(uint128,uint128)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__protocolFeesResult(
-        value[0].toBigInt(),
-        value[1].toBigInt()
-      )
-    );
-  }
-
-  slot0(): UniswapV3Pool__slot0Result {
+  slot0(): IPancakeV3Pool__slot0Result {
     let result = super.call(
       "slot0",
-      "slot0():(uint160,int24,uint16,uint16,uint16,uint8,bool)",
+      "slot0():(uint160,int24,uint16,uint16,uint16,uint32,bool)",
       []
     );
 
-    return new UniswapV3Pool__slot0Result(
+    return new IPancakeV3Pool__slot0Result(
       result[0].toBigInt(),
       result[1].toI32(),
       result[2].toI32(),
       result[3].toI32(),
       result[4].toI32(),
-      result[5].toI32(),
+      result[5].toBigInt(),
       result[6].toBoolean()
     );
   }
 
-  try_slot0(): ethereum.CallResult<UniswapV3Pool__slot0Result> {
+  try_slot0(): ethereum.CallResult<IPancakeV3Pool__slot0Result> {
     let result = super.tryCall(
       "slot0",
-      "slot0():(uint160,int24,uint16,uint16,uint16,uint8,bool)",
+      "slot0():(uint160,int24,uint16,uint16,uint16,uint32,bool)",
       []
     );
     if (result.reverted) {
@@ -1249,53 +729,14 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__slot0Result(
+      new IPancakeV3Pool__slot0Result(
         value[0].toBigInt(),
         value[1].toI32(),
         value[2].toI32(),
         value[3].toI32(),
         value[4].toI32(),
-        value[5].toI32(),
+        value[5].toBigInt(),
         value[6].toBoolean()
-      )
-    );
-  }
-
-  snapshotCumulativesInside(
-    tickLower: i32,
-    tickUpper: i32
-  ): UniswapV3Pool__snapshotCumulativesInsideResult {
-    let result = super.call(
-      "snapshotCumulativesInside",
-      "snapshotCumulativesInside(int24,int24):(int56,uint160,uint32)",
-      [ethereum.Value.fromI32(tickLower), ethereum.Value.fromI32(tickUpper)]
-    );
-
-    return new UniswapV3Pool__snapshotCumulativesInsideResult(
-      result[0].toBigInt(),
-      result[1].toBigInt(),
-      result[2].toBigInt()
-    );
-  }
-
-  try_snapshotCumulativesInside(
-    tickLower: i32,
-    tickUpper: i32
-  ): ethereum.CallResult<UniswapV3Pool__snapshotCumulativesInsideResult> {
-    let result = super.tryCall(
-      "snapshotCumulativesInside",
-      "snapshotCumulativesInside(int24,int24):(int56,uint160,uint32)",
-      [ethereum.Value.fromI32(tickLower), ethereum.Value.fromI32(tickUpper)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__snapshotCumulativesInsideResult(
-        value[0].toBigInt(),
-        value[1].toBigInt(),
-        value[2].toBigInt()
       )
     );
   }
@@ -1306,7 +747,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     amountSpecified: BigInt,
     sqrtPriceLimitX96: BigInt,
     data: Bytes
-  ): UniswapV3Pool__swapResult {
+  ): IPancakeV3Pool__swapResult {
     let result = super.call(
       "swap",
       "swap(address,bool,int256,uint160,bytes):(int256,int256)",
@@ -1319,7 +760,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
       ]
     );
 
-    return new UniswapV3Pool__swapResult(
+    return new IPancakeV3Pool__swapResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
@@ -1331,7 +772,7 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     amountSpecified: BigInt,
     sqrtPriceLimitX96: BigInt,
     data: Bytes
-  ): ethereum.CallResult<UniswapV3Pool__swapResult> {
+  ): ethereum.CallResult<IPancakeV3Pool__swapResult> {
     let result = super.tryCall(
       "swap",
       "swap(address,bool,int256,uint160,bytes):(int256,int256)",
@@ -1348,21 +789,21 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__swapResult(value[0].toBigInt(), value[1].toBigInt())
+      new IPancakeV3Pool__swapResult(value[0].toBigInt(), value[1].toBigInt())
     );
   }
 
-  tickBitmap(param0: i32): BigInt {
+  tickBitmap(wordPosition: i32): BigInt {
     let result = super.call("tickBitmap", "tickBitmap(int16):(uint256)", [
-      ethereum.Value.fromI32(param0)
+      ethereum.Value.fromI32(wordPosition)
     ]);
 
     return result[0].toBigInt();
   }
 
-  try_tickBitmap(param0: i32): ethereum.CallResult<BigInt> {
+  try_tickBitmap(wordPosition: i32): ethereum.CallResult<BigInt> {
     let result = super.tryCall("tickBitmap", "tickBitmap(int16):(uint256)", [
-      ethereum.Value.fromI32(param0)
+      ethereum.Value.fromI32(wordPosition)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1386,14 +827,14 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  ticks(param0: i32): UniswapV3Pool__ticksResult {
+  ticks(tick: i32): IPancakeV3Pool__ticksResult {
     let result = super.call(
       "ticks",
       "ticks(int24):(uint128,int128,uint256,uint256,int56,uint160,uint32,bool)",
-      [ethereum.Value.fromI32(param0)]
+      [ethereum.Value.fromI32(tick)]
     );
 
-    return new UniswapV3Pool__ticksResult(
+    return new IPancakeV3Pool__ticksResult(
       result[0].toBigInt(),
       result[1].toBigInt(),
       result[2].toBigInt(),
@@ -1405,18 +846,18 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     );
   }
 
-  try_ticks(param0: i32): ethereum.CallResult<UniswapV3Pool__ticksResult> {
+  try_ticks(tick: i32): ethereum.CallResult<IPancakeV3Pool__ticksResult> {
     let result = super.tryCall(
       "ticks",
       "ticks(int24):(uint128,int128,uint256,uint256,int56,uint160,uint32,bool)",
-      [ethereum.Value.fromI32(param0)]
+      [ethereum.Value.fromI32(tick)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new UniswapV3Pool__ticksResult(
+      new IPancakeV3Pool__ticksResult(
         value[0].toBigInt(),
         value[1].toBigInt(),
         value[2].toBigInt(),
@@ -1457,32 +898,6 @@ export class UniswapV3Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-}
-
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
   }
 }
 
@@ -1574,52 +989,6 @@ export class CollectCall__Outputs {
   _call: CollectCall;
 
   constructor(call: CollectCall) {
-    this._call = call;
-  }
-
-  get amount0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-
-  get amount1(): BigInt {
-    return this._call.outputValues[1].value.toBigInt();
-  }
-}
-
-export class CollectProtocolCall extends ethereum.Call {
-  get inputs(): CollectProtocolCall__Inputs {
-    return new CollectProtocolCall__Inputs(this);
-  }
-
-  get outputs(): CollectProtocolCall__Outputs {
-    return new CollectProtocolCall__Outputs(this);
-  }
-}
-
-export class CollectProtocolCall__Inputs {
-  _call: CollectProtocolCall;
-
-  constructor(call: CollectProtocolCall) {
-    this._call = call;
-  }
-
-  get recipient(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount0Requested(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get amount1Requested(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class CollectProtocolCall__Outputs {
-  _call: CollectProtocolCall;
-
-  constructor(call: CollectProtocolCall) {
     this._call = call;
   }
 
@@ -1785,40 +1154,6 @@ export class MintCall__Outputs {
 
   get amount1(): BigInt {
     return this._call.outputValues[1].value.toBigInt();
-  }
-}
-
-export class SetFeeProtocolCall extends ethereum.Call {
-  get inputs(): SetFeeProtocolCall__Inputs {
-    return new SetFeeProtocolCall__Inputs(this);
-  }
-
-  get outputs(): SetFeeProtocolCall__Outputs {
-    return new SetFeeProtocolCall__Outputs(this);
-  }
-}
-
-export class SetFeeProtocolCall__Inputs {
-  _call: SetFeeProtocolCall;
-
-  constructor(call: SetFeeProtocolCall) {
-    this._call = call;
-  }
-
-  get feeProtocol0(): i32 {
-    return this._call.inputValues[0].value.toI32();
-  }
-
-  get feeProtocol1(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-}
-
-export class SetFeeProtocolCall__Outputs {
-  _call: SetFeeProtocolCall;
-
-  constructor(call: SetFeeProtocolCall) {
-    this._call = call;
   }
 }
 

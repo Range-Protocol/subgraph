@@ -214,7 +214,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _uniswapV3Factory(): Address {
+  get _pancakeV3Factory(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
