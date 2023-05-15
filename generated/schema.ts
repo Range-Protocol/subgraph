@@ -315,22 +315,22 @@ export class Position extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get lowerTick(): BigInt {
-    let value = this.get("lowerTick");
+  get bottomTick(): BigInt {
+    let value = this.get("bottomTick");
     return value!.toBigInt();
   }
 
-  set lowerTick(value: BigInt) {
-    this.set("lowerTick", Value.fromBigInt(value));
+  set bottomTick(value: BigInt) {
+    this.set("bottomTick", Value.fromBigInt(value));
   }
 
-  get upperTick(): BigInt {
-    let value = this.get("upperTick");
+  get topTick(): BigInt {
+    let value = this.get("topTick");
     return value!.toBigInt();
   }
 
-  set upperTick(value: BigInt) {
-    this.set("upperTick", Value.fromBigInt(value));
+  set topTick(value: BigInt) {
+    this.set("topTick", Value.fromBigInt(value));
   }
 
   get feesEarned0(): BigInt {

@@ -96,6 +96,21 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  TICK_SPACING(): i32 {
+    let result = super.call("TICK_SPACING", "TICK_SPACING():(int24)", []);
+
+    return result[0].toI32();
+  }
+
+  try_TICK_SPACING(): ethereum.CallResult<i32> {
+    let result = super.tryCall("TICK_SPACING", "TICK_SPACING():(int24)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   UPGRADE_SELECTOR(): Bytes {
     let result = super.call(
       "UPGRADE_SELECTOR",
@@ -214,7 +229,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _pancakeV3Factory(): Address {
+  get _algebraFactory(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
@@ -252,16 +267,12 @@ export class CreateVaultCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get fee(): i32 {
-    return this._call.inputValues[2].value.toI32();
-  }
-
   get implementation(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 

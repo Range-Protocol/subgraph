@@ -233,13 +233,13 @@
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "tickLower",
+        "name": "tickBottom",
         "type": "int24"
       },
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "tickUpper",
+        "name": "tickTop",
         "type": "int24"
       },
       {
@@ -270,13 +270,13 @@
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "tickLower",
+        "name": "tickBottom",
         "type": "int24"
       },
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "tickUpper",
+        "name": "tickTop",
         "type": "int24"
       },
       {
@@ -395,13 +395,13 @@
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "lowerTick",
+        "name": "bottomTick",
         "type": "int24"
       },
       {
         "indexed": false,
         "internalType": "int24",
-        "name": "upperTick",
+        "name": "topTick",
         "type": "int24"
       }
     ],
@@ -489,12 +489,12 @@
     "inputs": [
       {
         "internalType": "int24",
-        "name": "newLowerTick",
+        "name": "newBottomTick",
         "type": "int24"
       },
       {
         "internalType": "int24",
-        "name": "newUpperTick",
+        "name": "newTopTick",
         "type": "int24"
       },
       {
@@ -521,6 +521,52 @@
         "type": "uint256"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount0Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount1Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "algebraMintCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "amount0Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "amount1Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "algebraSwapCallback",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -586,6 +632,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bottomTick",
+    "outputs": [
+      {
+        "internalType": "int24",
+        "name": "",
+        "type": "int24"
       }
     ],
     "stateMutability": "view",
@@ -882,19 +941,6 @@
   },
   {
     "inputs": [],
-    "name": "lowerTick",
-    "outputs": [
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "manager",
     "outputs": [
       {
@@ -996,52 +1042,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3MintCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "int256",
-        "name": "amount0Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "amount1Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3SwapCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "pause",
     "outputs": [],
@@ -1079,7 +1079,7 @@
     "name": "pool",
     "outputs": [
       {
-        "internalType": "contract IPancakeV3Pool",
+        "internalType": "contract IAlgebraPool",
         "name": "",
         "type": "address"
       }
@@ -1209,6 +1209,19 @@
   },
   {
     "inputs": [],
+    "name": "topTick",
+    "outputs": [
+      {
+        "internalType": "int24",
+        "name": "",
+        "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "totalSupply",
     "outputs": [
       {
@@ -1315,12 +1328,12 @@
     "inputs": [
       {
         "internalType": "int24",
-        "name": "_lowerTick",
+        "name": "_bottomTick",
         "type": "int24"
       },
       {
         "internalType": "int24",
-        "name": "_upperTick",
+        "name": "_topTick",
         "type": "int24"
       }
     ],
@@ -1358,19 +1371,6 @@
     "name": "upgradeToAndCall",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "upperTick",
-    "outputs": [
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

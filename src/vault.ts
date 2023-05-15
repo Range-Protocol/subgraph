@@ -166,8 +166,8 @@ export function handleTicksSet(event: TicksSetEvent): void {
 
     vault.positionCount = vault.positionCount.plus(bn(1));
     const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
-    position.lowerTick = bn(event.params.lowerTick);
-    position.upperTick = bn(event.params.upperTick);
+    position.bottomTick = bn(event.params.bottomTick);
+    position.topTick = bn(event.params.topTick);
     position.feesEarned0 = ZERO;
     position.feesEarned1 = ZERO;
     position.vault = vault.id;

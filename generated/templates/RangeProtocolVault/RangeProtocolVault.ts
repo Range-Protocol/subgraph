@@ -203,11 +203,11 @@ export class LiquidityAdded__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get tickLower(): i32 {
+  get tickBottom(): i32 {
     return this._event.parameters[1].value.toI32();
   }
 
-  get tickUpper(): i32 {
+  get tickTop(): i32 {
     return this._event.parameters[2].value.toI32();
   }
 
@@ -237,11 +237,11 @@ export class LiquidityRemoved__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get tickLower(): i32 {
+  get tickBottom(): i32 {
     return this._event.parameters[1].value.toI32();
   }
 
-  get tickUpper(): i32 {
+  get tickTop(): i32 {
     return this._event.parameters[2].value.toI32();
   }
 
@@ -377,11 +377,11 @@ export class TicksSet__Params {
     this._event = event;
   }
 
-  get lowerTick(): i32 {
+  get bottomTick(): i32 {
     return this._event.parameters[0].value.toI32();
   }
 
-  get upperTick(): i32 {
+  get topTick(): i32 {
     return this._event.parameters[1].value.toI32();
   }
 }
@@ -753,8 +753,8 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   }
 
   addLiquidity(
-    newLowerTick: i32,
-    newUpperTick: i32,
+    newBottomTick: i32,
+    newTopTick: i32,
     amount0: BigInt,
     amount1: BigInt
   ): RangeProtocolVault__addLiquidityResult {
@@ -762,8 +762,8 @@ export class RangeProtocolVault extends ethereum.SmartContract {
       "addLiquidity",
       "addLiquidity(int24,int24,uint256,uint256):(uint256,uint256)",
       [
-        ethereum.Value.fromI32(newLowerTick),
-        ethereum.Value.fromI32(newUpperTick),
+        ethereum.Value.fromI32(newBottomTick),
+        ethereum.Value.fromI32(newTopTick),
         ethereum.Value.fromUnsignedBigInt(amount0),
         ethereum.Value.fromUnsignedBigInt(amount1)
       ]
@@ -776,8 +776,8 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   }
 
   try_addLiquidity(
-    newLowerTick: i32,
-    newUpperTick: i32,
+    newBottomTick: i32,
+    newTopTick: i32,
     amount0: BigInt,
     amount1: BigInt
   ): ethereum.CallResult<RangeProtocolVault__addLiquidityResult> {
@@ -785,8 +785,8 @@ export class RangeProtocolVault extends ethereum.SmartContract {
       "addLiquidity",
       "addLiquidity(int24,int24,uint256,uint256):(uint256,uint256)",
       [
-        ethereum.Value.fromI32(newLowerTick),
-        ethereum.Value.fromI32(newUpperTick),
+        ethereum.Value.fromI32(newBottomTick),
+        ethereum.Value.fromI32(newTopTick),
         ethereum.Value.fromUnsignedBigInt(amount0),
         ethereum.Value.fromUnsignedBigInt(amount1)
       ]
@@ -864,6 +864,21 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  bottomTick(): i32 {
+    let result = super.call("bottomTick", "bottomTick():(int24)", []);
+
+    return result[0].toI32();
+  }
+
+  try_bottomTick(): ethereum.CallResult<i32> {
+    let result = super.tryCall("bottomTick", "bottomTick():(int24)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   burn(burnAmount: BigInt): RangeProtocolVault__burnResult {
@@ -1214,21 +1229,6 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  lowerTick(): i32 {
-    let result = super.call("lowerTick", "lowerTick():(int24)", []);
-
-    return result[0].toI32();
-  }
-
-  try_lowerTick(): ethereum.CallResult<i32> {
-    let result = super.tryCall("lowerTick", "lowerTick():(int24)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
   manager(): Address {
     let result = super.call("manager", "manager():(address)", []);
 
@@ -1539,6 +1539,21 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  topTick(): i32 {
+    let result = super.call("topTick", "topTick():(int24)", []);
+
+    return result[0].toI32();
+  }
+
+  try_topTick(): ethereum.CallResult<i32> {
+    let result = super.tryCall("topTick", "topTick():(int24)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
   totalSupply(): BigInt {
     let result = super.call("totalSupply", "totalSupply():(uint256)", []);
 
@@ -1608,21 +1623,6 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  upperTick(): i32 {
-    let result = super.call("upperTick", "upperTick():(int24)", []);
-
-    return result[0].toI32();
-  }
-
-  try_upperTick(): ethereum.CallResult<i32> {
-    let result = super.tryCall("upperTick", "upperTick():(int24)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   userCount(): BigInt {
@@ -1738,11 +1738,11 @@ export class AddLiquidityCall__Inputs {
     this._call = call;
   }
 
-  get newLowerTick(): i32 {
+  get newBottomTick(): i32 {
     return this._call.inputValues[0].value.toI32();
   }
 
-  get newUpperTick(): i32 {
+  get newTopTick(): i32 {
     return this._call.inputValues[1].value.toI32();
   }
 
@@ -1768,6 +1768,82 @@ export class AddLiquidityCall__Outputs {
 
   get remainingAmount1(): BigInt {
     return this._call.outputValues[1].value.toBigInt();
+  }
+}
+
+export class AlgebraMintCallbackCall extends ethereum.Call {
+  get inputs(): AlgebraMintCallbackCall__Inputs {
+    return new AlgebraMintCallbackCall__Inputs(this);
+  }
+
+  get outputs(): AlgebraMintCallbackCall__Outputs {
+    return new AlgebraMintCallbackCall__Outputs(this);
+  }
+}
+
+export class AlgebraMintCallbackCall__Inputs {
+  _call: AlgebraMintCallbackCall;
+
+  constructor(call: AlgebraMintCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Owed(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Owed(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class AlgebraMintCallbackCall__Outputs {
+  _call: AlgebraMintCallbackCall;
+
+  constructor(call: AlgebraMintCallbackCall) {
+    this._call = call;
+  }
+}
+
+export class AlgebraSwapCallbackCall extends ethereum.Call {
+  get inputs(): AlgebraSwapCallbackCall__Inputs {
+    return new AlgebraSwapCallbackCall__Inputs(this);
+  }
+
+  get outputs(): AlgebraSwapCallbackCall__Outputs {
+    return new AlgebraSwapCallbackCall__Outputs(this);
+  }
+}
+
+export class AlgebraSwapCallbackCall__Inputs {
+  _call: AlgebraSwapCallbackCall;
+
+  constructor(call: AlgebraSwapCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Delta(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Delta(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class AlgebraSwapCallbackCall__Outputs {
+  _call: AlgebraSwapCallbackCall;
+
+  constructor(call: AlgebraSwapCallbackCall) {
+    this._call = call;
   }
 }
 
@@ -2022,82 +2098,6 @@ export class MintCall__Outputs {
 
   get amount1(): BigInt {
     return this._call.outputValues[1].value.toBigInt();
-  }
-}
-
-export class PancakeV3MintCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3MintCallbackCall__Inputs {
-    return new PancakeV3MintCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3MintCallbackCall__Outputs {
-    return new PancakeV3MintCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3MintCallbackCall__Inputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Owed(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Owed(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3MintCallbackCall__Outputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-}
-
-export class PancakeV3SwapCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3SwapCallbackCall__Inputs {
-    return new PancakeV3SwapCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3SwapCallbackCall__Outputs {
-    return new PancakeV3SwapCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Inputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Delta(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Delta(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Outputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
   }
 }
 
@@ -2438,11 +2438,11 @@ export class UpdateTicksCall__Inputs {
     this._call = call;
   }
 
-  get _lowerTick(): i32 {
+  get _bottomTick(): i32 {
     return this._call.inputValues[0].value.toI32();
   }
 
-  get _upperTick(): i32 {
+  get _topTick(): i32 {
     return this._call.inputValues[1].value.toI32();
   }
 }

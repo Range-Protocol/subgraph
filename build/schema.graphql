@@ -30,8 +30,8 @@ type Vault @entity {
 
 type Position @entity {
   id: String!
-  lowerTick: BigInt!
-  upperTick: BigInt!
+  bottomTick: BigInt!
+  topTick: BigInt!
   feesEarned0: BigInt!
   feesEarned1: BigInt!
   vault: Vault!
