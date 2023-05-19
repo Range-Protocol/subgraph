@@ -70,6 +70,7 @@ type Swap @entity {
   zeroForOne: Boolean!
   amount0: BigInt!
   amount1: BigInt!
+  timestamp: BigInt!
 }
 
 type Mint @entity {

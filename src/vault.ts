@@ -210,6 +210,7 @@ export function handleSwap(event: SwappedEvent): void {
     swap.zeroForOne = event.params.zeroForOne;
     swap.amount0 = event.params.amount0;
     swap.amount1 = event.params.amount1;
+    swap.timestamp = event.block.timestamp;
     swap.save();
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
