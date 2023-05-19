@@ -24,6 +24,12 @@ import {IPancakeV3Pool} from "../generated/RangeProtocolFactory/IPancakeV3Pool";
  * @param event Instance of MintedEvent.
  */
 export function handleMinted(event: MintedEvent): void {
+    const vault = Vault.load(event.address)!;
+    if (vault.firstMintAtBlock.equals(ZERO)) {
+        vault.firstMintAtBlock = event.block.number;
+        vault.save();
+    }
+
     const mint = new Mint(
         constructMintBurnId(
             event.address,
@@ -35,13 +41,9 @@ export function handleMinted(event: MintedEvent): void {
     mint.mintAmount = event.params.mintAmount;
     mint.amount0In = event.params.amount0In;
     mint.amount1In = event.params.amount1In;
+    mint.timestamp = event.block.timestamp;
+    mint.vault = vault.id;
     mint.save();
-
-    const vault = Vault.load(event.address)!;
-    if (vault.firstMintAtBlock.equals(ZERO)) {
-        vault.firstMintAtBlock = event.block.number;
-        vault.save();
-    }
 
     updateUnderlyingBalancesAndLiquidty(vault);
 }
@@ -65,6 +67,8 @@ export function handleBurned(event: BurnedEvent): void {
     burn.burnAmount = event.params.burnAmount;
     burn.amount0Out = event.params.amount0Out;
     burn.amount1Out = event.params.amount1Out;
+    burn.timestamp = event.block.timestamp;
+    burn.vault = Vault.load(event.address)!.id;
     burn.save();
 
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
@@ -211,6 +215,7 @@ export function handleSwap(event: SwappedEvent): void {
     swap.amount0 = event.params.amount0;
     swap.amount1 = event.params.amount1;
     swap.timestamp = event.block.timestamp;
+    swap.vault = Vault.load(event.address)!.id;
     swap.save();
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
