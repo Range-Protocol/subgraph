@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ range-bsc-pancakeswap",
-    "create-local": "graph create --node http://localhost:8020/ range-bsc-pancakeswap",
-    "remove-local": "graph remove --node http://localhost:8020/ range-bsc-pancakeswap",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 range-bsc-pancakeswap",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ ethereum-uniswap",
+    "create-local": "graph create --node http://localhost:8020/ ethereum-uniswap",
+    "remove-local": "graph remove --node http://localhost:8020/ ethereum-uniswap",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ethereum-uniswap",
     "test": "graph test"
   },
   "dependencies": {

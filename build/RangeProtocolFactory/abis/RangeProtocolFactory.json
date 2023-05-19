@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pancakeV3Factory",
+        "name": "_uniswapV3Factory",
         "type": "address"
       }
     ],

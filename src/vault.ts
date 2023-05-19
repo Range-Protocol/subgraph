@@ -14,7 +14,7 @@ import {
     RangeProtocolVault
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
-import {IPancakeV3Pool} from "../generated/RangeProtocolFactory/IPancakeV3Pool";
+import {IUniswapV3Pool} from "../generated/RangeProtocolFactory/IUniswapV3Pool";
 
 /**
  * @dev Handles the recording of new mints happenings on the vault.
@@ -277,7 +277,7 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
-    const position = IPancakeV3Pool.bind(Address.fromBytes(vault.pool))
+    const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
         .positions(vault.currentPositionIdInVault!);
 
     vault.liquidity = position.value0;
