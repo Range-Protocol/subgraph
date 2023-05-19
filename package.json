@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ range-poygon-quickswap",
-    "create-local": "graph create --node http://localhost:8020/ range-poygon-quickswap",
-    "remove-local": "graph remove --node http://localhost:8020/ range-poygon-quickswap",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 range-poygon-quickswap",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ poygon-quickswap",
+    "create-local": "graph create --node http://localhost:8020/ poygon-quickswap",
+    "remove-local": "graph remove --node http://localhost:8020/ poygon-quickswap",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 poygon-quickswap",
     "test": "graph test"
   },
   "dependencies": {

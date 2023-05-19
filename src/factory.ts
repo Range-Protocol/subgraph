@@ -15,6 +15,7 @@ import {Bytes} from "@graphprotocol/graph-ts";
  */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
     const vaultAddress = event.params.vault;
+    if (vaultAddress.toHexString().toLowerCase() == "0x7dea5e8d6269a02220608d07ae5feae7de856868") return;
     let vault = new Vault(vaultAddress);
     vault.pool = event.params.uniPool;
 
