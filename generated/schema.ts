@@ -309,6 +309,24 @@ export class Vault extends Entity {
   set swaps(value: Array<Bytes>) {
     this.set("swaps", Value.fromBytesArray(value));
   }
+
+  get lastUserIndex(): BigInt {
+    let value = this.get("lastUserIndex");
+    return value!.toBigInt();
+  }
+
+  set lastUserIndex(value: BigInt) {
+    this.set("lastUserIndex", Value.fromBigInt(value));
+  }
+
+  get userBalances(): Array<Bytes> {
+    let value = this.get("userBalances");
+    return value!.toBytesArray();
+  }
+
+  set userBalances(value: Array<Bytes>) {
+    this.set("userBalances", Value.fromBytesArray(value));
+  }
 }
 
 export class Position extends Entity {
@@ -600,13 +618,31 @@ export class UserVaultBalance extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
-  get vault(): Bytes {
-    let value = this.get("vault");
-    return value!.toBytes();
+  get token0(): BigInt {
+    let value = this.get("token0");
+    return value!.toBigInt();
   }
 
-  set vault(value: Bytes) {
-    this.set("vault", Value.fromBytes(value));
+  set token0(value: BigInt) {
+    this.set("token0", Value.fromBigInt(value));
+  }
+
+  get token1(): BigInt {
+    let value = this.get("token1");
+    return value!.toBigInt();
+  }
+
+  set token1(value: BigInt) {
+    this.set("token1", Value.fromBigInt(value));
+  }
+
+  get userIndex(): BigInt {
+    let value = this.get("userIndex");
+    return value!.toBigInt();
+  }
+
+  set userIndex(value: BigInt) {
+    this.set("userIndex", Value.fromBigInt(value));
   }
 
   get user(): Bytes {
@@ -616,6 +652,15 @@ export class UserVaultBalance extends Entity {
 
   set user(value: Bytes) {
     this.set("user", Value.fromBytes(value));
+  }
+
+  get vault(): Bytes {
+    let value = this.get("vault");
+    return value!.toBytes();
+  }
+
+  set vault(value: Bytes) {
+    this.set("vault", Value.fromBytes(value));
   }
 }
 
