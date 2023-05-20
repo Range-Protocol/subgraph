@@ -29,6 +29,8 @@ type Vault @entity {
   mints: [Mint!]! @derivedFrom(field: "vault")
   burns: [Burn!]! @derivedFrom(field: "vault")
   swaps: [Swap!]! @derivedFrom(field: "vault")
+  lastUserIndex: BigInt!
+  userBalances: [UserVaultBalance!]! @derivedFrom(field: "vault")
 }
 
 type Position @entity {
@@ -63,8 +65,11 @@ type UserVaultBalance @entity {
   id: Bytes!
   address: Bytes!
   balance: BigInt!
-  vault: Bytes!
+  token0: BigInt!
+  token1: BigInt!
+  userIndex: BigInt!
   user: User!
+  vault: Vault!
 }
 
 # Swap entity to track swap records

@@ -44,6 +44,7 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.currentPositionIdInVault = Bytes.fromHexString("0x");
     vault.positionCount = ZERO;
     vault.feeEarnedEventCount = ZERO;
+    vault.lastUserIndex = ZERO;
     vault.save();
 
     // Start indexing newly deployed vault.
