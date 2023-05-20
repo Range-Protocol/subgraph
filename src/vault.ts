@@ -24,6 +24,12 @@ import {IPancakeV3Pool} from "../generated/RangeProtocolFactory/IPancakeV3Pool";
  * @param event Instance of MintedEvent.
  */
 export function handleMinted(event: MintedEvent): void {
+    const vault = Vault.load(event.address)!;
+    if (vault.firstMintAtBlock.equals(ZERO)) {
+        vault.firstMintAtBlock = event.block.number;
+        vault.save();
+    }
+
     const mint = new Mint(
         constructMintBurnId(
             event.address,
@@ -35,13 +41,15 @@ export function handleMinted(event: MintedEvent): void {
     mint.mintAmount = event.params.mintAmount;
     mint.amount0In = event.params.amount0In;
     mint.amount1In = event.params.amount1In;
+    mint.timestamp = event.block.timestamp;
+    mint.vault = vault.id;
     mint.save();
 
-    const vault = Vault.load(event.address)!;
-    if (vault.firstMintAtBlock.equals(ZERO)) {
-        vault.firstMintAtBlock = event.block.number;
-        vault.save();
-    }
+    const vaultId = Bytes.fromByteArray(event.address);
+    const userVaultBalance = UserVaultBalance.load(vaultId.concat(event.params.receiver))!;
+    userVaultBalance.token0 = userVaultBalance.token0.plus(event.params.amount0In);
+    userVaultBalance.token1 = userVaultBalance.token1.plus(event.params.amount1In);
+    userVaultBalance.save();
 
     updateUnderlyingBalancesAndLiquidty(vault);
 }
@@ -65,6 +73,8 @@ export function handleBurned(event: BurnedEvent): void {
     burn.burnAmount = event.params.burnAmount;
     burn.amount0Out = event.params.amount0Out;
     burn.amount1Out = event.params.amount1Out;
+    burn.timestamp = event.block.timestamp;
+    burn.vault = Vault.load(event.address)!.id;
     burn.save();
 
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
@@ -111,10 +121,26 @@ export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
  */
 export function handleTransfer(event: TransferEvent): void {
     const vaultId = Bytes.fromByteArray(event.address);
+    let token0 = ZERO;
+    let token1 = ZERO;
     if (event.params.from != Address.zero()) {
         const fromVaultBalanceId = vaultId.concat(event.params.from);
         const fromVaultBalance = UserVaultBalance.load(fromVaultBalanceId)!;
+        token0 = fromVaultBalance.token0.minus(
+            fromVaultBalance.token0
+                .times(fromVaultBalance.balance.minus(event.params.value))
+                .div(fromVaultBalance.balance)
+        );
+
+        token1 = fromVaultBalance.token1.minus(
+            fromVaultBalance.token1
+                .times(fromVaultBalance.balance.minus(event.params.value))
+                .div(fromVaultBalance.balance)
+        );
+
         fromVaultBalance.balance = fromVaultBalance.balance.minus(event.params.value);
+        fromVaultBalance.token0 = fromVaultBalance.token0.minus(token0);
+        fromVaultBalance.token1 = fromVaultBalance.token1.minus(token1);
         fromVaultBalance.save();
         if (fromVaultBalance.balance.equals(ZERO)) {
             store.remove("UserVaultBalance", fromVaultBalanceId.toHexString());
@@ -127,16 +153,30 @@ export function handleTransfer(event: TransferEvent): void {
             user = new User((event.params.to));
             user.save();
         }
+
         const toVaultBalanceId = vaultId.concat(event.params.to);
         let toVaultBalance = UserVaultBalance.load(toVaultBalanceId);
         if (toVaultBalance == null) {
             toVaultBalance = new UserVaultBalance(toVaultBalanceId);
-            toVaultBalance.user = user.id;
-            toVaultBalance.balance = event.params.value;
-            toVaultBalance.vault = vaultId;
             toVaultBalance.address = event.params.to;
+            toVaultBalance.balance = event.params.value;
+            toVaultBalance.token0 = ZERO;
+            toVaultBalance.token1 = ZERO;
+            toVaultBalance.user = user.id;
+            toVaultBalance.vault = vaultId;
+
+            const vault = Vault.load(vaultId)!;
+            vault.lastUserIndex = vault.lastUserIndex.plus(bn(1));
+            vault.save();
+
+            toVaultBalance.userIndex = vault.lastUserIndex;
         } else {
             toVaultBalance.balance = toVaultBalance.balance.plus(event.params.value);
+        }
+
+        if (event.params.from != Address.zero()) {
+            toVaultBalance.token0 = toVaultBalance.token0.plus(token0);
+            toVaultBalance.token1 = toVaultBalance.token1.plus(token1);
         }
         toVaultBalance.save();
     }
@@ -211,6 +251,7 @@ export function handleSwap(event: SwappedEvent): void {
     swap.amount0 = event.params.amount0;
     swap.amount1 = event.params.amount1;
     swap.timestamp = event.block.timestamp;
+    swap.vault = Vault.load(event.address)!.id;
     swap.save();
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }

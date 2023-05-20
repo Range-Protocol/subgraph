@@ -26,6 +26,11 @@ type Vault @entity {
   feeEarnedEventCount: BigInt!
   positions: [Position!]! @derivedFrom(field: "vault")
   feeEarnedEvents: [FeeEarned!]! @derivedFrom(field: "vault")
+  mints: [Mint!]! @derivedFrom(field: "vault")
+  burns: [Burn!]! @derivedFrom(field: "vault")
+  swaps: [Swap!]! @derivedFrom(field: "vault")
+  lastUserIndex: BigInt!
+  userBalances: [UserVaultBalance!]! @derivedFrom(field: "vault")
 }
 
 type Position @entity {
@@ -60,8 +65,11 @@ type UserVaultBalance @entity {
   id: Bytes!
   address: Bytes!
   balance: BigInt!
-  vault: Bytes!
+  token0: BigInt!
+  token1: BigInt!
+  userIndex: BigInt!
   user: User!
+  vault: Vault!
 }
 
 # Swap entity to track swap records
@@ -71,6 +79,7 @@ type Swap @entity {
   amount0: BigInt!
   amount1: BigInt!
   timestamp: BigInt!
+  vault: Vault!
 }
 
 type Mint @entity {
@@ -79,6 +88,8 @@ type Mint @entity {
   mintAmount: BigInt!
   amount0In: BigInt!
   amount1In: BigInt!
+  timestamp: BigInt!
+  vault: Vault!
 }
 
 type Burn @entity {
@@ -87,4 +98,6 @@ type Burn @entity {
   burnAmount: BigInt!
   amount0Out: BigInt!
   amount1Out: BigInt!
+  timestamp: BigInt!
+  vault: Vault
 }
