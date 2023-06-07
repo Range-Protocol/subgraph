@@ -96,6 +96,15 @@ export class Vault extends Entity {
     this.set("token1Name", Value.fromString(value));
   }
 
+  get isPassive(): boolean {
+    let value = this.get("isPassive");
+    return value!.toBoolean();
+  }
+
+  set isPassive(value: boolean) {
+    this.set("isPassive", Value.fromBoolean(value));
+  }
+
   get liquidity(): BigInt {
     let value = this.get("liquidity");
     return value!.toBigInt();
