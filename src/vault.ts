@@ -51,6 +51,13 @@ export function handleMinted(event: MintedEvent): void {
     userVaultBalance.token1 = userVaultBalance.token1.plus(event.params.amount1In);
     userVaultBalance.save();
 
+    if (vault.inThePosition) {
+        const position = Position.load(vault.currentPosition!)!;
+        position.token0Amount = position.token0Amount.plus(event.params.amount0In);
+        position.token1Amount = position.token1Amount.plus(event.params.amount1In);
+        position.save();
+    }
+
     updateUnderlyingBalancesAndLiquidty(vault);
 }
 
@@ -77,7 +84,16 @@ export function handleBurned(event: BurnedEvent): void {
     burn.vault = Vault.load(event.address)!.id
     burn.save();
 
-    updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
+    const vault = Vault.load(event.address)!;
+
+    if (vault.inThePosition) {
+        const position = Position.load(vault.currentPosition!)!;
+        position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
+        position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
+        position.save();
+    }
+
+    updateUnderlyingBalancesAndLiquidty(vault);
 }
 
 /**
@@ -88,7 +104,13 @@ export function handleBurned(event: BurnedEvent): void {
  * @param event Instance of LiquidityAddedEvent.
  */
 export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
-    updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
+    const vault = Vault.load(event.address)!;
+    const position = Position.load(vault.currentPosition!)!;
+    position.token0Amount = position.token0Amount.plus(event.params.amount0In);
+    position.token1Amount = position.token1Amount.plus(event.params.amount1In);
+    position.save();
+
+    updateUnderlyingBalancesAndLiquidty(vault);
 }
 
 /**
@@ -101,11 +123,15 @@ export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
 export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
     const vault = Vault.load(event.address)!;
     const position = Position.load(vault.currentPosition!)!;
+    position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
+    position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
+    position.priceSqrtAtClosing = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
     if (position.closedAtBlock == ZERO) {
         position.closedAtTimestamp = event.block.timestamp;
         position.closedAtBlock = event.block.number;
-        position.save();
     }
+    position.save();
+
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
 
@@ -206,6 +232,10 @@ export function handleTicksSet(event: TicksSetEvent): void {
 
     vault.positionCount = vault.positionCount.plus(bn(1));
     const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
+    position.token0Amount = ZERO;
+    position.token1Amount = ZERO;
+    position.token0Withdrawn = ZERO;
+    position.token1Withdrawn = ZERO;
     position.lowerTick = bn(event.params.lowerTick);
     position.upperTick = bn(event.params.upperTick);
     position.feesEarned0 = ZERO;
@@ -215,6 +245,8 @@ export function handleTicksSet(event: TicksSetEvent): void {
     position.openedATBlock = event.block.number;
     position.closedAtTimestamp = ZERO;
     position.closedAtBlock = ZERO;
+    position.priceSqrtAtOpening = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.priceSqrtAtClosing = ZERO;
     position.save();
 
     vault.currentPosition = position.id;
