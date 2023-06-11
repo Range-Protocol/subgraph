@@ -24,7 +24,7 @@ dataSources:
           file: ./abis/RangeProtocolVault.json
         - name: IERC20Metadata
           file: ./abis/IERC20Metadata.json
-        - name: IPancakeV3Pool
+        - name: IUniswapV3Pool
           file: ./abis/IUniswapV3Pool.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
@@ -48,7 +48,7 @@ templates:
       abis:
         - name: RangeProtocolVault
           file: ./abis/RangeProtocolVault.json
-        - name: IPancakeV3Pool
+        - name: IUniswapV3Pool
           file: ./abis/IUniswapV3Pool.json
       eventHandlers:
         - event: Minted(indexed address,uint256,uint256,uint256)
