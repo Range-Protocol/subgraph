@@ -369,6 +369,60 @@ export class Position extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get token0Amount(): BigInt {
+    let value = this.get("token0Amount");
+    return value!.toBigInt();
+  }
+
+  set token0Amount(value: BigInt) {
+    this.set("token0Amount", Value.fromBigInt(value));
+  }
+
+  get token1Amount(): BigInt {
+    let value = this.get("token1Amount");
+    return value!.toBigInt();
+  }
+
+  set token1Amount(value: BigInt) {
+    this.set("token1Amount", Value.fromBigInt(value));
+  }
+
+  get token0Withdrawn(): BigInt {
+    let value = this.get("token0Withdrawn");
+    return value!.toBigInt();
+  }
+
+  set token0Withdrawn(value: BigInt) {
+    this.set("token0Withdrawn", Value.fromBigInt(value));
+  }
+
+  get token1Withdrawn(): BigInt {
+    let value = this.get("token1Withdrawn");
+    return value!.toBigInt();
+  }
+
+  set token1Withdrawn(value: BigInt) {
+    this.set("token1Withdrawn", Value.fromBigInt(value));
+  }
+
+  get priceSqrtAtOpening(): BigInt {
+    let value = this.get("priceSqrtAtOpening");
+    return value!.toBigInt();
+  }
+
+  set priceSqrtAtOpening(value: BigInt) {
+    this.set("priceSqrtAtOpening", Value.fromBigInt(value));
+  }
+
+  get priceSqrtAtClosing(): BigInt {
+    let value = this.get("priceSqrtAtClosing");
+    return value!.toBigInt();
+  }
+
+  set priceSqrtAtClosing(value: BigInt) {
+    this.set("priceSqrtAtClosing", Value.fromBigInt(value));
+  }
+
   get bottomTick(): BigInt {
     let value = this.get("bottomTick");
     return value!.toBigInt();
