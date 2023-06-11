@@ -36,6 +36,12 @@ type Vault @entity {
 
 type Position @entity {
   id: String!
+  token0Amount: BigInt!
+  token1Amount: BigInt!
+  token0Withdrawn: BigInt!
+  token1Withdrawn: BigInt!
+  priceSqrtAtOpening: BigInt!
+  priceSqrtAtClosing: BigInt!
   lowerTick: BigInt!
   upperTick: BigInt!
   feesEarned0: BigInt!
