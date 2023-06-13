@@ -129,6 +129,7 @@ export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
         position.closedAtTimestamp = event.block.timestamp;
         position.closedAtBlock = event.block.number;
     }
+    position.save();
     updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
 
