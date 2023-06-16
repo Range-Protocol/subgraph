@@ -108,3 +108,19 @@ type Burn @entity {
   timestamp: BigInt!
   vault: Vault
 }
+
+type VaultDayData @entity {
+  id: ID!
+  date: Int!
+  vault: Vault!
+  fee0: BigInt!
+  fee1: BigInt!
+}
+
+type VaultHourData @entity {
+  id: ID!
+  periodStartUnix: Int!
+  vault: Vault!
+  fee0: BigInt!
+  fee1: BigInt!
+}
