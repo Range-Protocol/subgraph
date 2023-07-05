@@ -96,6 +96,7 @@ type Mint @entity {
   amount0In: BigInt!
   amount1In: BigInt!
   timestamp: BigInt!
+  blockNumber: BigInt!
   vault: Vault!
 }
 
@@ -106,6 +107,7 @@ type Burn @entity {
   amount0Out: BigInt!
   amount1Out: BigInt!
   timestamp: BigInt!
+  blockNumber: BigInt!
   vault: Vault!
 }
 
