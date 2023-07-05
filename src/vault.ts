@@ -15,7 +15,6 @@ import {
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
 import {IPancakeV3Pool} from "../generated/RangeProtocolFactory/IPancakeV3Pool";
-import {updateVaultDayData, updateVaultHourData} from "./interval-updates";
 
 /**
  * @dev Handles the recording of new mints happenings on the vault.
@@ -169,9 +168,6 @@ export function handleTransfer(event: TransferEvent): void {
         fromVaultBalance.token0 = fromVaultBalance.token0.minus(token0);
         fromVaultBalance.token1 = fromVaultBalance.token1.minus(token1);
         fromVaultBalance.save();
-        if (fromVaultBalance.balance.equals(ZERO)) {
-            store.remove("UserVaultBalance", fromVaultBalanceId.toHexString());
-        }
     }
 
     if (event.params.to != Address.zero()) {
@@ -316,9 +312,6 @@ export function handleFeesEarned(event: FeesEarnedEvent): void {
     vault.totalFeesEarned0 = vault.totalFeesEarned0.plus(event.params.feesEarned0);
     vault.totalFeesEarned1 = vault.totalFeesEarned1.plus(event.params.feesEarned1);
     vault.save();
-
-    updateVaultDayData(event, event.params.feesEarned0, event.params.feesEarned1);
-    updateVaultHourData(event, event.params.feesEarned0, event.params.feesEarned1);
 
     updateUnderlyingBalancesAndLiquidty(vault);
 }
