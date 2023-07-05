@@ -167,9 +167,6 @@ export function handleTransfer(event: TransferEvent): void {
         fromVaultBalance.token0 = fromVaultBalance.token0.minus(token0);
         fromVaultBalance.token1 = fromVaultBalance.token1.minus(token1);
         fromVaultBalance.save();
-        if (fromVaultBalance.balance.equals(ZERO)) {
-            store.remove("UserVaultBalance", fromVaultBalanceId.toHexString());
-        }
     }
 
     if (event.params.to != Address.zero()) {
