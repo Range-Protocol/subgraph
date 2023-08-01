@@ -15,7 +15,6 @@ import {Bytes} from "@graphprotocol/graph-ts";
  */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
     const vaultAddress = event.params.vault;
-    if (vaultAddress.toHexString().toLowerCase() == "0xca6bcb39b852abad11e7241519de1aa5e136c5b8") return
     let vault = new Vault(vaultAddress);
     vault.pool = event.params.uniPool;
 
@@ -25,19 +24,16 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.token1 = vaultInstance.token1();
     vault.token0Name = IERC20Metadata.bind(vaultInstance.token0()).name();
     vault.token1Name = IERC20Metadata.bind(vaultInstance.token1()).name();
-    vault.isPassive = !!vault.name.includes("Wide");
     vault.liquidity = ZERO;
     vault.totalSupply = ZERO;
 
     vault.manager = vaultInstance.manager();
     vault.managingFee = bn(vaultInstance.managingFee());
     vault.performanceFee = bn(vaultInstance.performanceFee());
-    vault.managerBalance0 = ZERO;
-    vault.managerBalance1 = ZERO;
+    vault.managerBalanceGHO = ZERO;
+    vault.managerBalanceToken = ZERO;
 
-    vault.balance0 = ZERO;
-    vault.balance1 = ZERO;
-
+    vault.balance = ZERO;
     vault.totalFeesEarned0 = ZERO;
     vault.totalFeesEarned1 = ZERO;
     vault.firstMintAtBlock = ZERO;

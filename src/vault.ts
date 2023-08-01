@@ -1,4 +1,17 @@
-import {Burn, Mint, Position, Swap, User, UserVaultBalance, Vault, FeeEarned} from "../generated/schema";
+import {
+    Burn,
+    Mint,
+    Position,
+    Swap,
+    User,
+    UserVaultBalance,
+    Vault,
+    FeeEarned,
+    CollateralSupplied,
+    CollateralWithdrawn,
+    GHOMinted,
+    GHOBurned
+} from "../generated/schema";
 import {Address, BigInt, Bytes, store} from "@graphprotocol/graph-ts";
 import {
     Minted as MintedEvent,
@@ -11,7 +24,12 @@ import {
     Swapped as SwappedEvent,
     FeesEarned as FeesEarnedEvent,
     InThePositionStatusSet as InThePositionStatusSetEvent,
-    RangeProtocolVault
+    CollateralSupplied as CollateralSuppliedEvent,
+    CollateralWithdrawn as CollateralWithdrawnEvent,
+    GHOMinted as GHOMintedEvent,
+    GHOBurned as GHOBurnedEvent,
+
+    RangeProtocolVault,
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
 import {IUniswapV3Pool} from "../generated/RangeProtocolFactory/IUniswapV3Pool";
@@ -38,25 +56,16 @@ export function handleMinted(event: MintedEvent): void {
         )
     );
     mint.receiver = event.params.receiver;
-    mint.mintAmount = event.params.mintAmount;
-    mint.amount0In = event.params.amount0In;
-    mint.amount1In = event.params.amount1In;
+    mint.mintAmount = event.params.shares;
+    mint.amountIn = event.params.amount;
     mint.timestamp = event.block.timestamp;
     mint.vault = vault.id;
     mint.save();
 
     const vaultId = Bytes.fromByteArray(event.address);
     const userVaultBalance = UserVaultBalance.load(vaultId.concat(event.params.receiver))!;
-    userVaultBalance.token0 = userVaultBalance.token0.plus(event.params.amount0In);
-    userVaultBalance.token1 = userVaultBalance.token1.plus(event.params.amount1In);
+    userVaultBalance.token = userVaultBalance.token.plus(event.params.amount);
     userVaultBalance.save();
-
-    if (vault.inThePosition) {
-        const position = Position.load(vault.currentPosition!)!;
-        position.token0Amount = position.token0Amount.plus(event.params.amount0In);
-        position.token1Amount = position.token1Amount.plus(event.params.amount1In);
-        position.save();
-    }
 
     updateUnderlyingBalancesAndLiquidty(vault);
 }
@@ -78,22 +87,12 @@ export function handleBurned(event: BurnedEvent): void {
     );
     burn.receiver = event.params.receiver;
     burn.burnAmount = event.params.burnAmount;
-    burn.amount0Out = event.params.amount0Out;
-    burn.amount1Out = event.params.amount1Out;
+    burn.amountOut = event.params.amount;
     burn.timestamp = event.block.timestamp;
     burn.vault = Vault.load(event.address)!.id
     burn.save();
 
-    const vault = Vault.load(event.address)!;
-
-    if (vault.inThePosition) {
-        const position = Position.load(vault.currentPosition!)!;
-        position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
-        position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
-        position.save();
-    }
-
-    updateUnderlyingBalancesAndLiquidty(vault);
+    updateUnderlyingBalancesAndLiquidty(Vault.load(event.address)!);
 }
 
 /**
@@ -147,26 +146,18 @@ export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
  */
 export function handleTransfer(event: TransferEvent): void {
     const vaultId = Bytes.fromByteArray(event.address);
-    let token0 = ZERO;
-    let token1 = ZERO;
+    let token = ZERO;
     if (event.params.from != Address.zero()) {
         const fromVaultBalanceId = vaultId.concat(event.params.from);
         const fromVaultBalance = UserVaultBalance.load(fromVaultBalanceId)!;
-        token0 = fromVaultBalance.token0.minus(
-            fromVaultBalance.token0
-                .times(fromVaultBalance.balance.minus(event.params.value))
-                .div(fromVaultBalance.balance)
-        );
-
-        token1 = fromVaultBalance.token1.minus(
-            fromVaultBalance.token1
+        token = fromVaultBalance.token.minus(
+            fromVaultBalance.token
                 .times(fromVaultBalance.balance.minus(event.params.value))
                 .div(fromVaultBalance.balance)
         );
 
         fromVaultBalance.balance = fromVaultBalance.balance.minus(event.params.value);
-        fromVaultBalance.token0 = fromVaultBalance.token0.minus(token0);
-        fromVaultBalance.token1 = fromVaultBalance.token1.minus(token1);
+        fromVaultBalance.token = fromVaultBalance.token.minus(token);
         fromVaultBalance.save();
     }
 
@@ -183,8 +174,7 @@ export function handleTransfer(event: TransferEvent): void {
             toVaultBalance = new UserVaultBalance(toVaultBalanceId);
             toVaultBalance.address = event.params.to;
             toVaultBalance.balance = event.params.value;
-            toVaultBalance.token0 = ZERO;
-            toVaultBalance.token1 = ZERO;
+            toVaultBalance.token = ZERO;
             toVaultBalance.user = user.id;
             toVaultBalance.vault = vaultId;
 
@@ -198,8 +188,7 @@ export function handleTransfer(event: TransferEvent): void {
         }
 
         if (event.params.from != Address.zero()) {
-            toVaultBalance.token0 = toVaultBalance.token0.plus(token0);
-            toVaultBalance.token1 = toVaultBalance.token1.plus(token1);
+            toVaultBalance.token = toVaultBalance.token.plus(token);
         }
         toVaultBalance.save();
     }
@@ -330,6 +319,54 @@ export function handleInThePositionStatusSet(event: InThePositionStatusSetEvent)
     vault.save();
 }
 
+export function handleCollateralSupplied(event: CollateralSuppliedEvent): void {
+    const collateralSupplied = new CollateralSupplied(
+        "CollateralSupplied#"
+        + event.transaction.hash.toHexString()
+        + event.logIndex.toHexString()
+    );
+    collateralSupplied.amount = event.params.amount;
+    collateralSupplied.timestamp = event.block.timestamp;
+    collateralSupplied.vault = event.address;
+    collateralSupplied.save();
+}
+
+export function handleCollateralWithdrawn(event: CollateralWithdrawnEvent): void {
+    const collateralWithdrawn = new CollateralWithdrawn(
+        "CollateralWithdrawn#"
+        + event.transaction.hash.toHexString()
+        + event.logIndex.toHexString()
+    );
+    collateralWithdrawn.amount = event.params.amount;
+    collateralWithdrawn.timestamp = event.block.timestamp;
+    collateralWithdrawn.vault = event.address;
+    collateralWithdrawn.save();
+}
+
+export function handleGHOMinted(event: GHOMintedEvent): void {
+    const ghominted = new GHOMinted(
+        "GHOMinted#"
+        + event.transaction.hash.toHexString()
+        + event.logIndex.toHexString()
+    );
+    ghominted.amount = event.params.amount;
+    ghominted.timestamp = event.block.timestamp;
+    ghominted.vault = event.address;
+    ghominted.save();
+}
+
+export function handleGHOBurned(event: GHOBurnedEvent): void {
+    const ghoBurned = new GHOBurned(
+        "GHOBurned#"
+        + event.transaction.hash.toHexString()
+        + event.logIndex.toHexString()
+    );
+    ghoBurned.amount = event.params.amount;
+    ghoBurned.timestamp = event.block.timestamp;
+    ghoBurned.vault = event.address;
+    ghoBurned.save();
+}
+
 /**
  * @dev It updates the underlying balances of the vault on token0 and token1.
  * The underlying balances include all the funds held by vault excluding the manager and treasury fees.
@@ -343,15 +380,9 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
     const vaultInstance = RangeProtocolVault.bind(Address.fromBytes(vault.id));
     vault.totalSupply = vaultInstance.totalSupply();
 
-    const underlyingBalances = vaultInstance.try_getUnderlyingBalances();
-
-    if (!underlyingBalances.reverted) {
-        vault.balance0 = underlyingBalances.value.value0;
-        vault.balance1 = underlyingBalances.value.value1;
-    }
-
-    vault.managerBalance0 = vaultInstance.managerBalance0();
-    vault.managerBalance1 = vaultInstance.managerBalance1();
+    vault.balance = vaultInstance.try_getUnderlyingBalance().value;
+    vault.managerBalanceGHO = vaultInstance.managerBalanceGHO();
+    vault.managerBalanceToken = vaultInstance.managerBalanceToken();
     const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
         .positions(vault.currentPositionIdInVault!);
 

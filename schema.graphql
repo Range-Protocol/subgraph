@@ -7,16 +7,14 @@ type Vault @entity {
   token1: Bytes!
   token0Name: String!
   token1Name: String!
-  isPassive: Boolean!
   liquidity: BigInt!
   totalSupply: BigInt!
   manager: Bytes!
   managingFee: BigInt!
   performanceFee: BigInt!
-  managerBalance0: BigInt!
-  managerBalance1: BigInt!
-  balance0: BigInt!
-  balance1: BigInt!
+  managerBalanceGHO: BigInt!
+  managerBalanceToken: BigInt!
+  balance: BigInt!
   totalFeesEarned0: BigInt!
   totalFeesEarned1: BigInt!
   firstMintAtBlock: BigInt!
@@ -32,6 +30,10 @@ type Vault @entity {
   swaps: [Swap!]! @derivedFrom(field: "vault")
   lastUserIndex: BigInt!
   userBalances: [UserVaultBalance!]! @derivedFrom(field: "vault")
+  collateralSupplies: [CollateralSupplied!]! @derivedFrom(field: "vault")
+  collateralWithraws: [CollateralWithdrawn!]! @derivedFrom(field: "vault")
+  ghoMints: [GHOMinted!]! @derivedFrom(field: "vault")
+  ghoBurns: [GHOBurned!]! @derivedFrom(field: "vault")
 }
 
 type Position @entity {
@@ -72,8 +74,7 @@ type UserVaultBalance @entity {
   id: Bytes!
   address: Bytes!
   balance: BigInt!
-  token0: BigInt!
-  token1: BigInt!
+  token: BigInt!
   userIndex: BigInt!
   user: User!
   vault: Vault!
@@ -93,8 +94,7 @@ type Mint @entity {
   id: Bytes!
   receiver: Bytes!
   mintAmount: BigInt!
-  amount0In: BigInt!
-  amount1In: BigInt!
+  amountIn: BigInt!
   timestamp: BigInt!
   vault: Vault!
 }
@@ -103,24 +103,35 @@ type Burn @entity {
   id: Bytes!
   receiver: Bytes!
   burnAmount: BigInt!
-  amount0Out: BigInt!
-  amount1Out: BigInt!
+  amountOut: BigInt!
   timestamp: BigInt!
   vault: Vault!
 }
 
-type VaultDayData @entity {
-  id: ID!
-  date: Int!
+type CollateralSupplied @entity {
+  id: String!
+  amount: BigInt!
+  timestamp: BigInt!
   vault: Vault!
-  fee0: BigInt!
-  fee1: BigInt!
 }
 
-type VaultHourData @entity {
-  id: ID!
-  periodStartUnix: Int!
+type CollateralWithdrawn @entity {
+  id: String!
+  amount: BigInt!
+  timestamp: BigInt!
   vault: Vault!
-  fee0: BigInt!
-  fee1: BigInt!
+}
+
+type GHOMinted @entity {
+  id: String!
+  amount: BigInt!
+  timestamp: BigInt!
+  vault: Vault!
+}
+
+type GHOBurned @entity {
+  id: String!
+  amount: BigInt!
+  timestamp: BigInt!
+  vault: Vault!
 }
