@@ -12,7 +12,7 @@ import {
     GHOMinted,
     GHOBurned
 } from "../generated/schema";
-import {Address, BigInt, Bytes, store} from "@graphprotocol/graph-ts";
+import {Address, BigInt, Bytes, log} from "@graphprotocol/graph-ts";
 import {
     Minted as MintedEvent,
     Burned as BurnedEvent,
@@ -104,6 +104,7 @@ export function handleBurned(event: BurnedEvent): void {
  */
 export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
     const vault = Vault.load(event.address)!;
+    createPosition(vault, event.block.timestamp, event.block.number);
     const position = Position.load(vault.currentPosition!)!;
     position.token0Amount = position.token0Amount.plus(event.params.amount0In);
     position.token1Amount = position.token1Amount.plus(event.params.amount1In);
@@ -205,13 +206,17 @@ export function handleTransfer(event: TransferEvent): void {
  * @param event Instance of TicksSetEvent.
  */
 export function handleTicksSet(event: TicksSetEvent): void {
-    const vault = Vault.load(event.address)!;
+    createPosition(Vault.load(event.address)!, event.block.timestamp, event.block.number);
+}
 
+function createPosition(vault: Vault, timestamp: BigInt, blockNumber: BigInt): void {
     if (vault.currentPosition) {
-        const lastPosition = Position.load(vault.currentPosition!)!;
+        const lastPosition = Position.load(vault.currentPosition)!;
+        if (lastPosition.openedATBlock == blockNumber) return;
+
         if (lastPosition.closedAtTimestamp == ZERO) {
-            lastPosition.closedAtTimestamp = event.block.timestamp;
-            lastPosition.closedAtBlock = event.block.number;
+            lastPosition.closedAtTimestamp = timestamp;
+            lastPosition.closedAtBlock = blockNumber;
             lastPosition.save();
         }
     }
@@ -222,13 +227,13 @@ export function handleTicksSet(event: TicksSetEvent): void {
     position.token1Amount = ZERO;
     position.token0Withdrawn = ZERO;
     position.token1Withdrawn = ZERO;
-    position.lowerTick = bn(event.params.lowerTick);
-    position.upperTick = bn(event.params.upperTick);
+    position.lowerTick = bn(RangeProtocolVault.bind(Address.fromBytes(vault.id)).lowerTick());
+    position.upperTick = bn(RangeProtocolVault.bind(Address.fromBytes(vault.id)).upperTick());
     position.feesEarned0 = ZERO;
     position.feesEarned1 = ZERO;
     position.vault = vault.id;
-    position.openedAtTimestamp = event.block.timestamp;
-    position.openedATBlock = event.block.number;
+    position.openedAtTimestamp = timestamp;
+    position.openedATBlock = blockNumber;
     position.closedAtTimestamp = ZERO;
     position.closedAtBlock = ZERO;
     position.priceSqrtAtOpening = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
@@ -236,7 +241,7 @@ export function handleTicksSet(event: TicksSetEvent): void {
     position.save();
 
     vault.currentPosition = position.id;
-    vault.currentPositionIdInVault = RangeProtocolVault.bind(event.address).getPositionID();
+    vault.currentPositionIdInVault = RangeProtocolVault.bind(Address.fromBytes(vault.id)).getPositionID();
     vault.save();
 }
 
@@ -383,10 +388,13 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
     vault.balance = vaultInstance.try_getUnderlyingBalance().value;
     vault.managerBalanceGHO = vaultInstance.managerBalanceGHO();
     vault.managerBalanceToken = vaultInstance.managerBalanceToken();
-    const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
-        .positions(vault.currentPositionIdInVault!);
+    log.info("value = {}", [vault.currentPositionIdInVault!.toHexString()]);
 
-    vault.liquidity = position.value0;
+    if (vault.currentPositionIdInVault!.toHexString() != "0x") {
+        const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
+            .positions(vault.currentPositionIdInVault!);
+        vault.liquidity = position.value0;
+    }
     vault.save();
 }
 
