@@ -4,13 +4,13 @@ repository: https://github.com/Range-Protocol/range-protocol-vault
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: RangeProtocolFactory
-    network: mainnet
+    network: matic
     source:
-      address: "0xa02D258f5E1beE50d876698De00fB682Ae58Bc37"
+      address: "0x9eD6C646b4A57e48DFE7AE04FBA4c857AD71d162"
       abi: RangeProtocolFactory
-      startBlock: 17044563
+      startBlock: 45889700
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: mainnet
+    network: matic
     source:
       abi: RangeProtocolVault
     mapping:
