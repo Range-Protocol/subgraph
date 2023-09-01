@@ -168,6 +168,15 @@ export class Vault extends Entity {
     this.set("managerBalance1", Value.fromBigInt(value));
   }
 
+  get tag(): string {
+    let value = this.get("tag");
+    return value!.toString();
+  }
+
+  set tag(value: string) {
+    this.set("tag", Value.fromString(value));
+  }
+
   get balance0(): BigInt {
     let value = this.get("balance0");
     return value!.toBigInt();

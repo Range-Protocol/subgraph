@@ -26,6 +26,11 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.token0Name = IERC20Metadata.bind(vaultInstance.token0()).name();
     vault.token1Name = IERC20Metadata.bind(vaultInstance.token1()).name();
     vault.isPassive = !!vault.name.includes("Passive");
+    vault.tag = !!vault.name.includes("Passive") || !!vault.name.includes("Wide")
+        ? "Passive"
+        : !!vault.name.includes("Pegged")
+            ? "Pegged"
+            : "Active";
     vault.liquidity = ZERO;
     vault.totalSupply = ZERO;
 
