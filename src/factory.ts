@@ -29,8 +29,12 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.tag = !!vault.name.includes("Passive") || !!vault.name.includes("Wide")
         ? "Passive"
         : !!vault.name.includes("Pegged")
-            ? "Pegged"
-            : "Active";
+            || !!vault.name.toLowerCase().includes("weth/wsteth")
+            || !!vault.name.toLowerCase().includes("wsteth/weth")
+            || !!vault.name.toLowerCase().includes("usdc/usdt")
+            || !!vault.name.toLowerCase().includes("usdt/usdc")
+                ? "Pegged"
+                : "Active";
     vault.liquidity = ZERO;
     vault.totalSupply = ZERO;
 

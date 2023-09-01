@@ -8,6 +8,7 @@ type Vault @entity {
   token0Name: String!
   token1Name: String!
   isPassive: Boolean!
+  tag: String!
   liquidity: BigInt!
   totalSupply: BigInt!
   manager: Bytes!
@@ -15,7 +16,6 @@ type Vault @entity {
   performanceFee: BigInt!
   managerBalance0: BigInt!
   managerBalance1: BigInt!
-  tag: String!
   balance0: BigInt!
   balance1: BigInt!
   totalFeesEarned0: BigInt!

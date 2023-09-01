@@ -105,6 +105,15 @@ export class Vault extends Entity {
     this.set("isPassive", Value.fromBoolean(value));
   }
 
+  get tag(): string {
+    let value = this.get("tag");
+    return value!.toString();
+  }
+
+  set tag(value: string) {
+    this.set("tag", Value.fromString(value));
+  }
+
   get liquidity(): BigInt {
     let value = this.get("liquidity");
     return value!.toBigInt();
@@ -166,15 +175,6 @@ export class Vault extends Entity {
 
   set managerBalance1(value: BigInt) {
     this.set("managerBalance1", Value.fromBigInt(value));
-  }
-
-  get tag(): string {
-    let value = this.get("tag");
-    return value!.toString();
-  }
-
-  set tag(value: string) {
-    this.set("tag", Value.fromString(value));
   }
 
   get balance0(): BigInt {
