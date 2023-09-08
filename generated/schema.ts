@@ -105,6 +105,15 @@ export class Vault extends Entity {
     this.set("isPassive", Value.fromBoolean(value));
   }
 
+  get tag(): string {
+    let value = this.get("tag");
+    return value!.toString();
+  }
+
+  set tag(value: string) {
+    this.set("tag", Value.fromString(value));
+  }
+
   get liquidity(): BigInt {
     let value = this.get("liquidity");
     return value!.toBigInt();
@@ -973,141 +982,5 @@ export class Burn extends Entity {
 
   set vault(value: Bytes) {
     this.set("vault", Value.fromBytes(value));
-  }
-}
-
-export class VaultDayData extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save VaultDayData entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type VaultDayData must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("VaultDayData", id.toString(), this);
-    }
-  }
-
-  static load(id: string): VaultDayData | null {
-    return changetype<VaultDayData | null>(store.get("VaultDayData", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get date(): i32 {
-    let value = this.get("date");
-    return value!.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
-  get vault(): Bytes {
-    let value = this.get("vault");
-    return value!.toBytes();
-  }
-
-  set vault(value: Bytes) {
-    this.set("vault", Value.fromBytes(value));
-  }
-
-  get fee0(): BigInt {
-    let value = this.get("fee0");
-    return value!.toBigInt();
-  }
-
-  set fee0(value: BigInt) {
-    this.set("fee0", Value.fromBigInt(value));
-  }
-
-  get fee1(): BigInt {
-    let value = this.get("fee1");
-    return value!.toBigInt();
-  }
-
-  set fee1(value: BigInt) {
-    this.set("fee1", Value.fromBigInt(value));
-  }
-}
-
-export class VaultHourData extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save VaultHourData entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type VaultHourData must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("VaultHourData", id.toString(), this);
-    }
-  }
-
-  static load(id: string): VaultHourData | null {
-    return changetype<VaultHourData | null>(store.get("VaultHourData", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get periodStartUnix(): i32 {
-    let value = this.get("periodStartUnix");
-    return value!.toI32();
-  }
-
-  set periodStartUnix(value: i32) {
-    this.set("periodStartUnix", Value.fromI32(value));
-  }
-
-  get vault(): Bytes {
-    let value = this.get("vault");
-    return value!.toBytes();
-  }
-
-  set vault(value: Bytes) {
-    this.set("vault", Value.fromBytes(value));
-  }
-
-  get fee0(): BigInt {
-    let value = this.get("fee0");
-    return value!.toBigInt();
-  }
-
-  set fee0(value: BigInt) {
-    this.set("fee0", Value.fromBigInt(value));
-  }
-
-  get fee1(): BigInt {
-    let value = this.get("fee1");
-    return value!.toBigInt();
-  }
-
-  set fee1(value: BigInt) {
-    this.set("fee1", Value.fromBigInt(value));
   }
 }

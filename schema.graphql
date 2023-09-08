@@ -8,6 +8,7 @@ type Vault @entity {
   token0Name: String!
   token1Name: String!
   isPassive: Boolean!
+  tag: String!
   liquidity: BigInt!
   totalSupply: BigInt!
   manager: Bytes!
@@ -107,20 +108,4 @@ type Burn @entity {
   amount1Out: BigInt!
   timestamp: BigInt!
   vault: Vault!
-}
-
-type VaultDayData @entity {
-  id: ID!
-  date: Int!
-  vault: Vault!
-  fee0: BigInt!
-  fee1: BigInt!
-}
-
-type VaultHourData @entity {
-  id: ID!
-  periodStartUnix: Int!
-  vault: Vault!
-  fee0: BigInt!
-  fee1: BigInt!
 }

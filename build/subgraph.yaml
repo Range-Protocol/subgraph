@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: RangeProtocolFactory
-    network: bsc
+    network: mantle
     source:
-      address: "0xad2b34a2245b5a7378964BC820e8F34D14adF312"
+      address: "0x4bF9CDcCE12924B559928623a5d23598ca19367B"
       abi: RangeProtocolFactory
-      startBlock: 28026880
+      startBlock: 1364977
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -24,8 +24,34 @@ dataSources:
           file: RangeProtocolFactory/abis/RangeProtocolVault.json
         - name: IERC20Metadata
           file: RangeProtocolFactory/abis/IERC20Metadata.json
-        - name: IPancakeV3Pool
-          file: RangeProtocolFactory/abis/IPancakeV3Pool.json
+        - name: IAgniPool
+          file: RangeProtocolFactory/abis/IAgniPool.json
+      eventHandlers:
+        - event: VaultCreated(indexed address,indexed address)
+          handler: handleVaultCreated
+      file: RangeProtocolFactory/RangeProtocolFactory.wasm
+  - kind: ethereum
+    name: RangeProtocolFactoryNew
+    network: mantle
+    source:
+      address: "0x3E89E72026DA6093DD6E4FED767f1f5db2fc0Fb4"
+      abi: RangeProtocolFactory
+      startBlock: 1364970
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+      abis:
+        - name: RangeProtocolFactory
+          file: RangeProtocolFactoryNew/abis/RangeProtocolFactory.json
+        - name: RangeProtocolVault
+          file: RangeProtocolFactoryNew/abis/RangeProtocolVault.json
+        - name: IERC20Metadata
+          file: RangeProtocolFactoryNew/abis/IERC20Metadata.json
+        - name: IAgniPool
+          file: RangeProtocolFactoryNew/abis/IAgniPool.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
@@ -33,7 +59,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: bsc
+    network: mantle
     source:
       abi: RangeProtocolVault
     mapping:
@@ -48,8 +74,8 @@ templates:
       abis:
         - name: RangeProtocolVault
           file: RangeProtocolVault/abis/RangeProtocolVault.json
-        - name: IPancakeV3Pool
-          file: RangeProtocolVault/abis/IPancakeV3Pool.json
+        - name: IAgniPool
+          file: RangeProtocolVault/abis/IAgniPool.json
       eventHandlers:
         - event: Minted(indexed address,uint256,uint256,uint256)
           handler: handleMinted

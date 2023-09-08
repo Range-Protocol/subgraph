@@ -14,7 +14,7 @@ import {
     RangeProtocolVault
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
-import {IPancakeV3Pool} from "../generated/RangeProtocolFactory/IPancakeV3Pool";
+import {IAgniPool} from "../generated/RangeProtocolFactory/IAgniPool"
 
 /**
  * @dev Handles the recording of new mints happenings on the vault.
@@ -125,7 +125,7 @@ export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
     const position = Position.load(vault.currentPosition!)!;
     position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
     position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
-    position.priceSqrtAtClosing = IPancakeV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.priceSqrtAtClosing = IAgniPool.bind(Address.fromBytes(vault.pool)).slot0().value0;
     if (position.closedAtBlock == ZERO) {
         position.closedAtTimestamp = event.block.timestamp;
         position.closedAtBlock = event.block.number;
@@ -242,7 +242,7 @@ export function handleTicksSet(event: TicksSetEvent): void {
     position.openedATBlock = event.block.number;
     position.closedAtTimestamp = ZERO;
     position.closedAtBlock = ZERO;
-    position.priceSqrtAtOpening = IPancakeV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.priceSqrtAtOpening = IAgniPool.bind(Address.fromBytes(vault.pool)).slot0().value0;
     position.priceSqrtAtClosing = ZERO;
     position.save();
 
@@ -349,7 +349,7 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
-    const position = IPancakeV3Pool.bind(Address.fromBytes(vault.pool))
+    const position = IAgniPool.bind(Address.fromBytes(vault.pool))
         .positions(vault.currentPositionIdInVault!);
 
     vault.liquidity = position.value0;

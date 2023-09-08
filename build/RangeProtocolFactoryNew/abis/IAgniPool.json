@@ -130,60 +130,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "flash",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "observationCardinalityNext",
-        "type": "uint16"
-      }
-    ],
-    "name": "increaseObservationCardinalityNext",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint160",
-        "name": "sqrtPriceX96",
-        "type": "uint160"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "liquidity",
     "outputs": [
@@ -256,40 +202,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "observations",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "blockTimestamp",
-        "type": "uint32"
-      },
-      {
-        "internalType": "int56",
-        "name": "tickCumulative",
-        "type": "int56"
-      },
-      {
-        "internalType": "uint160",
-        "name": "secondsPerLiquidityCumulativeX128",
-        "type": "uint160"
-      },
-      {
-        "internalType": "bool",
-        "name": "initialized",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes32",
         "name": "key",
         "type": "bytes32"
@@ -320,6 +232,24 @@
       {
         "internalType": "uint128",
         "name": "tokensOwed1",
+        "type": "uint128"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolFees",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "token0",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "token1",
         "type": "uint128"
       }
     ],
