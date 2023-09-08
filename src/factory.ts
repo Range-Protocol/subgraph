@@ -28,12 +28,12 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.tag = !!vault.name.includes("Passive") || !!vault.name.includes("Wide")
         ? "Passive"
         : !!vault.name.includes("Pegged")
-            || !!vault.name.toLowerCase().includes("weth/wsteth")
-            || !!vault.name.toLowerCase().includes("wsteth/weth")
-            || !!vault.name.toLowerCase().includes("usdc/usdt")
-            || !!vault.name.toLowerCase().includes("usdt/usdc")
-                ? "Pegged"
-                : "Active";
+        || !!vault.name.toLowerCase().includes("weth/wsteth")
+        || !!vault.name.toLowerCase().includes("wsteth/weth")
+        || !!vault.name.toLowerCase().includes("usdc/usdt")
+        || !!vault.name.toLowerCase().includes("usdt/usdc")
+            ? "Pegged"
+            : "Active";
     vault.liquidity = ZERO;
     vault.totalSupply = ZERO;
 
@@ -52,6 +52,8 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.inThePosition = false;
     vault.currentPositionIdInVault = Bytes.fromHexString("0x");
     vault.positionCount = ZERO;
+    vault.feeEarnedEventCount = ZERO;
+    vault.lastUserIndex = ZERO;
     vault.save();
 
     // Start indexing newly deployed vault.
