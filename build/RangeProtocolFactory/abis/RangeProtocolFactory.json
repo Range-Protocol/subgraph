@@ -89,6 +89,19 @@
   },
   {
     "inputs": [],
+    "name": "GHO",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "INIT_SELECTOR",
     "outputs": [
       {
@@ -117,12 +130,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "tokenA",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "tokenB",
+        "name": "token",
         "type": "address"
       },
       {

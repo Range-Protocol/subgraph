@@ -51,9 +51,9 @@ templates:
         - name: IUniswapV3Pool
           file: ./abis/IUniswapV3Pool.json
       eventHandlers:
-        - event: Minted(indexed address,uint256,uint256,uint256)
+        - event: Minted(indexed address,uint256,uint256)
           handler: handleMinted
-        - event: Burned(indexed address,uint256,uint256,uint256)
+        - event: Burned(indexed address,uint256,uint256)
           handler: handleBurned
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -71,6 +71,16 @@ templates:
           handler: handleFeesEarned
         - event: InThePositionStatusSet(bool)
           handler: handleInThePositionStatusSet
+        - event: CollateralSupplied(address,uint256)
+          handler: handleCollateralSupplied
+        - event: CollateralWithdrawn(address,uint256)
+          handler: handleCollateralWithdrawn
+        - event: GHOMinted(uint256)
+          handler: handleGHOMinted
+        - event: GHOBurned(uint256)
+          handler: handleGHOBurned
+        - event: PoolRebalanced()
+          handler: handlePoolRebalanced
 
 
 

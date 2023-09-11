@@ -81,6 +81,21 @@ export class RangeProtocolFactory extends ethereum.SmartContract {
     return new RangeProtocolFactory("RangeProtocolFactory", address);
   }
 
+  GHO(): Address {
+    let result = super.call("GHO", "GHO():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_GHO(): ethereum.CallResult<Address> {
+    let result = super.tryCall("GHO", "GHO():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   INIT_SELECTOR(): Bytes {
     let result = super.call("INIT_SELECTOR", "INIT_SELECTOR():(bytes4)", []);
 
@@ -244,24 +259,20 @@ export class CreateVaultCall__Inputs {
     this._call = call;
   }
 
-  get tokenA(): Address {
+  get token(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get tokenB(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
   get fee(): i32 {
-    return this._call.inputValues[2].value.toI32();
+    return this._call.inputValues[1].value.toI32();
   }
 
   get implementation(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 

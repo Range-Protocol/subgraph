@@ -6,42 +6,7 @@
   },
   {
     "inputs": [],
-    "name": "InvalidBurnAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidManagingFee",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidMintAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidPerformanceFee",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidTicksSpacing",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "MintNotAllowed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "MintNotStarted",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotAllowedToUpdateTicks",
+    "name": "MulticallFailed",
     "type": "error"
   },
   {
@@ -51,22 +16,7 @@
   },
   {
     "inputs": [],
-    "name": "OnlyPoolAllowed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "TicksOutOfRange",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ZeroMintAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ZeroUnderlyingBalance",
+    "name": "OnlyVaultAllowed",
     "type": "error"
   },
   {
@@ -144,17 +94,49 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0Out",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount1Out",
+        "name": "amount",
         "type": "uint256"
       }
     ],
     "name": "Burned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "CollateralSupplied",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "CollateralWithdrawn",
     "type": "event"
   },
   {
@@ -193,6 +175,32 @@
       }
     ],
     "name": "FeesUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "GHOBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "GHOMinted",
     "type": "event"
   },
   {
@@ -297,12 +305,6 @@
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "MintStarted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
     "inputs": [
       {
         "indexed": true,
@@ -313,19 +315,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "mintAmount",
+        "name": "shares",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0In",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount1In",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -362,6 +358,12 @@
       }
     ],
     "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PoolRebalanced",
     "type": "event"
   },
   {
@@ -458,32 +460,6 @@
     ],
     "name": "Upgraded",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_MANAGING_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_PERFORMANCE_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [
@@ -603,16 +579,55 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1",
+        "name": "amount",
         "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "burnAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnGHO",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnShares",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collateralToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -674,6 +689,57 @@
   },
   {
     "inputs": [],
+    "name": "getAavePositionData",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalCollateralBase",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalDebtBase",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "availableBorrowsBase",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentLiquidationThreshold",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "ltv",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "healthFactor",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBalanceInCollateralToken",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getCurrentFees",
     "outputs": [
       {
@@ -684,40 +750,6 @@
       {
         "internalType": "uint256",
         "name": "fee1",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Max",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Max",
-        "type": "uint256"
-      }
-    ],
-    "name": "getMintAmounts",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "mintAmount",
         "type": "uint256"
       }
     ],
@@ -738,41 +770,18 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getUnderlyingBalances",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Current",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Current",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "uint160",
-        "name": "sqrtRatioX96",
-        "type": "uint160"
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
       }
     ],
-    "name": "getUnderlyingBalancesAtPrice",
+    "name": "getUnderlyingBalanceByShare",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0Current",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Current",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -803,18 +812,26 @@
           },
           {
             "internalType": "uint256",
-            "name": "token0",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "token1",
+            "name": "token",
             "type": "uint256"
           }
         ],
-        "internalType": "struct IRangeProtocolVault.UserVaultInfo[]",
+        "internalType": "struct DataTypesLib.UserVaultInfo[]",
         "name": "",
         "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gho",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -908,20 +925,7 @@
   },
   {
     "inputs": [],
-    "name": "managerBalance0",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "managerBalance1",
+    "name": "managerBalance",
     "outputs": [
       {
         "internalType": "uint256",
@@ -949,7 +953,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "mintAmount",
+        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -957,12 +961,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1",
+        "name": "shares",
         "type": "uint256"
       }
     ],
@@ -970,16 +969,34 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "mintStarted",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "mintAmount",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "mintGHO",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintShares",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1043,6 +1060,19 @@
   },
   {
     "inputs": [],
+    "name": "poolAddressesProvider",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "proxiableUUID",
     "outputs": [
       {
@@ -1062,6 +1092,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "rebalance",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "returndatas",
+        "type": "bytes[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "removeLiquidity",
     "outputs": [],
@@ -1071,6 +1120,19 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "supplyAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "supplyCollateral",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1390,26 +1452,28 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "user",
         "type": "address"
       }
     ],
     "name": "userVaults",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "exists",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token1",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "token",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypesLib.UserVault",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -1419,7 +1483,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "index",
         "type": "uint256"
       }
     ],
@@ -1432,6 +1496,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "withdrawAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawCollateral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

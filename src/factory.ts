@@ -41,12 +41,9 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.manager = vaultInstance.manager();
     vault.managingFee = bn(vaultInstance.managingFee());
     vault.performanceFee = bn(vaultInstance.performanceFee());
-    vault.managerBalance0 = ZERO;
-    vault.managerBalance1 = ZERO;
+    vault.managerBalance = ZERO;
 
-    vault.balance0 = ZERO;
-    vault.balance1 = ZERO;
-
+    vault.balance = ZERO;
     vault.totalFeesEarned0 = ZERO;
     vault.totalFeesEarned1 = ZERO;
     vault.firstMintAtBlock = ZERO;
