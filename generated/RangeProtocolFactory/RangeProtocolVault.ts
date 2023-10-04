@@ -605,6 +605,31 @@ export class RangeProtocolVault__getUnderlyingBalancesAtPriceResult {
   }
 }
 
+export class RangeProtocolVault__getUnderlyingBalancesByShareResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+
+  getAmount0(): BigInt {
+    return this.value0;
+  }
+
+  getAmount1(): BigInt {
+    return this.value1;
+  }
+}
+
 export class RangeProtocolVault__getUserVaultsResultValue0Struct extends ethereum.Tuple {
   get user(): Address {
     return this[0].toAddress();
@@ -704,52 +729,6 @@ export class RangeProtocolVault__userVaultsResult {
 export class RangeProtocolVault extends ethereum.SmartContract {
   static bind(address: Address): RangeProtocolVault {
     return new RangeProtocolVault("RangeProtocolVault", address);
-  }
-
-  MAX_MANAGING_FEE_BPS(): i32 {
-    let result = super.call(
-      "MAX_MANAGING_FEE_BPS",
-      "MAX_MANAGING_FEE_BPS():(uint16)",
-      []
-    );
-
-    return result[0].toI32();
-  }
-
-  try_MAX_MANAGING_FEE_BPS(): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "MAX_MANAGING_FEE_BPS",
-      "MAX_MANAGING_FEE_BPS():(uint16)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
-  MAX_PERFORMANCE_FEE_BPS(): i32 {
-    let result = super.call(
-      "MAX_PERFORMANCE_FEE_BPS",
-      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
-      []
-    );
-
-    return result[0].toI32();
-  }
-
-  try_MAX_PERFORMANCE_FEE_BPS(): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "MAX_PERFORMANCE_FEE_BPS",
-      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   addLiquidity(
@@ -1133,6 +1112,43 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new RangeProtocolVault__getUnderlyingBalancesAtPriceResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
+  }
+
+  getUnderlyingBalancesByShare(
+    shares: BigInt
+  ): RangeProtocolVault__getUnderlyingBalancesByShareResult {
+    let result = super.call(
+      "getUnderlyingBalancesByShare",
+      "getUnderlyingBalancesByShare(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(shares)]
+    );
+
+    return new RangeProtocolVault__getUnderlyingBalancesByShareResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_getUnderlyingBalancesByShare(
+    shares: BigInt
+  ): ethereum.CallResult<
+    RangeProtocolVault__getUnderlyingBalancesByShareResult
+  > {
+    let result = super.tryCall(
+      "getUnderlyingBalancesByShare",
+      "getUnderlyingBalancesByShare(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(shares)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new RangeProtocolVault__getUnderlyingBalancesByShareResult(
         value[0].toBigInt(),
         value[1].toBigInt()
       )

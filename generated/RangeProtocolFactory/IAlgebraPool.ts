@@ -67,7 +67,8 @@ export class IAlgebraPool__globalStateResult {
   value3: i32;
   value4: i32;
   value5: i32;
-  value6: boolean;
+  value6: i32;
+  value7: boolean;
 
   constructor(
     value0: BigInt,
@@ -76,7 +77,8 @@ export class IAlgebraPool__globalStateResult {
     value3: i32,
     value4: i32,
     value5: i32,
-    value6: boolean
+    value6: i32,
+    value7: boolean
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -85,6 +87,7 @@ export class IAlgebraPool__globalStateResult {
     this.value4 = value4;
     this.value5 = value5;
     this.value6 = value6;
+    this.value7 = value7;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -107,7 +110,11 @@ export class IAlgebraPool__globalStateResult {
       "value5",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5))
     );
-    map.set("value6", ethereum.Value.fromBoolean(this.value6));
+    map.set(
+      "value6",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value6))
+    );
+    map.set("value7", ethereum.Value.fromBoolean(this.value7));
     return map;
   }
 
@@ -119,24 +126,28 @@ export class IAlgebraPool__globalStateResult {
     return this.value1;
   }
 
-  getFee(): i32 {
+  getFeeZto(): i32 {
     return this.value2;
   }
 
-  getTimepointIndex(): i32 {
+  getFeeOtz(): i32 {
     return this.value3;
   }
 
-  getCommunityFeeToken0(): i32 {
+  getTimepointIndex(): i32 {
     return this.value4;
   }
 
-  getCommunityFeeToken1(): i32 {
+  getCommunityFeeToken0(): i32 {
     return this.value5;
   }
 
-  getUnlocked(): boolean {
+  getCommunityFeeToken1(): i32 {
     return this.value6;
+  }
+
+  getUnlocked(): boolean {
+    return this.value7;
   }
 }
 
@@ -452,7 +463,7 @@ export class IAlgebraPool extends ethereum.SmartContract {
   globalState(): IAlgebraPool__globalStateResult {
     let result = super.call(
       "globalState",
-      "globalState():(uint160,int24,uint16,uint16,uint8,uint8,bool)",
+      "globalState():(uint160,int24,uint16,uint16,uint16,uint8,uint8,bool)",
       []
     );
 
@@ -463,14 +474,15 @@ export class IAlgebraPool extends ethereum.SmartContract {
       result[3].toI32(),
       result[4].toI32(),
       result[5].toI32(),
-      result[6].toBoolean()
+      result[6].toI32(),
+      result[7].toBoolean()
     );
   }
 
   try_globalState(): ethereum.CallResult<IAlgebraPool__globalStateResult> {
     let result = super.tryCall(
       "globalState",
-      "globalState():(uint160,int24,uint16,uint16,uint8,uint8,bool)",
+      "globalState():(uint160,int24,uint16,uint16,uint16,uint8,uint8,bool)",
       []
     );
     if (result.reverted) {
@@ -485,7 +497,8 @@ export class IAlgebraPool extends ethereum.SmartContract {
         value[3].toI32(),
         value[4].toI32(),
         value[5].toI32(),
-        value[6].toBoolean()
+        value[6].toI32(),
+        value[7].toBoolean()
       )
     );
   }

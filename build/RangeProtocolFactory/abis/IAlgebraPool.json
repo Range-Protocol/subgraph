@@ -106,7 +106,12 @@
       },
       {
         "internalType": "uint16",
-        "name": "fee",
+        "name": "feeZto",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "feeOtz",
         "type": "uint16"
       },
       {

@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: RangeProtocolFactory
-    network: matic
+    network: arbitrum-one
     source:
-      address: "0xad2b34a2245b5a7378964BC820e8F34D14adF312"
+      address: "0x16D7F55f4f8ac39eb4a30aB58458ef7e5b6de13a"
       abi: RangeProtocolFactory
-      startBlock: 42446547
+      startBlock: 136666253
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: matic
+    network: arbitrum-one
     source:
       abi: RangeProtocolVault
     mapping:
