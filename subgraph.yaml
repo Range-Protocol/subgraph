@@ -8,9 +8,9 @@ dataSources:
     name: RangeProtocolFactory
     network: arbitrum-one
     source:
-      address: "0x16D7F55f4f8ac39eb4a30aB58458ef7e5b6de13a"
+      address: "0x2274AC83290eB9355f851b447D3046b32A5B4f52"
       abi: RangeProtocolFactory
-      startBlock: 136666253
+      startBlock: 138961230
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
