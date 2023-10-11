@@ -580,7 +580,7 @@ export class RangeProtocolVault__getUnderlyingBalancesResult {
   }
 }
 
-export class RangeProtocolVault__getUnderlyingBalancesAtPriceResult {
+export class RangeProtocolVault__getUnderlyingBalancesByShareResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -596,11 +596,11 @@ export class RangeProtocolVault__getUnderlyingBalancesAtPriceResult {
     return map;
   }
 
-  getAmount0Current(): BigInt {
+  getAmount0(): BigInt {
     return this.value0;
   }
 
-  getAmount1Current(): BigInt {
+  getAmount1(): BigInt {
     return this.value1;
   }
 }
@@ -706,66 +706,22 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return new RangeProtocolVault("RangeProtocolVault", address);
   }
 
-  MAX_MANAGING_FEE_BPS(): i32 {
-    let result = super.call(
-      "MAX_MANAGING_FEE_BPS",
-      "MAX_MANAGING_FEE_BPS():(uint16)",
-      []
-    );
-
-    return result[0].toI32();
-  }
-
-  try_MAX_MANAGING_FEE_BPS(): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "MAX_MANAGING_FEE_BPS",
-      "MAX_MANAGING_FEE_BPS():(uint16)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
-  MAX_PERFORMANCE_FEE_BPS(): i32 {
-    let result = super.call(
-      "MAX_PERFORMANCE_FEE_BPS",
-      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
-      []
-    );
-
-    return result[0].toI32();
-  }
-
-  try_MAX_PERFORMANCE_FEE_BPS(): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "MAX_PERFORMANCE_FEE_BPS",
-      "MAX_PERFORMANCE_FEE_BPS():(uint16)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
-  }
-
   addLiquidity(
     newLowerTick: i32,
     newUpperTick: i32,
     amount0: BigInt,
-    amount1: BigInt
+    amount1: BigInt,
+    maxAmounts: Array<BigInt>
   ): RangeProtocolVault__addLiquidityResult {
     let result = super.call(
       "addLiquidity",
-      "addLiquidity(int24,int24,uint256,uint256):(uint256,uint256)",
+      "addLiquidity(int24,int24,uint256,uint256,uint256[2]):(uint256,uint256)",
       [
         ethereum.Value.fromI32(newLowerTick),
         ethereum.Value.fromI32(newUpperTick),
         ethereum.Value.fromUnsignedBigInt(amount0),
-        ethereum.Value.fromUnsignedBigInt(amount1)
+        ethereum.Value.fromUnsignedBigInt(amount1),
+        ethereum.Value.fromUnsignedBigIntArray(maxAmounts)
       ]
     );
 
@@ -779,16 +735,18 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     newLowerTick: i32,
     newUpperTick: i32,
     amount0: BigInt,
-    amount1: BigInt
+    amount1: BigInt,
+    maxAmounts: Array<BigInt>
   ): ethereum.CallResult<RangeProtocolVault__addLiquidityResult> {
     let result = super.tryCall(
       "addLiquidity",
-      "addLiquidity(int24,int24,uint256,uint256):(uint256,uint256)",
+      "addLiquidity(int24,int24,uint256,uint256,uint256[2]):(uint256,uint256)",
       [
         ethereum.Value.fromI32(newLowerTick),
         ethereum.Value.fromI32(newUpperTick),
         ethereum.Value.fromUnsignedBigInt(amount0),
-        ethereum.Value.fromUnsignedBigInt(amount1)
+        ethereum.Value.fromUnsignedBigInt(amount1),
+        ethereum.Value.fromUnsignedBigIntArray(maxAmounts)
       ]
     );
     if (result.reverted) {
@@ -866,10 +824,18 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  burn(burnAmount: BigInt): RangeProtocolVault__burnResult {
-    let result = super.call("burn", "burn(uint256):(uint256,uint256)", [
-      ethereum.Value.fromUnsignedBigInt(burnAmount)
-    ]);
+  burn(
+    burnAmount: BigInt,
+    minAmounts: Array<BigInt>
+  ): RangeProtocolVault__burnResult {
+    let result = super.call(
+      "burn",
+      "burn(uint256,uint256[2]):(uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(burnAmount),
+        ethereum.Value.fromUnsignedBigIntArray(minAmounts)
+      ]
+    );
 
     return new RangeProtocolVault__burnResult(
       result[0].toBigInt(),
@@ -878,11 +844,17 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   }
 
   try_burn(
-    burnAmount: BigInt
+    burnAmount: BigInt,
+    minAmounts: Array<BigInt>
   ): ethereum.CallResult<RangeProtocolVault__burnResult> {
-    let result = super.tryCall("burn", "burn(uint256):(uint256,uint256)", [
-      ethereum.Value.fromUnsignedBigInt(burnAmount)
-    ]);
+    let result = super.tryCall(
+      "burn",
+      "burn(uint256,uint256[2]):(uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(burnAmount),
+        ethereum.Value.fromUnsignedBigIntArray(minAmounts)
+      ]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1087,37 +1059,37 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     );
   }
 
-  getUnderlyingBalancesAtPrice(
-    sqrtRatioX96: BigInt
-  ): RangeProtocolVault__getUnderlyingBalancesAtPriceResult {
+  getUnderlyingBalancesByShare(
+    shares: BigInt
+  ): RangeProtocolVault__getUnderlyingBalancesByShareResult {
     let result = super.call(
-      "getUnderlyingBalancesAtPrice",
-      "getUnderlyingBalancesAtPrice(uint160):(uint256,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(sqrtRatioX96)]
+      "getUnderlyingBalancesByShare",
+      "getUnderlyingBalancesByShare(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(shares)]
     );
 
-    return new RangeProtocolVault__getUnderlyingBalancesAtPriceResult(
+    return new RangeProtocolVault__getUnderlyingBalancesByShareResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
   }
 
-  try_getUnderlyingBalancesAtPrice(
-    sqrtRatioX96: BigInt
+  try_getUnderlyingBalancesByShare(
+    shares: BigInt
   ): ethereum.CallResult<
-    RangeProtocolVault__getUnderlyingBalancesAtPriceResult
+    RangeProtocolVault__getUnderlyingBalancesByShareResult
   > {
     let result = super.tryCall(
-      "getUnderlyingBalancesAtPrice",
-      "getUnderlyingBalancesAtPrice(uint160):(uint256,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(sqrtRatioX96)]
+      "getUnderlyingBalancesByShare",
+      "getUnderlyingBalancesByShare(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(shares)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new RangeProtocolVault__getUnderlyingBalancesAtPriceResult(
+      new RangeProtocolVault__getUnderlyingBalancesByShareResult(
         value[0].toBigInt(),
         value[1].toBigInt()
       )
@@ -1305,10 +1277,18 @@ export class RangeProtocolVault extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  mint(mintAmount: BigInt): RangeProtocolVault__mintResult {
-    let result = super.call("mint", "mint(uint256):(uint256,uint256)", [
-      ethereum.Value.fromUnsignedBigInt(mintAmount)
-    ]);
+  mint(
+    mintAmount: BigInt,
+    maxAmounts: Array<BigInt>
+  ): RangeProtocolVault__mintResult {
+    let result = super.call(
+      "mint",
+      "mint(uint256,uint256[2]):(uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(mintAmount),
+        ethereum.Value.fromUnsignedBigIntArray(maxAmounts)
+      ]
+    );
 
     return new RangeProtocolVault__mintResult(
       result[0].toBigInt(),
@@ -1317,11 +1297,17 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   }
 
   try_mint(
-    mintAmount: BigInt
+    mintAmount: BigInt,
+    maxAmounts: Array<BigInt>
   ): ethereum.CallResult<RangeProtocolVault__mintResult> {
-    let result = super.tryCall("mint", "mint(uint256):(uint256,uint256)", [
-      ethereum.Value.fromUnsignedBigInt(mintAmount)
-    ]);
+    let result = super.tryCall(
+      "mint",
+      "mint(uint256,uint256[2]):(uint256,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(mintAmount),
+        ethereum.Value.fromUnsignedBigIntArray(maxAmounts)
+      ]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1435,15 +1421,17 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   swap(
     zeroForOne: boolean,
     swapAmount: BigInt,
-    sqrtPriceLimitX96: BigInt
+    sqrtPriceLimitX96: BigInt,
+    minAmountIn: BigInt
   ): RangeProtocolVault__swapResult {
     let result = super.call(
       "swap",
-      "swap(bool,int256,uint160):(int256,int256)",
+      "swap(bool,int256,uint160,uint256):(int256,int256)",
       [
         ethereum.Value.fromBoolean(zeroForOne),
         ethereum.Value.fromSignedBigInt(swapAmount),
-        ethereum.Value.fromUnsignedBigInt(sqrtPriceLimitX96)
+        ethereum.Value.fromUnsignedBigInt(sqrtPriceLimitX96),
+        ethereum.Value.fromUnsignedBigInt(minAmountIn)
       ]
     );
 
@@ -1456,15 +1444,17 @@ export class RangeProtocolVault extends ethereum.SmartContract {
   try_swap(
     zeroForOne: boolean,
     swapAmount: BigInt,
-    sqrtPriceLimitX96: BigInt
+    sqrtPriceLimitX96: BigInt,
+    minAmountIn: BigInt
   ): ethereum.CallResult<RangeProtocolVault__swapResult> {
     let result = super.tryCall(
       "swap",
-      "swap(bool,int256,uint160):(int256,int256)",
+      "swap(bool,int256,uint160,uint256):(int256,int256)",
       [
         ethereum.Value.fromBoolean(zeroForOne),
         ethereum.Value.fromSignedBigInt(swapAmount),
-        ethereum.Value.fromUnsignedBigInt(sqrtPriceLimitX96)
+        ethereum.Value.fromUnsignedBigInt(sqrtPriceLimitX96),
+        ethereum.Value.fromUnsignedBigInt(minAmountIn)
       ]
     );
     if (result.reverted) {
@@ -1753,6 +1743,10 @@ export class AddLiquidityCall__Inputs {
   get amount1(): BigInt {
     return this._call.inputValues[3].value.toBigInt();
   }
+
+  get maxAmounts(): Array<BigInt> {
+    return this._call.inputValues[4].value.toBigIntArray();
+  }
 }
 
 export class AddLiquidityCall__Outputs {
@@ -1828,6 +1822,10 @@ export class BurnCall__Inputs {
 
   get burnAmount(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get minAmounts(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
   }
 }
 
@@ -1908,6 +1906,82 @@ export class DecreaseAllowanceCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
+  }
+}
+
+export class FusionXV3MintCallbackCall extends ethereum.Call {
+  get inputs(): FusionXV3MintCallbackCall__Inputs {
+    return new FusionXV3MintCallbackCall__Inputs(this);
+  }
+
+  get outputs(): FusionXV3MintCallbackCall__Outputs {
+    return new FusionXV3MintCallbackCall__Outputs(this);
+  }
+}
+
+export class FusionXV3MintCallbackCall__Inputs {
+  _call: FusionXV3MintCallbackCall;
+
+  constructor(call: FusionXV3MintCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Owed(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Owed(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class FusionXV3MintCallbackCall__Outputs {
+  _call: FusionXV3MintCallbackCall;
+
+  constructor(call: FusionXV3MintCallbackCall) {
+    this._call = call;
+  }
+}
+
+export class FusionXV3SwapCallbackCall extends ethereum.Call {
+  get inputs(): FusionXV3SwapCallbackCall__Inputs {
+    return new FusionXV3SwapCallbackCall__Inputs(this);
+  }
+
+  get outputs(): FusionXV3SwapCallbackCall__Outputs {
+    return new FusionXV3SwapCallbackCall__Outputs(this);
+  }
+}
+
+export class FusionXV3SwapCallbackCall__Inputs {
+  _call: FusionXV3SwapCallbackCall;
+
+  constructor(call: FusionXV3SwapCallbackCall) {
+    this._call = call;
+  }
+
+  get amount0Delta(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get amount1Delta(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get value2(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class FusionXV3SwapCallbackCall__Outputs {
+  _call: FusionXV3SwapCallbackCall;
+
+  constructor(call: FusionXV3SwapCallbackCall) {
+    this._call = call;
   }
 }
 
@@ -2007,6 +2081,10 @@ export class MintCall__Inputs {
   get mintAmount(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
+
+  get maxAmounts(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
 }
 
 export class MintCall__Outputs {
@@ -2022,82 +2100,6 @@ export class MintCall__Outputs {
 
   get amount1(): BigInt {
     return this._call.outputValues[1].value.toBigInt();
-  }
-}
-
-export class PancakeV3MintCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3MintCallbackCall__Inputs {
-    return new PancakeV3MintCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3MintCallbackCall__Outputs {
-    return new PancakeV3MintCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3MintCallbackCall__Inputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Owed(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Owed(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3MintCallbackCall__Outputs {
-  _call: PancakeV3MintCallbackCall;
-
-  constructor(call: PancakeV3MintCallbackCall) {
-    this._call = call;
-  }
-}
-
-export class PancakeV3SwapCallbackCall extends ethereum.Call {
-  get inputs(): PancakeV3SwapCallbackCall__Inputs {
-    return new PancakeV3SwapCallbackCall__Inputs(this);
-  }
-
-  get outputs(): PancakeV3SwapCallbackCall__Outputs {
-    return new PancakeV3SwapCallbackCall__Outputs(this);
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Inputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
-  }
-
-  get amount0Delta(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get amount1Delta(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-}
-
-export class PancakeV3SwapCallbackCall__Outputs {
-  _call: PancakeV3SwapCallbackCall;
-
-  constructor(call: PancakeV3SwapCallbackCall) {
-    this._call = call;
   }
 }
 
@@ -2169,6 +2171,10 @@ export class RemoveLiquidityCall__Inputs {
   constructor(call: RemoveLiquidityCall) {
     this._call = call;
   }
+
+  get minAmounts(): Array<BigInt> {
+    return this._call.inputValues[0].value.toBigIntArray();
+  }
 }
 
 export class RemoveLiquidityCall__Outputs {
@@ -2232,6 +2238,10 @@ export class SwapCall__Inputs {
 
   get sqrtPriceLimitX96(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get minAmountIn(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
   }
 }
 

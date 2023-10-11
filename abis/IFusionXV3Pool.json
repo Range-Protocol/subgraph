@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "IPancakeV3Pool",
-  "sourceName": "contracts/pancake/interfaces/IPancakeV3Pool.sol",
+  "contractName": "IFusionXV3Pool",
+  "sourceName": "contracts/fusionX/interfaces/IFusionXV3Pool.sol",
   "abi": [
     {
       "inputs": [

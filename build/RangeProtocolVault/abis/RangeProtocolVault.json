@@ -31,6 +31,11 @@
   },
   {
     "inputs": [],
+    "name": "LiquidityAlreadyAdded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "MintNotAllowed",
     "type": "error"
   },
@@ -56,7 +61,17 @@
   },
   {
     "inputs": [],
+    "name": "SlippageExceedThreshold",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "TicksOutOfRange",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroManagerAddress",
     "type": "error"
   },
   {
@@ -460,32 +475,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "MAX_MANAGING_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_PERFORMANCE_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "int24",
@@ -506,6 +495,11 @@
         "internalType": "uint256",
         "name": "amount1",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "maxAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "addLiquidity",
@@ -597,6 +591,11 @@
         "internalType": "uint256",
         "name": "burnAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "minAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "burn",
@@ -670,6 +669,52 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount0Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount1Owed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "fusionXV3MintCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "amount0Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "amount1Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "fusionXV3SwapCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -758,21 +803,21 @@
   {
     "inputs": [
       {
-        "internalType": "uint160",
-        "name": "sqrtRatioX96",
-        "type": "uint160"
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
       }
     ],
-    "name": "getUnderlyingBalancesAtPrice",
+    "name": "getUnderlyingBalancesByShare",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0Current",
+        "name": "amount0",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1Current",
+        "name": "amount1",
         "type": "uint256"
       }
     ],
@@ -951,6 +996,11 @@
         "internalType": "uint256",
         "name": "mintAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "maxAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "mint",
@@ -996,52 +1046,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3MintCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "int256",
-        "name": "amount0Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "amount1Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "pancakeV3SwapCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "pause",
     "outputs": [],
@@ -1079,7 +1083,7 @@
     "name": "pool",
     "outputs": [
       {
-        "internalType": "contract IPancakeV3Pool",
+        "internalType": "contract IFusionXV3Pool",
         "name": "",
         "type": "address"
       }
@@ -1108,7 +1112,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256[2]",
+        "name": "minAmounts",
+        "type": "uint256[2]"
+      }
+    ],
     "name": "removeLiquidity",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -1137,6 +1147,11 @@
         "internalType": "uint160",
         "name": "sqrtPriceLimitX96",
         "type": "uint160"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minAmountIn",
+        "type": "uint256"
       }
     ],
     "name": "swap",

@@ -3,12 +3,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_pancakeV3Factory",
+        "name": "_fusionXV3Factory",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "ImplIsNotAContract",
+    "type": "error"
   },
   {
     "inputs": [],
@@ -18,6 +23,11 @@
   {
     "inputs": [],
     "name": "NoVaultInitDataProvided",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SameTokensAddresses",
     "type": "error"
   },
   {
