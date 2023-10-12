@@ -214,7 +214,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _uniswapV3Factory(): Address {
+  get _iZiSwapFactory(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
@@ -244,11 +244,11 @@ export class CreateVaultCall__Inputs {
     this._call = call;
   }
 
-  get tokenA(): Address {
+  get tokenX(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get tokenB(): Address {
+  get tokenY(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 

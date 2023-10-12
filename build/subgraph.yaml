@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: RangeProtocolFactory
-    network: arbitrum-one
+    network: mantle
     source:
-      address: "0x42f2dBb72964ac2854bF1C781E525C5CE1e19d52"
+      address: "0xCCA961F89a03997F834eB5a0104efd9ba1f5800E"
       abi: RangeProtocolFactory
-      startBlock: 136696158
+      startBlock: 14374189
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -24,8 +24,8 @@ dataSources:
           file: RangeProtocolFactory/abis/RangeProtocolVault.json
         - name: IERC20Metadata
           file: RangeProtocolFactory/abis/IERC20Metadata.json
-        - name: IUniswapV3Pool
-          file: RangeProtocolFactory/abis/IUniswapV3Pool.json
+        - name: IiZiSwapPool
+          file: RangeProtocolFactory/abis/IiZiSwapPool.json
       eventHandlers:
         - event: VaultCreated(indexed address,indexed address)
           handler: handleVaultCreated
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: arbitrum-one
+    network: mantle
     source:
       abi: RangeProtocolVault
     mapping:
@@ -48,8 +48,8 @@ templates:
       abis:
         - name: RangeProtocolVault
           file: RangeProtocolVault/abis/RangeProtocolVault.json
-        - name: IUniswapV3Pool
-          file: RangeProtocolVault/abis/IUniswapV3Pool.json
+        - name: IiZiSwapPool
+          file: RangeProtocolVault/abis/IiZiSwapPool.json
       eventHandlers:
         - event: Minted(indexed address,uint256,uint256,uint256)
           handler: handleMinted
@@ -57,15 +57,15 @@ templates:
           handler: handleBurned
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-        - event: TicksSet(int24,int24)
-          handler: handleTicksSet
+        - event: PointsSet(int24,int24)
+          handler: handlePointsSet
         - event: LiquidityAdded(uint256,int24,int24,uint256,uint256)
           handler: liquidityAddedHandler
         - event: LiquidityRemoved(uint256,int24,int24,uint256,uint256)
           handler: liquidityRemovedHandler
         - event: FeesUpdated(uint16,uint16)
           handler: feesUpdatedFeeHandler
-        - event: Swapped(bool,int256,int256)
+        - event: Swapped(bool,uint256,uint256)
           handler: handleSwap
         - event: FeesEarned(uint256,uint256)
           handler: handleFeesEarned

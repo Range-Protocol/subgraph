@@ -20,10 +20,10 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
 
     const vaultInstance = RangeProtocolVault.bind(vaultAddress);
     vault.name = vaultInstance.name();
-    vault.token0 = vaultInstance.token0();
-    vault.token1 = vaultInstance.token1();
-    vault.token0Name = IERC20Metadata.bind(vaultInstance.token0()).name();
-    vault.token1Name = IERC20Metadata.bind(vaultInstance.token1()).name();
+    vault.tokenX = vaultInstance.tokenX();
+    vault.tokenY = vaultInstance.tokenY();
+    vault.tokenXName = IERC20Metadata.bind(vaultInstance.tokenX()).name();
+    vault.tokenYName = IERC20Metadata.bind(vaultInstance.tokenY()).name();
     vault.isPassive = !!vault.name.includes("Wide");
     vault.tag = !!vault.name.includes("Passive") || !!vault.name.includes("Wide")
         ? "Passive"
@@ -40,8 +40,8 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.manager = vaultInstance.manager();
     vault.managingFee = bn(vaultInstance.managingFee());
     vault.performanceFee = bn(vaultInstance.performanceFee());
-    vault.managerBalance0 = ZERO;
-    vault.managerBalance1 = ZERO;
+    vault.managerBalanceX = ZERO;
+    vault.managerBalanceY = ZERO;
 
     vault.balance0 = ZERO;
     vault.balance1 = ZERO;

@@ -6,46 +6,6 @@
   },
   {
     "inputs": [],
-    "name": "InvalidBurnAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidManagingFee",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidMintAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidPerformanceFee",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidTicksSpacing",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "MintNotAllowed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "MintNotStarted",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotAllowedToUpdateTicks",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "OnlyFactoryAllowed",
     "type": "error"
   },
@@ -56,17 +16,12 @@
   },
   {
     "inputs": [],
-    "name": "TicksOutOfRange",
+    "name": "OnlySelfCallAllowed",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "ZeroMintAmount",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "ZeroUnderlyingBalance",
+    "name": "ZeroManagerAddress",
     "type": "error"
   },
   {
@@ -144,13 +99,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0Out",
+        "name": "amountXOut",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount1Out",
+        "name": "amountYOut",
         "type": "uint256"
       }
     ],
@@ -245,13 +200,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0In",
+        "name": "amountXIn",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount1In",
+        "name": "amountYIn",
         "type": "uint256"
       }
     ],
@@ -282,13 +237,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0Out",
+        "name": "amountXOut",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount1Out",
+        "name": "amountYOut",
         "type": "uint256"
       }
     ],
@@ -319,13 +274,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount0In",
+        "name": "amountXIn",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount1In",
+        "name": "amountYIn",
         "type": "uint256"
       }
     ],
@@ -369,31 +324,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bool",
-        "name": "zeroForOne",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "int256",
-        "name": "amount0",
-        "type": "int256"
-      },
-      {
-        "indexed": false,
-        "internalType": "int256",
-        "name": "amount1",
-        "type": "int256"
-      }
-    ],
-    "name": "Swapped",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "int24",
         "name": "lowerTick",
         "type": "int24"
@@ -405,7 +335,32 @@
         "type": "int24"
       }
     ],
-    "name": "TicksSet",
+    "name": "PointsSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "zeroForOne",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountX",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountY",
+        "type": "uint256"
+      }
+    ],
+    "name": "Swapped",
     "type": "event"
   },
   {
@@ -460,64 +415,43 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "MAX_MANAGING_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MAX_PERFORMANCE_FEE_BPS",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "int24",
-        "name": "newLowerTick",
+        "name": "newLeftPoint",
         "type": "int24"
       },
       {
         "internalType": "int24",
-        "name": "newUpperTick",
+        "name": "newRightPoint",
         "type": "int24"
       },
       {
-        "internalType": "uint256",
-        "name": "amount0",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "amountX",
+        "type": "uint128"
       },
       {
-        "internalType": "uint256",
-        "name": "amount1",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "amountY",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "maxAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "addLiquidity",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "remainingAmount0",
+        "name": "remainingAmountX",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "remainingAmount1",
+        "name": "remainingAmountY",
         "type": "uint256"
       }
     ],
@@ -597,21 +531,44 @@
         "internalType": "uint256",
         "name": "burnAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "minAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "burn",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0",
+        "name": "amountX",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1",
+        "name": "amountY",
         "type": "uint256"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnFrom",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -693,26 +650,26 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "amount0Max",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "amountXMax",
+        "type": "uint128"
       },
       {
-        "internalType": "uint256",
-        "name": "amount1Max",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "amountYMax",
+        "type": "uint128"
       }
     ],
     "name": "getMintAmounts",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0",
+        "name": "amountX",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1",
+        "name": "amountY",
         "type": "uint256"
       },
       {
@@ -743,12 +700,12 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0Current",
+        "name": "amountXCurrent",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1Current",
+        "name": "amountYCurrent",
         "type": "uint256"
       }
     ],
@@ -758,21 +715,21 @@
   {
     "inputs": [
       {
-        "internalType": "uint160",
-        "name": "sqrtRatioX96",
-        "type": "uint160"
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
       }
     ],
-    "name": "getUnderlyingBalancesAtPrice",
+    "name": "getUnderlyingBalancesByShare",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0Current",
+        "name": "amountX",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1Current",
+        "name": "amountY",
         "type": "uint256"
       }
     ],
@@ -803,16 +760,16 @@
           },
           {
             "internalType": "uint256",
-            "name": "token0",
+            "name": "tokenX",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "token1",
+            "name": "tokenY",
             "type": "uint256"
           }
         ],
-        "internalType": "struct IRangeProtocolVault.UserVaultInfo[]",
+        "internalType": "struct DataTypes.UserVaultInfo[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -866,7 +823,7 @@
       },
       {
         "internalType": "int24",
-        "name": "_tickSpacing",
+        "name": "_pointDelta",
         "type": "int24"
       },
       {
@@ -882,7 +839,7 @@
   },
   {
     "inputs": [],
-    "name": "lowerTick",
+    "name": "leftPoint",
     "outputs": [
       {
         "internalType": "int24",
@@ -908,7 +865,7 @@
   },
   {
     "inputs": [],
-    "name": "managerBalance0",
+    "name": "managerBalanceX",
     "outputs": [
       {
         "internalType": "uint256",
@@ -921,7 +878,7 @@
   },
   {
     "inputs": [],
-    "name": "managerBalance1",
+    "name": "managerBalanceY",
     "outputs": [
       {
         "internalType": "uint256",
@@ -951,21 +908,49 @@
         "internalType": "uint256",
         "name": "mintAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "maxAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "mint",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount0",
+        "name": "amountX",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "amount1",
+        "name": "amountY",
         "type": "uint256"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenXAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenYAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "mintDepositCallback",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -980,6 +965,24 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1030,10 +1033,23 @@
   },
   {
     "inputs": [],
+    "name": "pointDelta",
+    "outputs": [
+      {
+        "internalType": "int24",
+        "name": "",
+        "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "pool",
     "outputs": [
       {
-        "internalType": "contract IUniswapV3Pool",
+        "internalType": "contract IiZiSwapPool",
         "name": "",
         "type": "address"
       }
@@ -1062,7 +1078,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256[2]",
+        "name": "minAmounts",
+        "type": "uint256[2]"
+      }
+    ],
     "name": "removeLiquidity",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -1076,6 +1098,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rightPoint",
+    "outputs": [
+      {
+        "internalType": "int24",
+        "name": "",
+        "type": "int24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bool",
@@ -1083,29 +1118,80 @@
         "type": "bool"
       },
       {
-        "internalType": "int256",
+        "internalType": "uint128",
         "name": "swapAmount",
-        "type": "int256"
+        "type": "uint128"
       },
       {
-        "internalType": "uint160",
-        "name": "sqrtPriceLimitX96",
-        "type": "uint160"
+        "internalType": "int24",
+        "name": "pointLimit",
+        "type": "int24"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minAmountIn",
+        "type": "uint256"
       }
     ],
     "name": "swap",
     "outputs": [
       {
-        "internalType": "int256",
-        "name": "amount0",
-        "type": "int256"
+        "internalType": "uint256",
+        "name": "amountX",
+        "type": "uint256"
       },
       {
-        "internalType": "int256",
-        "name": "amount1",
-        "type": "int256"
+        "internalType": "uint256",
+        "name": "amountY",
+        "type": "uint256"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenXAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "swapX2YCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenYAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "swapY2XCallback",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1124,20 +1210,7 @@
   },
   {
     "inputs": [],
-    "name": "tickSpacing",
-    "outputs": [
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "token0",
+    "name": "tokenX",
     "outputs": [
       {
         "internalType": "contract IERC20Upgradeable",
@@ -1150,7 +1223,7 @@
   },
   {
     "inputs": [],
-    "name": "token1",
+    "name": "tokenY",
     "outputs": [
       {
         "internalType": "contract IERC20Upgradeable",
@@ -1241,52 +1314,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount0Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount1Owed",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "uniswapV3MintCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "int256",
-        "name": "amount0Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "amount1Delta",
-        "type": "int256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "uniswapV3SwapCallback",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "unpause",
     "outputs": [],
@@ -1315,16 +1342,16 @@
     "inputs": [
       {
         "internalType": "int24",
-        "name": "_lowerTick",
+        "name": "leftPoint",
         "type": "int24"
       },
       {
         "internalType": "int24",
-        "name": "_upperTick",
+        "name": "rightPoint",
         "type": "int24"
       }
     ],
-    "name": "updateTicks",
+    "name": "updatePoints",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1362,19 +1389,6 @@
   },
   {
     "inputs": [],
-    "name": "upperTick",
-    "outputs": [
-      {
-        "internalType": "int24",
-        "name": "",
-        "type": "int24"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "userCount",
     "outputs": [
       {
@@ -1390,26 +1404,33 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "user",
         "type": "address"
       }
     ],
     "name": "userVaults",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "exists",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token0",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "token1",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenX",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenY",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DataTypes.UserVault",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -1419,7 +1440,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "idx",
         "type": "uint256"
       }
     ],

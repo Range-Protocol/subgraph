@@ -60,40 +60,40 @@ export class Vault extends Entity {
     this.set("pool", Value.fromBytes(value));
   }
 
-  get token0(): Bytes {
-    let value = this.get("token0");
+  get tokenX(): Bytes {
+    let value = this.get("tokenX");
     return value!.toBytes();
   }
 
-  set token0(value: Bytes) {
-    this.set("token0", Value.fromBytes(value));
+  set tokenX(value: Bytes) {
+    this.set("tokenX", Value.fromBytes(value));
   }
 
-  get token1(): Bytes {
-    let value = this.get("token1");
+  get tokenY(): Bytes {
+    let value = this.get("tokenY");
     return value!.toBytes();
   }
 
-  set token1(value: Bytes) {
-    this.set("token1", Value.fromBytes(value));
+  set tokenY(value: Bytes) {
+    this.set("tokenY", Value.fromBytes(value));
   }
 
-  get token0Name(): string {
-    let value = this.get("token0Name");
+  get tokenXName(): string {
+    let value = this.get("tokenXName");
     return value!.toString();
   }
 
-  set token0Name(value: string) {
-    this.set("token0Name", Value.fromString(value));
+  set tokenXName(value: string) {
+    this.set("tokenXName", Value.fromString(value));
   }
 
-  get token1Name(): string {
-    let value = this.get("token1Name");
+  get tokenYName(): string {
+    let value = this.get("tokenYName");
     return value!.toString();
   }
 
-  set token1Name(value: string) {
-    this.set("token1Name", Value.fromString(value));
+  set tokenYName(value: string) {
+    this.set("tokenYName", Value.fromString(value));
   }
 
   get isPassive(): boolean {
@@ -159,22 +159,22 @@ export class Vault extends Entity {
     this.set("performanceFee", Value.fromBigInt(value));
   }
 
-  get managerBalance0(): BigInt {
-    let value = this.get("managerBalance0");
+  get managerBalanceX(): BigInt {
+    let value = this.get("managerBalanceX");
     return value!.toBigInt();
   }
 
-  set managerBalance0(value: BigInt) {
-    this.set("managerBalance0", Value.fromBigInt(value));
+  set managerBalanceX(value: BigInt) {
+    this.set("managerBalanceX", Value.fromBigInt(value));
   }
 
-  get managerBalance1(): BigInt {
-    let value = this.get("managerBalance1");
+  get managerBalanceY(): BigInt {
+    let value = this.get("managerBalanceY");
     return value!.toBigInt();
   }
 
-  set managerBalance1(value: BigInt) {
-    this.set("managerBalance1", Value.fromBigInt(value));
+  set managerBalanceY(value: BigInt) {
+    this.set("managerBalanceY", Value.fromBigInt(value));
   }
 
   get balance0(): BigInt {
@@ -378,40 +378,40 @@ export class Position extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get token0Amount(): BigInt {
-    let value = this.get("token0Amount");
+  get tokenXAmount(): BigInt {
+    let value = this.get("tokenXAmount");
     return value!.toBigInt();
   }
 
-  set token0Amount(value: BigInt) {
-    this.set("token0Amount", Value.fromBigInt(value));
+  set tokenXAmount(value: BigInt) {
+    this.set("tokenXAmount", Value.fromBigInt(value));
   }
 
-  get token1Amount(): BigInt {
-    let value = this.get("token1Amount");
+  get tokenYAmount(): BigInt {
+    let value = this.get("tokenYAmount");
     return value!.toBigInt();
   }
 
-  set token1Amount(value: BigInt) {
-    this.set("token1Amount", Value.fromBigInt(value));
+  set tokenYAmount(value: BigInt) {
+    this.set("tokenYAmount", Value.fromBigInt(value));
   }
 
-  get token0Withdrawn(): BigInt {
-    let value = this.get("token0Withdrawn");
+  get tokenXWithdrawn(): BigInt {
+    let value = this.get("tokenXWithdrawn");
     return value!.toBigInt();
   }
 
-  set token0Withdrawn(value: BigInt) {
-    this.set("token0Withdrawn", Value.fromBigInt(value));
+  set tokenXWithdrawn(value: BigInt) {
+    this.set("tokenXWithdrawn", Value.fromBigInt(value));
   }
 
-  get token1Withdrawn(): BigInt {
-    let value = this.get("token1Withdrawn");
+  get tokenYWithdrawn(): BigInt {
+    let value = this.get("tokenYWithdrawn");
     return value!.toBigInt();
   }
 
-  set token1Withdrawn(value: BigInt) {
-    this.set("token1Withdrawn", Value.fromBigInt(value));
+  set tokenYWithdrawn(value: BigInt) {
+    this.set("tokenYWithdrawn", Value.fromBigInt(value));
   }
 
   get priceSqrtAtOpening(): BigInt {
@@ -545,8 +545,8 @@ export class FeeEarned extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get amount0(): BigInt | null {
-    let value = this.get("amount0");
+  get amountX(): BigInt | null {
+    let value = this.get("amountX");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -554,16 +554,16 @@ export class FeeEarned extends Entity {
     }
   }
 
-  set amount0(value: BigInt | null) {
+  set amountX(value: BigInt | null) {
     if (!value) {
-      this.unset("amount0");
+      this.unset("amountX");
     } else {
-      this.set("amount0", Value.fromBigInt(<BigInt>value));
+      this.set("amountX", Value.fromBigInt(<BigInt>value));
     }
   }
 
-  get amount1(): BigInt | null {
-    let value = this.get("amount1");
+  get amountY(): BigInt | null {
+    let value = this.get("amountY");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -571,11 +571,11 @@ export class FeeEarned extends Entity {
     }
   }
 
-  set amount1(value: BigInt | null) {
+  set amountY(value: BigInt | null) {
     if (!value) {
-      this.unset("amount1");
+      this.unset("amountY");
     } else {
-      this.set("amount1", Value.fromBigInt(<BigInt>value));
+      this.set("amountY", Value.fromBigInt(<BigInt>value));
     }
   }
 
@@ -690,22 +690,22 @@ export class UserVaultBalance extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 
-  get token0(): BigInt {
-    let value = this.get("token0");
+  get tokenX(): BigInt {
+    let value = this.get("tokenX");
     return value!.toBigInt();
   }
 
-  set token0(value: BigInt) {
-    this.set("token0", Value.fromBigInt(value));
+  set tokenX(value: BigInt) {
+    this.set("tokenX", Value.fromBigInt(value));
   }
 
-  get token1(): BigInt {
-    let value = this.get("token1");
+  get tokenY(): BigInt {
+    let value = this.get("tokenY");
     return value!.toBigInt();
   }
 
-  set token1(value: BigInt) {
-    this.set("token1", Value.fromBigInt(value));
+  set tokenY(value: BigInt) {
+    this.set("tokenY", Value.fromBigInt(value));
   }
 
   get userIndex(): BigInt {
@@ -776,22 +776,22 @@ export class Swap extends Entity {
     this.set("zeroForOne", Value.fromBoolean(value));
   }
 
-  get amount0(): BigInt {
-    let value = this.get("amount0");
+  get amountX(): BigInt {
+    let value = this.get("amountX");
     return value!.toBigInt();
   }
 
-  set amount0(value: BigInt) {
-    this.set("amount0", Value.fromBigInt(value));
+  set amountX(value: BigInt) {
+    this.set("amountX", Value.fromBigInt(value));
   }
 
-  get amount1(): BigInt {
-    let value = this.get("amount1");
+  get amountY(): BigInt {
+    let value = this.get("amountY");
     return value!.toBigInt();
   }
 
-  set amount1(value: BigInt) {
-    this.set("amount1", Value.fromBigInt(value));
+  set amountY(value: BigInt) {
+    this.set("amountY", Value.fromBigInt(value));
   }
 
   get timestamp(): BigInt {
@@ -862,22 +862,22 @@ export class Mint extends Entity {
     this.set("mintAmount", Value.fromBigInt(value));
   }
 
-  get amount0In(): BigInt {
-    let value = this.get("amount0In");
+  get amountXIn(): BigInt {
+    let value = this.get("amountXIn");
     return value!.toBigInt();
   }
 
-  set amount0In(value: BigInt) {
-    this.set("amount0In", Value.fromBigInt(value));
+  set amountXIn(value: BigInt) {
+    this.set("amountXIn", Value.fromBigInt(value));
   }
 
-  get amount1In(): BigInt {
-    let value = this.get("amount1In");
+  get amountYIn(): BigInt {
+    let value = this.get("amountYIn");
     return value!.toBigInt();
   }
 
-  set amount1In(value: BigInt) {
-    this.set("amount1In", Value.fromBigInt(value));
+  set amountYIn(value: BigInt) {
+    this.set("amountYIn", Value.fromBigInt(value));
   }
 
   get timestamp(): BigInt {
@@ -948,22 +948,22 @@ export class Burn extends Entity {
     this.set("burnAmount", Value.fromBigInt(value));
   }
 
-  get amount0Out(): BigInt {
-    let value = this.get("amount0Out");
+  get amountXOut(): BigInt {
+    let value = this.get("amountXOut");
     return value!.toBigInt();
   }
 
-  set amount0Out(value: BigInt) {
-    this.set("amount0Out", Value.fromBigInt(value));
+  set amountXOut(value: BigInt) {
+    this.set("amountXOut", Value.fromBigInt(value));
   }
 
-  get amount1Out(): BigInt {
-    let value = this.get("amount1Out");
+  get amountYOut(): BigInt {
+    let value = this.get("amountYOut");
     return value!.toBigInt();
   }
 
-  set amount1Out(value: BigInt) {
-    this.set("amount1Out", Value.fromBigInt(value));
+  set amountYOut(value: BigInt) {
+    this.set("amountYOut", Value.fromBigInt(value));
   }
 
   get timestamp(): BigInt {

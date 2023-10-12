@@ -3,10 +3,10 @@ type Vault @entity {
   id: Bytes!
   name: String!
   pool: Bytes!
-  token0: Bytes!
-  token1: Bytes!
-  token0Name: String!
-  token1Name: String!
+  tokenX: Bytes!
+  tokenY: Bytes!
+  tokenXName: String!
+  tokenYName: String!
   isPassive: Boolean!
   tag: String!
   liquidity: BigInt!
@@ -14,8 +14,8 @@ type Vault @entity {
   manager: Bytes!
   managingFee: BigInt!
   performanceFee: BigInt!
-  managerBalance0: BigInt!
-  managerBalance1: BigInt!
+  managerBalanceX: BigInt!
+  managerBalanceY: BigInt!
   balance0: BigInt!
   balance1: BigInt!
   totalFeesEarned0: BigInt!
@@ -37,10 +37,10 @@ type Vault @entity {
 
 type Position @entity {
   id: String!
-  token0Amount: BigInt!
-  token1Amount: BigInt!
-  token0Withdrawn: BigInt!
-  token1Withdrawn: BigInt!
+  tokenXAmount: BigInt!
+  tokenYAmount: BigInt!
+  tokenXWithdrawn: BigInt!
+  tokenYWithdrawn: BigInt!
   priceSqrtAtOpening: BigInt!
   priceSqrtAtClosing: BigInt!
   lowerTick: BigInt!
@@ -56,8 +56,8 @@ type Position @entity {
 
 type FeeEarned @entity {
   id: String!
-  amount0: BigInt
-  amount1: BigInt
+  amountX: BigInt
+  amountY: BigInt
   timestamp: BigInt!
   vault: Vault!
 }
@@ -73,8 +73,8 @@ type UserVaultBalance @entity {
   id: Bytes!
   address: Bytes!
   balance: BigInt!
-  token0: BigInt!
-  token1: BigInt!
+  tokenX: BigInt!
+  tokenY: BigInt!
   userIndex: BigInt!
   user: User!
   vault: Vault!
@@ -84,8 +84,8 @@ type UserVaultBalance @entity {
 type Swap @entity {
   id: Bytes!
   zeroForOne: Boolean!
-  amount0: BigInt!
-  amount1: BigInt!
+  amountX: BigInt!
+  amountY: BigInt!
   timestamp: BigInt!
   vault: Vault!
 }
@@ -94,8 +94,8 @@ type Mint @entity {
   id: Bytes!
   receiver: Bytes!
   mintAmount: BigInt!
-  amount0In: BigInt!
-  amount1In: BigInt!
+  amountXIn: BigInt!
+  amountYIn: BigInt!
   timestamp: BigInt!
   vault: Vault!
 }
@@ -104,8 +104,8 @@ type Burn @entity {
   id: Bytes!
   receiver: Bytes!
   burnAmount: BigInt!
-  amount0Out: BigInt!
-  amount1Out: BigInt!
+  amountXOut: BigInt!
+  amountYOut: BigInt!
   timestamp: BigInt!
   vault: Vault!
 }

@@ -4,7 +4,7 @@ import {
     Minted as MintedEvent,
     Burned as BurnedEvent,
     Transfer as TransferEvent,
-    TicksSet as TicksSetEvent,
+    PointsSet as PointsSetEvent,
     LiquidityAdded as LiquidityAddedEvent,
     LiquidityRemoved as LiquidityRemovedEvent,
     FeesUpdated as FeeUpdatedEvent,
@@ -14,7 +14,7 @@ import {
     RangeProtocolVault
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
-import {IUniswapV3Pool} from "../generated/RangeProtocolFactory/IUniswapV3Pool";
+import {IiZiSwapPool} from "../generated/RangeProtocolFactory/IiZiSwapPool";
 
 /**
  * @dev Handles the recording of new mints happenings on the vault.
@@ -39,22 +39,22 @@ export function handleMinted(event: MintedEvent): void {
     );
     mint.receiver = event.params.receiver;
     mint.mintAmount = event.params.mintAmount;
-    mint.amount0In = event.params.amount0In;
-    mint.amount1In = event.params.amount1In;
+    mint.amountXIn = event.params.amountXIn;
+    mint.amountYIn = event.params.amountYIn;
     mint.timestamp = event.block.timestamp;
     mint.vault = vault.id;
     mint.save();
 
     const vaultId = Bytes.fromByteArray(event.address);
     const userVaultBalance = UserVaultBalance.load(vaultId.concat(event.params.receiver))!;
-    userVaultBalance.token0 = userVaultBalance.token0.plus(event.params.amount0In);
-    userVaultBalance.token1 = userVaultBalance.token1.plus(event.params.amount1In);
+    userVaultBalance.tokenX = userVaultBalance.tokenX.plus(event.params.amountXIn);
+    userVaultBalance.tokenY = userVaultBalance.tokenY.plus(event.params.amountYIn);
     userVaultBalance.save();
 
     if (vault.inThePosition) {
         const position = Position.load(vault.currentPosition!)!;
-        position.token0Amount = position.token0Amount.plus(event.params.amount0In);
-        position.token1Amount = position.token1Amount.plus(event.params.amount1In);
+        position.tokenXAmount = position.tokenXAmount.plus(event.params.amountXIn);
+        position.tokenYAmount = position.tokenYAmount.plus(event.params.amountYIn);
         position.save();
     }
 
@@ -78,8 +78,8 @@ export function handleBurned(event: BurnedEvent): void {
     );
     burn.receiver = event.params.receiver;
     burn.burnAmount = event.params.burnAmount;
-    burn.amount0Out = event.params.amount0Out;
-    burn.amount1Out = event.params.amount1Out;
+    burn.amountXOut = event.params.amountXOut;
+    burn.amountYOut = event.params.amountYOut;
     burn.timestamp = event.block.timestamp;
     burn.vault = Vault.load(event.address)!.id
     burn.save();
@@ -88,8 +88,8 @@ export function handleBurned(event: BurnedEvent): void {
 
     if (vault.inThePosition) {
         const position = Position.load(vault.currentPosition!)!;
-        position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
-        position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
+        position.tokenXWithdrawn = position.tokenXWithdrawn.plus(event.params.amountXOut);
+        position.tokenYWithdrawn = position.tokenYWithdrawn.plus(event.params.amountYOut);
         position.save();
     }
 
@@ -106,8 +106,8 @@ export function handleBurned(event: BurnedEvent): void {
 export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
     const vault = Vault.load(event.address)!;
     const position = Position.load(vault.currentPosition!)!;
-    position.token0Amount = position.token0Amount.plus(event.params.amount0In);
-    position.token1Amount = position.token1Amount.plus(event.params.amount1In);
+    position.tokenXAmount = position.tokenXAmount.plus(event.params.amountXIn);
+    position.tokenYAmount = position.tokenYAmount.plus(event.params.amountYIn);
     position.save();
 
     updateUnderlyingBalancesAndLiquidty(vault);
@@ -123,9 +123,9 @@ export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
 export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
     const vault = Vault.load(event.address)!;
     const position = Position.load(vault.currentPosition!)!;
-    position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
-    position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
-    position.priceSqrtAtClosing = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.tokenXWithdrawn = position.tokenXWithdrawn.plus(event.params.amountXOut);
+    position.tokenYWithdrawn = position.tokenYWithdrawn.plus(event.params.amountYOut);
+    position.priceSqrtAtClosing = IiZiSwapPool.bind(Address.fromBytes(vault.pool)).state().value0;
     if (position.closedAtBlock == ZERO) {
         position.closedAtTimestamp = event.block.timestamp;
         position.closedAtBlock = event.block.number;
@@ -147,26 +147,26 @@ export function liquidityRemovedHandler(event: LiquidityRemovedEvent): void {
  */
 export function handleTransfer(event: TransferEvent): void {
     const vaultId = Bytes.fromByteArray(event.address);
-    let token0 = ZERO;
-    let token1 = ZERO;
+    let tokenX = ZERO;
+    let tokenY = ZERO;
     if (event.params.from != Address.zero()) {
         const fromVaultBalanceId = vaultId.concat(event.params.from);
         const fromVaultBalance = UserVaultBalance.load(fromVaultBalanceId)!;
-        token0 = fromVaultBalance.token0.minus(
-            fromVaultBalance.token0
+        tokenX = fromVaultBalance.tokenX.minus(
+            fromVaultBalance.tokenX
                 .times(fromVaultBalance.balance.minus(event.params.value))
                 .div(fromVaultBalance.balance)
         );
 
-        token1 = fromVaultBalance.token1.minus(
-            fromVaultBalance.token1
+        tokenY = fromVaultBalance.tokenY.minus(
+            fromVaultBalance.tokenY
                 .times(fromVaultBalance.balance.minus(event.params.value))
                 .div(fromVaultBalance.balance)
         );
 
         fromVaultBalance.balance = fromVaultBalance.balance.minus(event.params.value);
-        fromVaultBalance.token0 = fromVaultBalance.token0.minus(token0);
-        fromVaultBalance.token1 = fromVaultBalance.token1.minus(token1);
+        fromVaultBalance.tokenX = fromVaultBalance.tokenX.minus(tokenX);
+        fromVaultBalance.tokenY = fromVaultBalance.tokenY.minus(tokenY);
         fromVaultBalance.save();
     }
 
@@ -183,8 +183,8 @@ export function handleTransfer(event: TransferEvent): void {
             toVaultBalance = new UserVaultBalance(toVaultBalanceId);
             toVaultBalance.address = event.params.to;
             toVaultBalance.balance = event.params.value;
-            toVaultBalance.token0 = ZERO;
-            toVaultBalance.token1 = ZERO;
+            toVaultBalance.tokenX = ZERO;
+            toVaultBalance.tokenY = ZERO;
             toVaultBalance.user = user.id;
             toVaultBalance.vault = vaultId;
 
@@ -198,8 +198,8 @@ export function handleTransfer(event: TransferEvent): void {
         }
 
         if (event.params.from != Address.zero()) {
-            toVaultBalance.token0 = toVaultBalance.token0.plus(token0);
-            toVaultBalance.token1 = toVaultBalance.token1.plus(token1);
+            toVaultBalance.tokenX = toVaultBalance.tokenX.plus(tokenX);
+            toVaultBalance.tokenY = toVaultBalance.tokenY.plus(tokenY);
         }
         toVaultBalance.save();
     }
@@ -213,9 +213,9 @@ export function handleTransfer(event: TransferEvent): void {
  *
  * Updates the underlying balances and liquidity amount.
  *
- * @param event Instance of TicksSetEvent.
+ * @param event Instance of PointsSetEvent.
  */
-export function handleTicksSet(event: TicksSetEvent): void {
+export function handlePointsSet(event: PointsSetEvent): void {
     const vault = Vault.load(event.address)!;
 
     if (vault.currentPosition) {
@@ -229,10 +229,10 @@ export function handleTicksSet(event: TicksSetEvent): void {
 
     vault.positionCount = vault.positionCount.plus(bn(1));
     const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
-    position.token0Amount = ZERO;
-    position.token1Amount = ZERO;
-    position.token0Withdrawn = ZERO;
-    position.token1Withdrawn = ZERO;
+    position.tokenXAmount = ZERO;
+    position.tokenYAmount = ZERO;
+    position.tokenXWithdrawn = ZERO;
+    position.tokenYWithdrawn = ZERO;
     position.lowerTick = bn(event.params.lowerTick);
     position.upperTick = bn(event.params.upperTick);
     position.feesEarned0 = ZERO;
@@ -242,7 +242,7 @@ export function handleTicksSet(event: TicksSetEvent): void {
     position.openedATBlock = event.block.number;
     position.closedAtTimestamp = ZERO;
     position.closedAtBlock = ZERO;
-    position.priceSqrtAtOpening = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.priceSqrtAtOpening = IiZiSwapPool.bind(Address.fromBytes(vault.pool)).state().value0;
     position.priceSqrtAtClosing = ZERO;
     position.save();
 
@@ -277,8 +277,8 @@ export function feesUpdatedFeeHandler(event: FeeUpdatedEvent): void {
 export function handleSwap(event: SwappedEvent): void {
     const swap = new Swap(Bytes.fromHexString(event.block.timestamp.toHexString()));
     swap.zeroForOne = event.params.zeroForOne;
-    swap.amount0 = event.params.amount0;
-    swap.amount1 = event.params.amount1;
+    swap.amountX = event.params.amountX;
+    swap.amountY = event.params.amountY;
     swap.timestamp = event.block.timestamp;
     swap.vault = Vault.load(event.address)!.id
     swap.save();
@@ -298,8 +298,8 @@ export function handleFeesEarned(event: FeesEarnedEvent): void {
 
     vault.feeEarnedEventCount = vault.feeEarnedEventCount.plus(bn(1));
     const feeEarned = new FeeEarned(vault.id.toHexString() + "#" + vault.feeEarnedEventCount.toHexString().substr(2));
-    feeEarned.amount0 = event.params.feesEarned0;
-    feeEarned.amount1 = event.params.feesEarned1;
+    feeEarned.amountX = event.params.feesEarned0;
+    feeEarned.amountY = event.params.feesEarned1;
     feeEarned.timestamp = event.block.timestamp;
     feeEarned.vault = vault.id;
     feeEarned.save();
@@ -331,7 +331,7 @@ export function handleInThePositionStatusSet(event: InThePositionStatusSetEvent)
 }
 
 /**
- * @dev It updates the underlying balances of the vault on token0 and token1.
+ * @dev It updates the underlying balances of the vault on tokenX and tokenY.
  * The underlying balances include all the funds held by vault excluding the manager and treasury fees.
  *
  * It also updates the liquidity amount currently held by vault and finalize the vault's updates by saving in the updates
@@ -350,12 +350,12 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
         vault.balance1 = underlyingBalances.value.value1;
     }
 
-    vault.managerBalance0 = vaultInstance.managerBalance0();
-    vault.managerBalance1 = vaultInstance.managerBalance1();
-    const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
-        .positions(vault.currentPositionIdInVault!);
+    vault.managerBalanceX = vaultInstance.managerBalanceX();
+    vault.managerBalanceY = vaultInstance.managerBalanceY();
+    const liquidity = IiZiSwapPool.bind(Address.fromBytes(vault.pool))
+        .liquidity(vault.currentPositionIdInVault!).liquidity;
 
-    vault.liquidity = position.value0;
+    vault.liquidity = liquidity;
     vault.save();
 }
 
