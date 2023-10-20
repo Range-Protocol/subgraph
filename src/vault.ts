@@ -106,10 +106,29 @@ export function handleBurned(event: BurnedEvent): void {
  */
 export function liquidityAddedHandler(event: LiquidityAddedEvent): void {
     const vault = Vault.load(event.address)!;
-    const position = Position.load(vault.currentPosition!)!;
-    position.token0Amount = position.token0Amount.plus(event.params.amount0In);
-    position.token1Amount = position.token1Amount.plus(event.params.amount1In);
+    const vaultInstance = RangeProtocolVault.bind(Address.fromBytes(event.address));
+    vault.positionCount = vault.positionCount.plus(bn(1));
+    const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
+    position.token0Amount = event.params.amount0In;
+    position.token1Amount = event.params.amount1In;
+    position.token0Withdrawn = ZERO;
+    position.token1Withdrawn = ZERO;
+    position.lowerTick = bn(vaultInstance.lowerTick());
+    position.upperTick = bn(vaultInstance.upperTick());
+    position.feesEarned0 = ZERO;
+    position.feesEarned1 = ZERO;
+    position.vault = vault.id;
+    position.openedAtTimestamp = event.block.timestamp;
+    position.openedATBlock = event.block.number;
+    position.closedAtTimestamp = ZERO;
+    position.closedAtBlock = ZERO;
+    position.priceSqrtAtOpening = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
+    position.priceSqrtAtClosing = ZERO;
     position.save();
+
+    vault.currentPosition = position.id;
+    vault.currentPositionIdInVault = RangeProtocolVault.bind(event.address).getPositionID();
+    vault.save();
 
     updateUnderlyingBalancesAndLiquidty(vault);
 }
@@ -196,50 +215,6 @@ export function handleTransfer(event: TransferEvent): void {
     }
 
     updateUnderlyingBalancesAndLiquidty(Vault.load(vaultId)!);
-}
-
-/**
- * @dev Called when new ticks are set on the vault contract. It creates a new position entity instance based on the new position
- * created in the UNI-V3 pool.
- *
- * Updates the underlying balances and liquidity amount.
- *
- * @param event Instance of TicksSetEvent.
- */
-export function handleTicksSet(event: TicksSetEvent): void {
-    const vault = Vault.load(event.address)!;
-
-    if (vault.currentPosition) {
-        const lastPosition = Position.load(vault.currentPosition!)!;
-        if (lastPosition.closedAtTimestamp == ZERO) {
-            lastPosition.closedAtTimestamp = event.block.timestamp;
-            lastPosition.closedAtBlock = event.block.number;
-            lastPosition.save();
-        }
-    }
-
-    vault.positionCount = vault.positionCount.plus(bn(1));
-    const position = new Position(vault.id.toHexString() + "#" + vault.positionCount.toHexString().substr(2));
-    position.token0Amount = ZERO;
-    position.token1Amount = ZERO;
-    position.token0Withdrawn = ZERO;
-    position.token1Withdrawn = ZERO;
-    position.lowerTick = bn(event.params.lowerTick);
-    position.upperTick = bn(event.params.upperTick);
-    position.feesEarned0 = ZERO;
-    position.feesEarned1 = ZERO;
-    position.vault = vault.id;
-    position.openedAtTimestamp = event.block.timestamp;
-    position.openedATBlock = event.block.number;
-    position.closedAtTimestamp = ZERO;
-    position.closedAtBlock = ZERO;
-    position.priceSqrtAtOpening = IUniswapV3Pool.bind(Address.fromBytes(vault.pool)).slot0().value0;
-    position.priceSqrtAtClosing = ZERO;
-    position.save();
-
-    vault.currentPosition = position.id;
-    vault.currentPositionIdInVault = RangeProtocolVault.bind(event.address).getPositionID();
-    vault.save();
 }
 
 /**
@@ -387,18 +362,15 @@ export function handlePoolRepegged(event: PoolRepeggedEvent): void {
 function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
     const vaultInstance = RangeProtocolVault.bind(Address.fromBytes(vault.id));
     vault.totalSupply = vaultInstance.totalSupply();
+    vault.balance = vaultInstance.getBalanceInCollateralToken();
+    vault.managerBalance = vaultInstance.managerBalance();
+    if (vaultInstance.inThePosition()) {
+        const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
+            .positions(vault.currentPositionIdInVault!);
 
-    const balanceInCollateralToken = vaultInstance.try_getBalanceInCollateralToken();
-
-    if (!balanceInCollateralToken.reverted) {
-        vault.balance = balanceInCollateralToken.value;
+        // vault.liquidity = position.value0;
     }
 
-    vault.managerBalance = vaultInstance.managerBalance();
-    const position = IUniswapV3Pool.bind(Address.fromBytes(vault.pool))
-        .positions(vault.currentPositionIdInVault!);
-
-    vault.liquidity = position.value0;
     vault.save();
 }
 

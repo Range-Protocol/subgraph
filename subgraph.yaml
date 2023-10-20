@@ -10,7 +10,7 @@ dataSources:
     source:
       address: "0xDE07a0D5C9CA371E41a869451141AcE84BCAd119"
       abi: RangeProtocolFactory
-      startBlock: 18375548
+      startBlock: 18375547
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -57,8 +57,6 @@ templates:
           handler: handleBurned
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-        - event: TicksSet(int24,int24)
-          handler: handleTicksSet
         - event: LiquidityAdded(uint256,int24,int24,uint256,uint256)
           handler: liquidityAddedHandler
         - event: LiquidityRemoved(uint256,int24,int24,uint256,uint256)
