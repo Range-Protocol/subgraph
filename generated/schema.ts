@@ -301,13 +301,13 @@ export class Vault extends Entity {
     this.set("ghoBurnedCount", Value.fromBigInt(value));
   }
 
-  get poolRebalancedCount(): BigInt {
-    let value = this.get("poolRebalancedCount");
+  get poolRepegdCount(): BigInt {
+    let value = this.get("poolRepegdCount");
     return value!.toBigInt();
   }
 
-  set poolRebalancedCount(value: BigInt) {
-    this.set("poolRebalancedCount", Value.fromBigInt(value));
+  set poolRepegdCount(value: BigInt) {
+    this.set("poolRepegdCount", Value.fromBigInt(value));
   }
 
   get positions(): Array<string> {
@@ -364,13 +364,13 @@ export class Vault extends Entity {
     this.set("ghoBurns", Value.fromStringArray(value));
   }
 
-  get poolRebalances(): Array<string> {
-    let value = this.get("poolRebalances");
+  get poolRepegs(): Array<string> {
+    let value = this.get("poolRepegs");
     return value!.toStringArray();
   }
 
-  set poolRebalances(value: Array<string>) {
-    this.set("poolRebalances", Value.fromStringArray(value));
+  set poolRepegs(value: Array<string>) {
+    this.set("poolRepegs", Value.fromStringArray(value));
   }
 
   get mints(): Array<Bytes> {
@@ -1306,7 +1306,7 @@ export class GHOBurned extends Entity {
   }
 }
 
-export class PoolRebalanced extends Entity {
+export class PoolRepeg extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -1314,18 +1314,18 @@ export class PoolRebalanced extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save PoolRebalanced entity without an ID");
+    assert(id != null, "Cannot save PoolRepeg entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type PoolRebalanced must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type PoolRepeg must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("PoolRebalanced", id.toString(), this);
+      store.set("PoolRepeg", id.toString(), this);
     }
   }
 
-  static load(id: string): PoolRebalanced | null {
-    return changetype<PoolRebalanced | null>(store.get("PoolRebalanced", id));
+  static load(id: string): PoolRepeg | null {
+    return changetype<PoolRepeg | null>(store.get("PoolRepeg", id));
   }
 
   get id(): string {

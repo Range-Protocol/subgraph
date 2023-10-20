@@ -52,6 +52,11 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.positionCount = ZERO;
     vault.feeEarnedEventCount = ZERO;
     vault.lastUserIndex = ZERO;
+    vault.collateralSuppliedCount = ZERO;
+    vault.collateralWithdrawnCount = ZERO;
+    vault.ghoMintedCount = ZERO;
+    vault.ghoBurnedCount = ZERO;
+    vault.poolRepegdCount = ZERO;
     vault.save();
 
     // Start indexing newly deployed vault.

@@ -28,14 +28,14 @@ type Vault @entity {
   collateralWithdrawnCount: BigInt!
   ghoMintedCount: BigInt!
   ghoBurnedCount: BigInt!
-  poolRebalancedCount: BigInt!
+  poolRepegdCount: BigInt!
   positions: [Position!]! @derivedFrom(field: "vault")
   feeEarnedEvents: [FeeEarned!]! @derivedFrom(field: "vault")
   collateralSupplies: [CollateralSupplied!]! @derivedFrom(field: "vault")
   collateralWithdrawns: [CollateralWithdrawn!]! @derivedFrom(field: "vault")
   ghoMints: [GHOMinted!]! @derivedFrom(field: "vault")
   ghoBurns: [GHOBurned!]! @derivedFrom(field: "vault")
-  poolRebalances: [PoolRebalanced!]! @derivedFrom(field: "vault")
+  poolRepegs: [PoolRepeg!]! @derivedFrom(field: "vault")
   mints: [Mint!]! @derivedFrom(field: "vault")
   burns: [Burn!]! @derivedFrom(field: "vault")
   swaps: [Swap!]! @derivedFrom(field: "vault")
@@ -147,7 +147,7 @@ type GHOBurned @entity {
   vault: Vault!
 }
 
-type PoolRebalanced @entity {
+type PoolRepeg @entity {
   id: String!
   timestamp: BigInt!
   vault: Vault!

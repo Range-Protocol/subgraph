@@ -6,17 +6,27 @@
   },
   {
     "inputs": [],
-    "name": "MulticallFailed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "OnlyFactoryAllowed",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "OnlyVaultAllowed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PoolRepegFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenZeroIsNotGHO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroManagerAddress",
     "type": "error"
   },
   {
@@ -332,6 +342,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collateralOracleHearbeat",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ghoOracleHeartbreat",
+        "type": "uint256"
+      }
+    ],
+    "name": "OraclesHeartbeatUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousManager",
@@ -363,7 +392,7 @@
   {
     "anonymous": false,
     "inputs": [],
-    "name": "PoolRebalanced",
+    "name": "PoolRepegged",
     "type": "event"
   },
   {
@@ -482,6 +511,11 @@
         "internalType": "uint256",
         "name": "amount1",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "maxAmounts",
+        "type": "uint256[2]"
       }
     ],
     "name": "addLiquidity",
@@ -572,6 +606,11 @@
       {
         "internalType": "uint256",
         "name": "burnAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minAmount",
         "type": "uint256"
       }
     ],
@@ -789,6 +828,42 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getUnderlyingBalancesFromAave",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUnderlyingBalancesFromPool",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -955,6 +1030,11 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minShares",
+        "type": "uint256"
       }
     ],
     "name": "mint",
@@ -1094,24 +1174,11 @@
   {
     "inputs": [
       {
-        "internalType": "bytes[]",
-        "name": "calldatas",
-        "type": "bytes[]"
+        "internalType": "uint256[2]",
+        "name": "minAmounts",
+        "type": "uint256[2]"
       }
     ],
-    "name": "rebalance",
-    "outputs": [
-      {
-        "internalType": "bytes[]",
-        "name": "returndatas",
-        "type": "bytes[]"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "removeLiquidity",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -1121,6 +1188,25 @@
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "repegPool",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "returndatas",
+        "type": "bytes[]"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1153,6 +1239,11 @@
         "internalType": "uint160",
         "name": "sqrtPriceLimitX96",
         "type": "uint160"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minAmountIn",
+        "type": "uint256"
       }
     ],
     "name": "swap",
@@ -1376,17 +1467,17 @@
   {
     "inputs": [
       {
-        "internalType": "int24",
-        "name": "_lowerTick",
-        "type": "int24"
+        "internalType": "uint256",
+        "name": "collateralOracleHBDuration",
+        "type": "uint256"
       },
       {
-        "internalType": "int24",
-        "name": "_upperTick",
-        "type": "int24"
+        "internalType": "uint256",
+        "name": "ghoOracleHBDuration",
+        "type": "uint256"
       }
     ],
-    "name": "updateTicks",
+    "name": "updatePriceOracleHeartbeatsDuration",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

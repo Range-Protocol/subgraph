@@ -11,7 +11,7 @@ import {
     CollateralWithdrawn,
     GHOMinted,
     GHOBurned,
-    PoolRebalanced
+    PoolRepeg
 } from "../generated/schema";
 import {Address, BigInt, Bytes, store} from "@graphprotocol/graph-ts";
 import {
@@ -29,7 +29,7 @@ import {
     CollateralWithdrawn as CollateralWithdrawnEvent,
     GHOMinted as GHOMintedEvent,
     GHOBurned as GHOBurnedEvent,
-    PoolRebalanced as PoolRebalancedEvent,
+    PoolRepegged as PoolRepeggedEvent,
     RangeProtocolVault
 } from "../generated/RangeProtocolFactory/RangeProtocolVault";
 import {bn, ZERO} from "./common";
@@ -68,13 +68,6 @@ export function handleMinted(event: MintedEvent): void {
     userVaultBalance.token = userVaultBalance.token.plus(event.params.amount);
     userVaultBalance.save();
 
-    // if (vault.inThePosition) {
-    //     const position = Position.load(vault.currentPosition!)!;
-    //     position.token0Amount = position.token0Amount.plus(event.params.amount0In);
-    //     position.token1Amount = position.token1Amount.plus(event.params.amount1In);
-    //     position.save();
-    // }
-
     updateUnderlyingBalancesAndLiquidty(vault);
 }
 
@@ -101,14 +94,6 @@ export function handleBurned(event: BurnedEvent): void {
     burn.save();
 
     const vault = Vault.load(event.address)!;
-
-    // if (vault.inThePosition) {
-    //     const position = Position.load(vault.currentPosition!)!;
-    //     position.token0Withdrawn = position.token0Withdrawn.plus(event.params.amount0Out);
-    //     position.token1Withdrawn = position.token1Withdrawn.plus(event.params.amount1Out);
-    //     position.save();
-    // }
-
     updateUnderlyingBalancesAndLiquidty(vault);
 }
 
@@ -381,13 +366,13 @@ export function handleGHOBurned(event: GHOBurnedEvent): void {
     ghoBurned.save();
 }
 
-export function handlePoolRebalanced(event: PoolRebalancedEvent): void {
+export function handlePoolRepegged(event: PoolRepeggedEvent): void {
     const vault = Vault.load(event.address)!;
-    vault.poolRebalancedCount = vault.poolRebalancedCount.plus(bn(1));
-    const poolRebalanced = new PoolRebalanced(vault.id.toHexString() + "#" + vault.poolRebalancedCount.toHexString().substr(2));
-    poolRebalanced.timestamp = event.block.timestamp;
-    poolRebalanced.vault = vault.id;
-    poolRebalanced.save();
+    vault.poolRepegdCount = vault.poolRepegdCount.plus(bn(1));
+    const poolRepeg = new PoolRepeg(vault.id.toHexString() + "#" + vault.poolRepegdCount.toHexString().substr(2));
+    poolRepeg.timestamp = event.block.timestamp;
+    poolRepeg.vault = vault.id;
+    poolRepeg.save();
 }
 
 /**

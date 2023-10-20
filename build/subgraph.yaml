@@ -8,9 +8,9 @@ dataSources:
     name: RangeProtocolFactory
     network: mainnet
     source:
-      address: "0xf1e70677fb1f49471604c012e8B42BA11226336b"
+      address: "0xDE07a0D5C9CA371E41a869451141AcE84BCAd119"
       abi: RangeProtocolFactory
-      startBlock: 17266659
+      startBlock: 18375548
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -79,5 +79,5 @@ templates:
           handler: handleGHOMinted
         - event: GHOBurned(uint256)
           handler: handleGHOBurned
-        - event: PoolRebalanced()
-          handler: handlePoolRebalanced
+        - event: PoolRepegged()
+          handler: handlePoolRepegged

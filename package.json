@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ ethereum-uniswap",
-    "create-local": "graph create --node http://localhost:8020/ ethereum-uniswap",
-    "remove-local": "graph remove --node http://localhost:8020/ ethereum-uniswap",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ethereum-uniswap",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ gho-vault",
+    "create-local": "graph create --node http://localhost:8020/ gho-vault",
+    "remove-local": "graph remove --node http://localhost:8020/ gho-vault",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 gho-vault",
     "test": "graph test"
   },
   "dependencies": {

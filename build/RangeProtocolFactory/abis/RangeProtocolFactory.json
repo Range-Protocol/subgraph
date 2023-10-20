@@ -12,12 +12,22 @@
   },
   {
     "inputs": [],
+    "name": "ImplIsNotAContract",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "MismatchedVaultsAndImplsLength",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "NoVaultInitDataProvided",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SameTokensAddresses",
     "type": "error"
   },
   {
