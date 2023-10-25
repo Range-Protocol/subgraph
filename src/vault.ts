@@ -343,9 +343,11 @@ function updateUnderlyingBalancesAndLiquidty(vault: Vault): void {
     const vaultInstance = RangeProtocolVault.bind(Address.fromBytes(vault.id));
     vault.totalSupply = vaultInstance.totalSupply();
 
-    const underlyingBalances = vaultInstance.getUnderlyingBalances();
-    vault.balance0 = underlyingBalances.value0;
-    vault.balance1 = underlyingBalances.value1;
+    const underlyingBalances = vaultInstance.try_getUnderlyingBalances();
+    if (!underlyingBalances.reverted) {
+        vault.balance0 = underlyingBalances.value.value0;
+        vault.balance1 = underlyingBalances.value.value1;
+    }
 
     vault.managerBalance0 = vaultInstance.managerBalance0();
     vault.managerBalance1 = vaultInstance.managerBalance1();
