@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: RangeProtocolFactory
-    network: bsc
+    network: mainnet
     source:
-      address: "0xad2b34a2245b5a7378964BC820e8F34D14adF312"
+      address: "0x3edeA0E6E94F75F86c62E1170a66f4e3bD7d77fE"
       abi: RangeProtocolFactory
-      startBlock: 28026880
+      startBlock: 18460401
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -33,7 +33,7 @@ dataSources:
 templates:
   - name: RangeProtocolVault
     kind: ethereum/contract
-    network: bsc
+    network: mainnet
     source:
       abi: RangeProtocolVault
     mapping:
