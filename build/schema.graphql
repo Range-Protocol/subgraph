@@ -97,6 +97,7 @@ type Mint @entity {
   amountXIn: BigInt!
   amountYIn: BigInt!
   timestamp: BigInt!
+  txHash: Bytes!
   vault: Vault!
 }
 
@@ -107,6 +108,7 @@ type Burn @entity {
   amountXOut: BigInt!
   amountYOut: BigInt!
   timestamp: BigInt!
+  txHash: Bytes!
   vault: Vault!
 }
 
