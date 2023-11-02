@@ -880,6 +880,15 @@ export class Mint extends Entity {
     this.set("amount1In", Value.fromBigInt(value));
   }
 
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
+  }
+
   get timestamp(): BigInt {
     let value = this.get("timestamp");
     return value!.toBigInt();
@@ -964,6 +973,15 @@ export class Burn extends Entity {
 
   set amount1Out(value: BigInt) {
     this.set("amount1Out", Value.fromBigInt(value));
+  }
+
+  get txHash(): Bytes {
+    let value = this.get("txHash");
+    return value!.toBytes();
+  }
+
+  set txHash(value: Bytes) {
+    this.set("txHash", Value.fromBytes(value));
   }
 
   get timestamp(): BigInt {
