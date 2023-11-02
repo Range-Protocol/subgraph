@@ -41,6 +41,7 @@ export function handleMinted(event: MintedEvent): void {
     mint.mintAmount = event.params.mintAmount;
     mint.amount0In = event.params.amount0In;
     mint.amount1In = event.params.amount1In;
+    mint.txHash = event.block.hash;
     mint.timestamp = event.block.timestamp;
     mint.vault = vault.id;
     mint.save();
@@ -80,6 +81,7 @@ export function handleBurned(event: BurnedEvent): void {
     burn.burnAmount = event.params.burnAmount;
     burn.amount0Out = event.params.amount0Out;
     burn.amount1Out = event.params.amount1Out;
+    burn.txHash = event.block.hash;
     burn.timestamp = event.block.timestamp;
     burn.vault = Vault.load(event.address)!.id;
     burn.save();
