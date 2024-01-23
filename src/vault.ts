@@ -299,6 +299,7 @@ export function handleInThePositionStatusSet(event: InThePositionStatusSetEvent)
 export function handleCollateralSupplied(event: CollateralSuppliedEvent): void {
     const vault = Vault.load(event.address)!;
     vault.collateralSuppliedCount = vault.collateralSuppliedCount.plus(bn(1));
+    vault.save();
     const collateralSupplied = new CollateralSupplied(vault.id.toHexString() + "#" + vault.collateralSuppliedCount.toHexString().substr(2));
     collateralSupplied.collateralToken = vault.token1;
     collateralSupplied.amountSupplied = event.params.amount;
@@ -311,6 +312,7 @@ export function handleCollateralSupplied(event: CollateralSuppliedEvent): void {
 export function handleCollateralWithdrawn(event: CollateralWithdrawnEvent): void {
     const vault = Vault.load(event.address)!;
     vault.collateralWithdrawnCount = vault.collateralWithdrawnCount.plus(bn(1));
+    vault.save();
     const collateralWithdrawn = new CollateralWithdrawn(vault.id.toHexString() + "#" + vault.collateralWithdrawnCount.toHexString().substr(2));
     collateralWithdrawn.collateralToken = vault.token1;
     collateralWithdrawn.amountWithdrawn = event.params.amount;
@@ -322,6 +324,7 @@ export function handleCollateralWithdrawn(event: CollateralWithdrawnEvent): void
 export function handleGHOMinted(event: GHOMintedEvent): void {
     const vault = Vault.load(event.address)!;
     vault.ghoMintedCount = vault.ghoMintedCount.plus(bn(1));
+    vault.save();
     const ghoMinted = new GHOMinted(vault.id.toHexString() + "#" + vault.ghoMintedCount.toHexString().substr(2));
     ghoMinted.collateralToken = vault.token1;
     ghoMinted.amountMinted = event.params.amount;
@@ -333,6 +336,7 @@ export function handleGHOMinted(event: GHOMintedEvent): void {
 export function handleGHOBurned(event: GHOBurnedEvent): void {
     const vault = Vault.load(event.address)!;
     vault.ghoBurnedCount = vault.ghoBurnedCount.plus(bn(1));
+    vault.save();
     const ghoBurned = new GHOBurned(vault.id.toHexString() + "#" + vault.ghoBurnedCount.toHexString().substr(2));
     ghoBurned.collateralToken = vault.token1;
     ghoBurned.amountBurned = event.params.amount;
@@ -344,6 +348,7 @@ export function handleGHOBurned(event: GHOBurnedEvent): void {
 export function handlePoolRepegged(event: PoolRepeggedEvent): void {
     const vault = Vault.load(event.address)!;
     vault.poolRepegdCount = vault.poolRepegdCount.plus(bn(1));
+    vault.save();
     const poolRepeg = new PoolRepeg(vault.id.toHexString() + "#" + vault.poolRepegdCount.toHexString().substr(2));
     poolRepeg.timestamp = event.block.timestamp;
     poolRepeg.vault = vault.id;
